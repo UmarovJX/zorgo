@@ -1,0 +1,36 @@
+/*================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+.create__btn {
+  padding: 0.5rem 1rem;
+  border-radius: .4rem;
+}
+
+.validation__red {
+  font-size: 12px;
+  color: red;
+}
+
+.form-group {
+  margin-bottom: .5rem;
+}
+
+.deactivate-btn_modal {
+  padding: 2rem 1rem;
+}
+
+[dir=ltr] .table.b-table > thead > tr > [aria-sort].b-table-sort-icon-left {
+  padding-left: 2rem;
+}
+
+::v-deep .table thead th[aria-colindex="1"] {
+  width: 70px;
+}
+
+.red__error {
+  color: red;
+}
