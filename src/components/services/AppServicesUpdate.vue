@@ -240,8 +240,8 @@ export default {
         formData.append('name[uz]', this.name.uz)
         formData.append('body[ru]', this.description.ru)
         formData.append('body[uz]', this.description.uz)
-        formData.append('service_id', this.serviceId)
-        formData.append('image', this.fileRecords[0].file)
+        if (this.serviceId) formData.append('service_id', this.serviceId)
+        if (this.fileRecords[0].file) formData.append('image', this.fileRecords[0].file)
         api.services.updateService(id, formData)
             .then(() => {
               this.$router.push({name: 'services'})

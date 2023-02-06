@@ -3,6 +3,9 @@ const path = require('path')
 module.exports = {
   publicPath: '/',
   lintOnSave: false,
+  devServer: {
+    port: process.env.VUE_APP_PORT,
+  },
   css: {
     loaderOptions: {
       sass: {

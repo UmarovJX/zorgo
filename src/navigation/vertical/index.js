@@ -38,15 +38,20 @@ import brands from "@/navigation/vertical/brands";
 import years from "@/navigation/vertical/years";
 import models from "@/navigation/vertical/models";
 import osago from "@/navigation/vertical/osago";
+import companies from "@/navigation/vertical/companies";
 
 // Array of sections
 export default [
-    ...dealers,
+    {
+        header: 'Страхование',
+    },
     ...services,
-    ...brands,
-    ...models,
-    ...years,
-    ...roles,
-    ...users,
-    ...osago
+    ...osago,
+    ...companies
+    // ...dealers,
+    // ...brands,
+    // ...models,
+    // ...years,
+    // ...roles,
+    // ...users,
 ]

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import Error404 from "@/views/error/Error404.vue";
+
 // Routes
 import pages from "@/router/routes/pages";
 import roles from "@/router/routes/roles";
@@ -11,6 +13,7 @@ import brands from "@/router/routes/brands";
 import years from "@/router/routes/years";
 import models from "@/router/routes/models";
 import osago from "@/router/routes/osago";
+import companies from "@/router/routes/companies";
 
 Vue.use(VueRouter)
 
@@ -26,7 +29,7 @@ const router = new VueRouter({
     routes: [
         {
             path: '/',
-            redirect: {name: 'roles'},
+            redirect: {name: 'services'},
         },
         ...pages,
         ...roles,
@@ -37,9 +40,10 @@ const router = new VueRouter({
         ...years,
         ...models,
         ...osago,
+        ...companies,
         {
-            path: '*',
-            redirect: 'error-404',
+            path: '/:pathMatch(.*)',
+            component: Error404
         },
     ],
 })
@@ -49,7 +53,7 @@ router.beforeEach((to, from, next) => {
     if (to.name === 'auth-login') return next()
     if (AUTH_TOKEN) {
         if (to.path === '/') {
-            return next({name: 'roles'})
+            return next({name: 'insurance/services'})
         } else {
             return next()
         }

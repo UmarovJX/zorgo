@@ -8,10 +8,10 @@
           :href="policy.policy.contract_url"
           target="_blank"
           variant="success"
-          class="btn-icon"
+          class="btn-icon d-flex align-items-center"
       >
-        <feather-icon size="18" icon="DownloadCloudIcon"/>
-        Скачать договор
+        <span class="" style="border-right: 1px solid #F3FBF5; padding-right: 4px">Скачать договор</span>
+        <feather-icon size="18" icon="DownloadCloudIcon" style="padding-left: 4px"/>
       </b-button>
     </b-col>
     <b-col md="9" sm="12">
@@ -254,12 +254,16 @@ export default {
     }
   },
   async mounted() {
-    await api.fetchPolicy(this.$route.params.id)
-        .then(res => {
-          this.policy = res.data
-        })
+    await this.loadPolicy()
   },
   methods: {
+    async loadPolicy() {
+      await api.fetchPolicy(this.$route.params.id)
+          .then(res => {
+            this.policy = res.data
+          })
+    },
+
     personFullName(person) {
       if (!person.first_name) return ''
       return `${person.last_name} ${person.first_name} ${person.middle_name}`

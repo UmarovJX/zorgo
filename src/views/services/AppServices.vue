@@ -68,10 +68,10 @@
 
         <template #cell(image)="data">
           <div
-              style="width: 60px; height: 60px"
+              style="width: 90px; height: 80px"
               v-if="data.item.image"
           >
-            <img style="object-fit: cover; width: 100%; height: 100%" :src="data.item.image">
+            <img style="object-fit: contain; width: 100%; height: 100%" :src="data.item.image">
           </div>
         </template>
 
