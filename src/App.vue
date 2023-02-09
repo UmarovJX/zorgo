@@ -29,8 +29,8 @@ import api from '@/services/api'
 import Vue from "vue";
 
 let numeral = require("numeral");
-Vue.filter('formatNumber', function (value) {
-  return numeral(value).format('0,0').replaceAll(',', ' ') + ' сум'
+Vue.filter('formatNumber', function (value, currency = 'сум') {
+  return numeral(value).format('0,0').replaceAll(',', ' ') + ' ' + currency
 });
 
 const LayoutVertical = () => import('@/layouts/vertical/LayoutVertical.vue')

@@ -10,7 +10,7 @@
           variant="success"
           class="btn-icon d-flex align-items-center"
       >
-        <span class="" style="border-right: 1px solid #F3FBF5; padding-right: 4px">Скачать договор</span>
+        <span style="padding-right: 4px">Скачать договор</span>
         <feather-icon size="18" icon="DownloadCloudIcon" style="padding-left: 4px"/>
       </b-button>
     </b-col>
@@ -27,7 +27,7 @@
               </tr>
               <tr>
                 <th class="pr-1">Серия:</th>
-                <td>{{ policySeries }}</td>
+                <td>{{ policy.policy.number }}</td>
               </tr>
               <tr>
                 <th class="pr-1">Кол-во водителей:</th>
@@ -78,7 +78,7 @@
           </tr>
           <tr>
             <th class="pr-1">Тех.паспорт:</th>
-            <td>{{ vehiclePassport }}</td>
+            <td>{{ policy.vehicle.tech_passport }}</td>
           </tr>
           <tr>
             <th class="pr-1">Модель:</th>
@@ -110,7 +110,7 @@
           </tr>
           <tr>
             <th class="pr-1">ФИО:</th>
-            <td>{{ personFullName(policy.applicant) }}</td>
+            <td>{{ policy.applicant.name }}</td>
           </tr>
           <tr>
             <th class="pr-1">Дата рождения:</th>
@@ -118,7 +118,7 @@
           </tr>
           <tr>
             <th class="pr-1">Серия и номер паспорта:</th>
-            <td>{{ personPassport(policy.applicant) }}</td>
+            <td>{{ policy.applicant.passport }}</td>
           </tr>
           <tr>
             <th class="pr-1">ПИНФЛ:</th>
@@ -141,7 +141,7 @@
           <tbody v-if="policy.owner.type">
           <tr>
             <th class="pr-1">Название организации:</th>
-            <td>{{ policy.owner.org_name }}</td>
+            <td>{{ policy.owner.name }}</td>
           </tr>
           <tr>
             <th class="pr-1">ИНН:</th>
@@ -157,7 +157,7 @@
           </tr>
           <tr>
             <th class="pr-1">ФИО:</th>
-            <td>{{ personFullName(policy.owner) }}</td>
+            <td>{{ policy.owner.name }}</td>
           </tr>
           <tr>
             <th class="pr-1">Дата рождения:</th>
@@ -165,7 +165,7 @@
           </tr>
           <tr>
             <th class="pr-1">Серия и номер паспорта:</th>
-            <td>{{ personPassport(policy.owner) }}</td>
+            <td>{{ policy.owner.passport }}</td>
           </tr>
           <tr>
             <th class="pr-1">ПИНФЛ:</th>
@@ -191,7 +191,7 @@
           <tbody>
           <tr>
             <th class="pr-1">ФИО:</th>
-            <td>{{ personFullName(driver) }}</td>
+            <td>{{ driver.name }}</td>
           </tr>
           <tr>
             <th class="pr-1">Дата рождения:</th>
@@ -199,7 +199,7 @@
           </tr>
           <tr>
             <th class="pr-1">Серия и номер паспорта:</th>
-            <td>{{ personPassport(driver) }}</td>
+            <td>{{ driver.passport }}</td>
           </tr>
           <tr>
             <th class="pr-1">ПИНФЛ:</th>
@@ -207,7 +207,7 @@
           </tr>
           <tr>
             <th class="pr-1">Серия и номер В.У:</th>
-            <td>{{ driverLicense(driver) }}</td>
+            <td>{{ driver.license }}</td>
           </tr>
           <tr>
             <th class="pr-1">Дата выпуска В.У:</th>
@@ -234,10 +234,6 @@ export default {
     BRow, BCol, BCard, BCardTitle, BCardBody, BButton
   },
   computed: {
-    policySeries() {
-      if (!this.policy.policy.series) return ''
-      return `${this.policy.policy.series}${this.policy.policy.number}`
-    },
     driversCount() {
       return this.policy.driver_limit ? 'До 5 человек' : 'Неограничено'
     },
@@ -262,15 +258,6 @@ export default {
           .then(res => {
             this.policy = res.data
           })
-    },
-
-    personFullName(person) {
-      if (!person.first_name) return ''
-      return `${person.last_name} ${person.first_name} ${person.middle_name}`
-    },
-    personPassport(person) {
-      if (!person.passport_series) return ''
-      return person.passport_series + person.passport_number
     },
     driverLicense(driver) {
       return driver.license_series + driver.license_number

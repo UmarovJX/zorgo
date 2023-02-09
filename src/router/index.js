@@ -14,6 +14,7 @@ import years from "@/router/routes/years";
 import models from "@/router/routes/models";
 import osago from "@/router/routes/osago";
 import companies from "@/router/routes/companies";
+import travel from "@/router/routes/travel";
 
 Vue.use(VueRouter)
 
@@ -40,6 +41,7 @@ const router = new VueRouter({
         ...years,
         ...models,
         ...osago,
+        ...travel,
         ...companies,
         {
             path: '/:pathMatch(.*)',

@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <h2 class="pl-1">Осаго</h2>
+    <h2 class="pl-1">Путешествие</h2>
 
     <div class="d-flex justify-content-between col-12">
 
@@ -43,9 +43,6 @@
           :busy="loading"
           :items="policies"
           :fields="fields"
-          :filter="filter"
-          :filter-included-fields="filterOn"
-          @filtered="onFiltered"
       >
 
         <template #table-busy>
@@ -55,27 +52,23 @@
           </div>
         </template>
 
-        <template #cell(driver_limit)="data">
-          <span v-if="data.item.driver_limit">До 5 человек</span>
-          <span v-else>Неограничено</span>
-        </template>
-
         <template #cell(price)="data">
           {{ data.item.price | formatNumber }}
         </template>
+        <template #cell(group_id)="data">{{data.item.group_id ? 'Семейный' : 'Индувидуальный'}}</template>
 
         <template #cell(crud_row)="data">
           <div class="d-flex float-right">
-              <b-button
-                  v-if="data.item.policy.contract_url"
-                  :href="data.item.policy.contract_url"
-                  target="_blank"
-                  variant="success"
-                  class="btn-sm btn-icon mr-1"
-              >
-                <feather-icon size="18" icon="DownloadCloudIcon"/>
-              </b-button>
-            <router-link :to="{path:`/insurance/osago/${data.item.id}`}">
+            <b-button
+                v-if="data.item.policy.contract_url"
+                :href="data.item.policy.contract_url"
+                target="_blank"
+                variant="success"
+                class="btn-sm btn-icon mr-1"
+            >
+              <feather-icon size="18" icon="DownloadCloudIcon"/>
+            </b-button>
+            <router-link :to="{path:`/insurance/travel/${data.item.id}`}">
               <b-button variant="info" class="btn-sm btn-icon">
                 <feather-icon size="18" icon="EyeIcon"/>
               </b-button>
@@ -114,7 +107,7 @@
 </template>
 
 <script>
-import Osago from "@/services/osago";
+import Travel from "@/services/travel";
 import {
   BRow,
   BCol,
@@ -129,7 +122,7 @@ import {
   BFormSelect
 } from "bootstrap-vue";
 
-const api = new Osago
+const api = new Travel
 
 export default {
   name: "Index",
@@ -170,13 +163,21 @@ export default {
           label: 'ID'
         },
         {
-          key: 'driver_limit',
-          label: 'Кол-во водителей',
-        },
-        {
           key: 'price',
           label: 'Стоимость',
         },
+        {
+          key: 'activity',
+          label: 'Цель поездки',
+        },
+        {
+          key: 'group_id',
+          label: 'Тип',
+        },
+        // {
+        //   key: 'countries',
+        //   label: 'Страны',
+        // },
         {
           key: 'date_begin',
           label: 'Дата начало',
@@ -193,17 +194,9 @@ export default {
           key: 'applicant.name',
           label: 'Имя заявителя',
         },
-        // {
-        //   key: 'applicant.phone',
-        //   label: 'Номер заявителя',
-        // },
         {
-          key: 'vehicle.number',
-          label: 'Номер Т.С',
-        },
-        {
-          key: 'vehicle.region.name.ru',
-          label: 'Регион',
+          key: 'applicant.phone',
+          label: 'Номер заявителя',
         },
         {
           key: 'company.name',
@@ -298,9 +291,7 @@ export default {
       if (this.search) {
         params.append(
             'search[id,policy.anketa_id,policy.number,' +
-            'applicant.name,applicant.phone,' +
-            'owner.name,owner.phone,' +
-            'vehicle.number]',
+            'applicant.name,applicant.phone]',
             this.search
         )
       }
@@ -309,12 +300,6 @@ export default {
       params.append('perPage', this.pagination.perPage)
 
       return params.toString()
-    },
-
-    onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length
-      this.pagination.current = 1
     },
   }
 }

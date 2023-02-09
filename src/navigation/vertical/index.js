@@ -39,6 +39,7 @@ import years from "@/navigation/vertical/years";
 import models from "@/navigation/vertical/models";
 import osago from "@/navigation/vertical/osago";
 import companies from "@/navigation/vertical/companies";
+import travel from "@/navigation/vertical/travel";
 
 // Array of sections
 export default [
@@ -47,6 +48,7 @@ export default [
     },
     ...services,
     ...osago,
+    ...travel,
     ...companies
     // ...dealers,
     // ...brands,
