@@ -9,20 +9,6 @@
         <ValidationObserver ref="validation-observer">
 
           <b-col cols="12" class="px-1">
-            <ValidationProvider name="Название" rules="required" v-slot="{errors}">
-              <b-form-group
-                  label="Название"
-                  label-for="name"
-              >
-                <b-form-input
-                    v-model="company.name"
-                    id="name"
-                    size="md"
-                    placeholder="Введите"
-                />
-              </b-form-group>
-              <p v-if="errors" class="validation__red">{{ errors[0] }}</p>
-            </ValidationProvider>
             <ValidationProvider name="image" rules="required" v-slot="{errors}">
               <b-form-group label="Изображение">
                 <VueFileAgent
@@ -42,11 +28,6 @@
               </b-form-group>
               <p v-if="errors" class="validation__red">{{ errors[0] }}</p>
             </ValidationProvider>
-            <div>
-              <b-card-text class="mb-0">До 5 человек для города Ташкент и Ташкентской области</b-card-text>
-              <b-form-checkbox v-model="company.driver_limit" class="custom-control-primary" name="check-button"
-                               switch/>
-            </div>
           </b-col>
 
         </ValidationObserver>
@@ -64,7 +45,7 @@
 </template>
 
 <script>
-import Companies from '@/services/companies'
+import Partners from '@/services/partners'
 import Ripple from 'vue-ripple-directive'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import {
@@ -81,7 +62,7 @@ import {
   BCardText
 } from 'bootstrap-vue'
 
-const api = new Companies
+const api = new Partners
 
 export default {
   name: "Update",
@@ -104,8 +85,7 @@ export default {
   },
   data() {
     return {
-      company: {},
-      image: [],
+      item: {},
       fileRecords: [],
       uploadUrl: '',
       uploadHeaders: {'X-Test-Header': 'vue-file-agent'},
@@ -114,14 +94,14 @@ export default {
   },
 
   async mounted() {
-    await this.loadCompany()
+    await this.loadItem()
   },
 
   methods: {
-    async loadCompany() {
-      api.fetch(this.$route.params.id)
+    async loadItem() {
+      await api.fetch(this.$route.params.id)
           .then(res => {
-            this.company = res.data
+            this.item = res.data
             this.fileRecords = [{
               name: 'image.jpg',
               size: 0,
@@ -130,23 +110,23 @@ export default {
               src: res.data.image
             }]
           })
-          .catch(error => {
-            console.error(error)
-          })
     },
 
     update() {
+      if (!this.fileRecords[0].file) {
+        this.$router.push({name: 'partner-index'})
+        return
+      }
+
       const isValid = this.$refs['validation-observer'].validate()
       if (isValid) {
-        const {id} = this.$route.params
         const formData = new FormData()
 
-        formData.append('name', this.company.name)
-        formData.append('driver_limit', +this.company.driver_limit)
-        if (this.fileRecords[0].file) formData.append('image', this.fileRecords[0].file)
-        api.update(id, formData)
+        formData.append('image', this.fileRecords[0].file)
+
+        api.update(this.$route.params.id, formData)
             .then(() => {
-              this.$router.push({name: 'company-index'})
+              this.$router.push({name: 'partner-index'})
               this.showToast('success', 'Успешно изменено!', 'CheckIcon')
             })
             .catch(error => {

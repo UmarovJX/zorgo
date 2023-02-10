@@ -15,6 +15,7 @@ import models from "@/router/routes/models";
 import osago from "@/router/routes/osago";
 import companies from "@/router/routes/companies";
 import travel from "@/router/routes/travel";
+import partners from "@/router/routes/partners";
 
 Vue.use(VueRouter)
 
@@ -43,6 +44,7 @@ const router = new VueRouter({
         ...osago,
         ...travel,
         ...companies,
+        ...partners,
         {
             path: '/:pathMatch(.*)',
             component: Error404

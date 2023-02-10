@@ -7,6 +7,9 @@ export default [
     {
         path: '/insurance/travel/:id',
         name: 'travel-show',
-        component: () => import('@/views/travel/Show.vue')
+        component: () => import('@/views/travel/Show.vue'),
+        meta: {
+            navActiveLink: 'travel',
+        }
     }
 ]

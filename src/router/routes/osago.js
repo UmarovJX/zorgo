@@ -7,7 +7,10 @@ export default [
     {
         path: '/insurance/osago/:id',
         name: 'osago-show',
-        component: () => import('@/views/osago/Show.vue')
+        component: () => import('@/views/osago/Show.vue'),
+        meta: {
+            navActiveLink: 'osago',
+        }
     }
 
 ]
