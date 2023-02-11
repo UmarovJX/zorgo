@@ -16,6 +16,7 @@ import osago from "@/router/routes/osago";
 import companies from "@/router/routes/companies";
 import travel from "@/router/routes/travel";
 import partners from "@/router/routes/partners";
+import mainPage from "@/router/routes/mainPage";
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,7 @@ const router = new VueRouter({
         ...travel,
         ...companies,
         ...partners,
+        ...mainPage,
         {
             path: '/:pathMatch(.*)',
             component: Error404

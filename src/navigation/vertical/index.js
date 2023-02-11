@@ -32,29 +32,17 @@ tagVariant
 */
 import roles from "@/navigation/vertical/roles";
 import users from "@/navigation/vertical/users";
-import services from "@/navigation/vertical/services";
 import dealers from "@/navigation/vertical/dealers";
 import brands from "@/navigation/vertical/brands";
 import years from "@/navigation/vertical/years";
 import models from "@/navigation/vertical/models";
-import osago from "@/navigation/vertical/osago";
-import companies from "@/navigation/vertical/companies";
-import travel from "@/navigation/vertical/travel";
-import partners from "@/navigation/vertical/partners";
+import insurance from "@/navigation/vertical/insurance";
+import common from "@/navigation/vertical/common";
 
 // Array of sections
 export default [
-    {
-        header: 'Страхование',
-    },
-    ...services,
-    ...osago,
-    ...travel,
-    ...companies,
-    {
-        header: 'Общее'
-    },
-    ...partners,
+    ...insurance,
+    ...common
     // ...dealers,
     // ...brands,
     // ...models,
