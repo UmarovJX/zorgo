@@ -6,8 +6,12 @@ class Settings extends Core {
     super(axios)
   }
 
-  fetchSettings() {
-    return this.get('/api/user')
+  fetch() {
+    return this.get('setting')
+  }
+
+  update(body) {
+    return this.put('setting', body)
   }
 
 }

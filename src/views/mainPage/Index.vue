@@ -8,7 +8,7 @@
         <b-card v-if="type !== 'travel'">
           <b-card-title>Партнеры</b-card-title>
           <b-row>
-            <b-col cols="6" v-for="(data, key) in item.partners_text">
+            <b-col md="6" v-for="(data, key) in item.partners_text">
               <b-form-group
                   :label="`Текст [${key.toUpperCase()}]`"
                   :label-for="`partners-text-${key}`"
@@ -27,15 +27,15 @@
         <b-card>
           <b-card-title>Раздел №1</b-card-title>
           <b-row>
-            <b-col cols="6" v-for="(data, key) in item.section_1.name">
+            <b-col md="6" v-for="(data, key) in item.section_1.name">
               <ValidationProvider :name="`Заголовок [${key.toUpperCase()}]`" rules="required" v-slot="{errors}">
                 <b-form-group
                     :label="`Заголовок [${key.toUpperCase()}]`"
-                    :label-for="`section_1-name.${key}`"
+                    :label-for="`section_1-name-${key}`"
                 >
                   <b-form-input
                       v-model="item.section_1.name[key]"
-                      :id="`section_1-name.${key}`"
+                      :id="`section_1-name-${key}`"
                       size="md"
                       placeholder="Введите"
                   />
@@ -43,7 +43,7 @@
                 <p v-if="errors" class="validation__red">{{ errors[0] }}</p>
               </ValidationProvider>
             </b-col>
-            <b-col cols="6" v-for="(data, key) in item.section_1.body">
+            <b-col md="6" v-for="(data, key) in item.section_1.body">
               <b-form-group
                   :label="`Описание [${key.toUpperCase()}]`"
                   :label-for="`section_1-body.${key}`"
@@ -80,15 +80,15 @@
         <b-card>
           <b-card-title>Раздел №2</b-card-title>
           <b-row>
-            <b-col cols="6" v-for="(data, key) in item.section_2.name">
+            <b-col md="6" v-for="(data, key) in item.section_2.name">
               <ValidationProvider :name="`Заголовок [${key.toUpperCase()}]`" rules="required" v-slot="{errors}">
                 <b-form-group
                     :label="`Заголовок [${key.toUpperCase()}]`"
-                    :label-for="`section_2-name.${key}`"
+                    :label-for="`section_2-name-${key}`"
                 >
                   <b-form-input
                       v-model="item.section_2.name[key]"
-                      :id="`section_2-name.${key}`"
+                      :id="`section_2-name-${key}`"
                       size="md"
                       placeholder="Введите"
                   />
@@ -114,15 +114,15 @@
         <b-card>
           <b-card-title>Раздел №3</b-card-title>
           <b-row>
-            <b-col cols="6" v-for="(data, key) in item.section_3.name">
+            <b-col md="6" v-for="(data, key) in item.section_3.name">
               <ValidationProvider :name="`Заголовок [${key.toUpperCase()}]`" rules="required" v-slot="{errors}">
                 <b-form-group
                     :label="`Заголовок [${key.toUpperCase()}]`"
-                    :label-for="`section_3-name.${key}`"
+                    :label-for="`section_3-name-${key}`"
                 >
                   <b-form-input
                       v-model="item.section_3.name[key]"
-                      :id="`section_3-name.${key}`"
+                      :id="`section_3-name-${key}`"
                       size="md"
                       placeholder="Введите"
                   />
@@ -130,7 +130,7 @@
                 <p v-if="errors" class="validation__red">{{ errors[0] }}</p>
               </ValidationProvider>
             </b-col>
-            <b-col cols="6" v-for="(data, key) in item.section_3.body">
+            <b-col md="6" v-for="(data, key) in item.section_3.body">
               <b-form-group
                   :label="`Описание [${key.toUpperCase()}]`"
                   :label-for="`section_3-body.${key}`"
@@ -146,7 +146,7 @@
         <b-card>
           <b-card-title>SEO</b-card-title>
           <b-row>
-            <b-col cols="6" v-for="(data, key) in item.seo_meta">
+            <b-col md="6" v-for="(data, key) in item.seo_meta">
               <b-form-group
                   :label="`Текст [${key.toUpperCase()}]`"
                   :label-for="`seo_meta-${key}`"
