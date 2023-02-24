@@ -225,7 +225,7 @@ export default {
                 setLocalVar('accessToken', `Bearer ${data['access_token']}`)
                 setLocalVar('registration_time', (new Date()).getTime())
                 // const {refresh_token} = await api.auth.updateToken()
-                await this.$router.push({name: 'roles'})
+                await this.$router.push({name: 'services'})
               })
               .catch((error) => {
                 console.error(error.response, 'jamshid')

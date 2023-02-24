@@ -11,7 +11,7 @@ class Settings extends Core {
   }
 
   update(body) {
-    return this.put('setting', body)
+    return this.post('setting?_method=put', body)
   }
 
 }

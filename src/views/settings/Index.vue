@@ -103,6 +103,23 @@
                 <p v-if="errors" class="validation__red">{{ errors[0] }}</p>
               </ValidationProvider>
             </b-col>
+            <b-col md="6" v-for="(data, key) in public_offer">
+              <ValidationProvider :name="`Публичная оферта [${key.toUpperCase()}]`" rules="mimes:application/pdf" v-slot="{errors}">
+                <b-form-group
+                    :label="`Публичная оферта [${key.toUpperCase()}]`"
+                    :label-for="`public-offer-${key}`"
+                >
+                  <b-form-file
+                      v-model="public_offer[key]"
+                      placeholder="Загрузите pdf файл"
+                      drop-placeholder="Drop file here..."
+                      :id="`public-offer-${key}`"
+                      accept="application/pdf"
+                  ></b-form-file>
+                </b-form-group>
+                <p v-if="errors" class="validation__red">{{ errors[0] }}</p>
+              </ValidationProvider>
+            </b-col>
           </b-row>
         </ValidationObserver>
         <b-button
@@ -124,6 +141,7 @@ import {
   BRow,
   BFormGroup,
   BFormInput,
+  BFormFile,
   BFormTextarea,
   BButton,
   BCard,
@@ -145,6 +163,7 @@ export default {
     BRow,
     BFormGroup,
     BFormInput,
+    BFormFile,
     BFormTextarea,
     BButton,
     BCard,
@@ -168,8 +187,9 @@ export default {
           ios: '',
           android: ''
         },
-        online_chat: ''
+        online_chat: '',
       },
+      public_offer: {ru: null, uz: null}
     }
   },
   mounted() {
@@ -185,7 +205,19 @@ export default {
     update() {
       this.$refs['validation-observer'].validate().then(isValid => {
         if (isValid) {
-          api.update(this.item)
+          const formData = new FormData
+
+          formData.append('email', this.item.email)
+          formData.append('phone', this.item.phone)
+          formData.append('address[ru]', this.item.address.ru)
+          formData.append('address[uz]', this.item.address.uz)
+          formData.append('links[ios]', this.item.links.ios)
+          formData.append('links[android]', this.item.links.android)
+          formData.append('online_chat', this.item.online_chat)
+          if (this.public_offer.ru) formData.append('public_offer[ru]', this.public_offer.ru)
+          if (this.public_offer.uz) formData.append('public_offer[uz]', this.public_offer.uz)
+
+          api.update(formData)
               .then(() => {
                 this.loadItem()
                 this.showToast('success', 'Успешно изменено!', 'CheckIcon')
