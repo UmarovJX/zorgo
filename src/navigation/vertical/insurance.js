@@ -18,6 +18,24 @@ export default [
         icon: 'FileIcon'
     },
     {
+        title: 'Краткое описание',
+        icon: 'HomeIcon',
+        children: [
+            {
+                title: 'Осаго',
+                route: {name: 'description-osago'}
+            },
+            {
+                title: 'Каско',
+                route: {name: 'description-kasko'}
+            },
+            {
+                title: 'Путешествие',
+                route: {name: 'description-travel'}
+            },
+        ]
+    },
+    {
         title: 'Компании',
         route: 'company-index',
         icon: 'ListIcon',

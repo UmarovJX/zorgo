@@ -18,6 +18,7 @@ import travel from "@/router/routes/travel";
 import partners from "@/router/routes/partners";
 import mainPage from "@/router/routes/mainPage";
 import settings from "@/router/routes/settings";
+import description from "@/router/routes/description";
 
 Vue.use(VueRouter)
 
@@ -48,6 +49,7 @@ const router = new VueRouter({
         ...companies,
         ...partners,
         ...mainPage,
+        ...description,
         ...settings,
         {
             path: '/:pathMatch(.*)',
