@@ -19,7 +19,7 @@ export default [
     },
     {
         title: 'Краткое описание',
-        icon: 'HomeIcon',
+        icon: 'MessageCircleIcon',
         children: [
             {
                 title: 'Осаго',
