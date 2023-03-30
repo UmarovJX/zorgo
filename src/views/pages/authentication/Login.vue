@@ -221,15 +221,14 @@ export default {
             }
             api.auth.login(data)
               .then(async ({data}) => {
-                console.log(data)
                 setLocalVar('accessToken', `Bearer ${data['access_token']}`)
-                api.auth.fetchUserDetails().then(response => setLocalVar('userData', JSON.stringify(response.data)))
+                await api.auth.fetchUserDetails().then(response => setLocalVar('userData', JSON.stringify(response.data)))
                 setLocalVar('registration_time', (new Date()).getTime())
                 // const {refresh_token} = await api.auth.updateToken()
-                await this.$router.push({name: 'services'})
+                // await this.$router.push({name: 'services'})
+                window.location.replace('/insurance/services')
               })
               .catch((error) => {
-                console.error(error.response, 'jamshid')
                 if (!error.response) {
                   this.dismissCountDown = 4
                 } else {
