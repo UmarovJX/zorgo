@@ -1,7 +1,7 @@
 <template>
   <b-row>
 
-    <h2 class="pl-1">Пользователи</h2>
+    <h2 class="pl-1">Сотрудники</h2>
 
     <!--  BEFORE TABLE  -->
     <div class="d-flex justify-content-between col-12">

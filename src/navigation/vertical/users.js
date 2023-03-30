@@ -1,6 +1,6 @@
 export default [
     {
-        title: 'Пользователи',
+        title: 'Сотрудники',
         route: 'users',
         icon: 'GridIcon'
     },

@@ -86,6 +86,7 @@ export default {
 
       // Remove userData from localStorage
       removeLocalVar('accessToken')
+      removeLocalVar('userData')
 
       // Reset ability
       this.$ability.update(initialAbility)

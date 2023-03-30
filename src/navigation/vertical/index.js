@@ -39,14 +39,36 @@ import models from "@/navigation/vertical/models";
 import insurance from "@/navigation/vertical/insurance";
 import common from "@/navigation/vertical/common";
 
+const userData = JSON.parse(localStorage.getItem('userData'))
+
+let array = []
+if (userData.role.id === 2) {
+    array = [
+        {
+            header: 'Страхование'
+        },
+        {
+            title: 'Осаго',
+            route: 'osago',
+            icon: 'FileIcon'
+        },
+        {
+            title: 'Путешествие',
+            route: 'travel',
+            icon: 'FileIcon'
+        },
+    ]
+} else {
+    array = [
+        ...insurance,
+        ...common,
+        // ...dealers,
+        // ...brands,
+        // ...models,
+        // ...years,
+        ...roles,
+        ...users,
+    ]
+}
 // Array of sections
-export default [
-    ...insurance,
-    ...common
-    // ...dealers,
-    // ...brands,
-    // ...models,
-    // ...years,
-    // ...roles,
-    // ...users,
-]
+export default array
