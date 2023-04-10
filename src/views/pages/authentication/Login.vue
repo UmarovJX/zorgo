@@ -220,9 +220,9 @@ export default {
               password: this.password
             }
             api.auth.login(data)
-              .then(async ({data}) => {
+              .then(({data}) => {
                 setLocalVar('accessToken', `Bearer ${data['access_token']}`)
-                await api.auth.fetchUserDetails().then(response => setLocalVar('userData', JSON.stringify(response.data)))
+                api.auth.fetchUserDetails().then(response => setLocalVar('userData', JSON.stringify(response.data)))
                 setLocalVar('registration_time', (new Date()).getTime())
                 // const {refresh_token} = await api.auth.updateToken()
                 // await this.$router.push({name: 'services'})

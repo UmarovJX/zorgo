@@ -115,6 +115,24 @@
                 <p v-if="errors" class="validation__red">{{ errors[0] }}</p>
               </ValidationProvider>
             </b-col>
+            <b-col md="6" v-for="(data, key) in personal_data_agreement">
+              <ValidationProvider :name="`Соглашение на обработку персональных данных [${key.toUpperCase()}]`" rules="mimes:application/pdf"
+                                  v-slot="{errors}">
+                <b-form-group
+                    :label="`Соглашение на обработку персональных данных [${key.toUpperCase()}]`"
+                    :label-for="`personal_data_agreement-${key}`"
+                >
+                  <b-form-file
+                      v-model="personal_data_agreement[key]"
+                      placeholder="Загрузите pdf файл"
+                      drop-placeholder="Drop file here..."
+                      :id="`personal_data_agreement-${key}`"
+                      accept="application/pdf"
+                  ></b-form-file>
+                </b-form-group>
+                <p v-if="errors" class="validation__red">{{ errors[0] }}</p>
+              </ValidationProvider>
+            </b-col>
             <b-col md="6">
               <ValidationProvider name="Telegram" v-slot="{errors}">
                 <b-form-group
@@ -249,6 +267,7 @@ export default {
         online_chat: '',
       },
       public_offer: {ru: null, uz: null},
+      personal_data_agreement: {ru: null, uz: null},
       social: {
         telegram: '',
         facebook: '',
@@ -281,6 +300,8 @@ export default {
           formData.append('online_chat', this.item.online_chat ?? '')
           if (this.public_offer.ru) formData.append('public_offer[ru]', this.public_offer.ru ?? '')
           if (this.public_offer.uz) formData.append('public_offer[uz]', this.public_offer.uz ?? '')
+          if (this.personal_data_agreement.ru) formData.append('personal_data_agreement[ru]', this.personal_data_agreement.ru ?? '')
+          if (this.personal_data_agreement.uz) formData.append('personal_data_agreement[uz]', this.personal_data_agreement.uz ?? '')
 
           formData.append('social[telegram]', this.item.social.telegram ?? '')
           formData.append('social[facebook]', this.item.social.facebook ?? '')
