@@ -61,7 +61,7 @@
         </template>
 
         <template #cell(status)="data">
-          <p v-if="data.item.status === 3 || data.item.status === 2" class="text-danger">Отменен</p>
+          <p v-if="data.item.status === 3 || data.item.status === 7" class="text-danger">Отменен</p>
           <p v-else class="text-success">Выдан</p>
         </template>
 
