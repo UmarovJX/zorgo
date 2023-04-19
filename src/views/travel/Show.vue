@@ -69,6 +69,11 @@
                 <th class="pr-1">Дата создания:</th>
                 <td>{{ policy.created_at }}</td>
               </tr>
+              <tr>
+                <th class="pr-1">Статус:</th>
+                <td v-if="policy.status === 3 || policy.status === 7" class="text-danger">{{ getStatus() }}</td>
+                <td v-else class="text-success">{{ getStatus() }}</td>
+              </tr>
               </tbody>
             </table>
           </b-col>
@@ -172,6 +177,13 @@ export default {
     },
     driverLicense(driver) {
       return driver.license_series + driver.license_number
+    },
+
+    getStatus() {
+      if (this.policy.status === 2 && this.policy.payment_status) {
+        return 'Выдан'
+      }
+      return 'Отменен'
     }
   }
 }

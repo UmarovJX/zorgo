@@ -60,6 +60,10 @@
           <span v-else>Неограничено</span>
         </template>
 
+        <template #cell(status)="data">
+          {{ getStatus(data.item) }}
+        </template>
+
         <template #cell(price)="data">
           {{ data.item.price | formatNumber }}
         </template>
@@ -168,6 +172,10 @@ export default {
         {
           key: 'id',
           label: 'ID'
+        },
+        {
+          key: 'status',
+          label: 'Статус',
         },
         {
           key: 'driver_limit',
@@ -316,6 +324,13 @@ export default {
       this.totalRows = filteredItems.length
       this.pagination.current = 1
     },
+
+    getStatus(data) {
+      if (data.status === 2 && data.payment_status) {
+        return 'Выдан'
+      }
+      return 'Отменен'
+    }
   }
 }
 </script>

@@ -52,6 +52,9 @@
           </div>
         </template>
 
+        <template #cell(status)="data">
+          {{ getStatus(data.item) }}
+        </template>
         <template #cell(price)="data">
           {{ data.item.price | formatNumber }}
         </template>
@@ -161,6 +164,10 @@ export default {
         {
           key: 'id',
           label: 'ID'
+        },
+        {
+          key: 'status',
+          label: 'Статус',
         },
         {
           key: 'price',
@@ -301,6 +308,13 @@ export default {
 
       return params.toString()
     },
+
+    getStatus(data) {
+      if (data.status === 2 && data.payment_status) {
+        return 'Выдан'
+      }
+      return 'Отменен'
+    }
   }
 }
 </script>
