@@ -61,7 +61,8 @@
         </template>
 
         <template #cell(status)="data">
-          {{ getStatus(data.item) }}
+          <p v-if="data.item.status === 3 || data.item.status === 2" class="text-danger">Отменен</p>
+          <p v-else class="text-success">Выдан</p>
         </template>
 
         <template #cell(price)="data">
@@ -323,13 +324,6 @@ export default {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length
       this.pagination.current = 1
-    },
-
-    getStatus(data) {
-      if (data.status === 2 && data.payment_status) {
-        return 'Выдан'
-      }
-      return 'Отменен'
     }
   }
 }

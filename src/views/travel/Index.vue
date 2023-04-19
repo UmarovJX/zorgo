@@ -53,7 +53,8 @@
         </template>
 
         <template #cell(status)="data">
-          {{ getStatus(data.item) }}
+          <p v-if="data.item.status === 3 || data.item.status === 2" class="text-danger">Отменен</p>
+          <p v-else class="text-success">Выдан</p>
         </template>
         <template #cell(price)="data">
           {{ data.item.price | formatNumber }}
@@ -308,13 +309,6 @@ export default {
 
       return params.toString()
     },
-
-    getStatus(data) {
-      if (data.status === 2 && data.payment_status) {
-        return 'Выдан'
-      }
-      return 'Отменен'
-    }
   }
 }
 </script>
