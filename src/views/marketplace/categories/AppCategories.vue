@@ -235,7 +235,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 
 
 export default {
-  name: "AppServices",
+  name: "AppCategories",
   components: {
     BTable,
     BBadge,
@@ -281,10 +281,7 @@ export default {
           key: 'name.ru',
           label: 'Названия',
         },
-        {
-          key: 'body.ru',
-          label: 'Описания',
-        },
+
         {
           key: 'image',
           label: 'Изображения',
@@ -327,7 +324,7 @@ export default {
   },
 
   async mounted() {
-    await this.getServices()
+    await this.getCategories()
   },
 
   computed: {
@@ -371,12 +368,13 @@ export default {
           })
     },
 
-    async getServices() {
+    async getCategories() {
       this.isBusy = true
-      await api.services.fetchServices()
+      await api.categories.fetchCategories()
           .then(res => {
-            this.items = res.data
+            this.items = res.data.data
             console.log(this.items)
+
           })
           .catch((error) => {
             console.error(error)
@@ -389,7 +387,7 @@ export default {
     deactivateService(id, active) {
       api.services.deleteService(id)
           .then(() => {
-            this.getServices()
+            this.getCategories()
             if (active === 1) {
               this.showToast('success', 'Деактивация прошла успешно!', 'CheckIcon')
             } else {

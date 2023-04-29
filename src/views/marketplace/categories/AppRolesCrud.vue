@@ -1,24 +1,23 @@
 <template>
   <div>
-    <AppModelsCreate
+    <AppRolesCreate
         v-if="splitRoute($route.name) === 'create'"
     />
-    <AppModelsUpdate
+    <AppRolesUpdate
         v-if="splitRoute($route.name) === 'update'"
     />
   </div>
 </template>
 
 <script>
-import AppModelsCreate from "@/components/models/AppModelsCreate";
-import AppModelsUpdate from "@/components/models/AppModelsUpdate";
-
+import AppRolesCreate from "@/components/roles/AppRolesCreate";
+import AppRolesUpdate from "@/components/roles/AppRolesUpdate";
 
 export default {
-  name: "AppModelsCrud",
+  name: "AppRolesCrud",
   components: {
-    AppModelsUpdate,
-    AppModelsCreate,
+    AppRolesCreate,
+    AppRolesUpdate
   },
 
   methods: {

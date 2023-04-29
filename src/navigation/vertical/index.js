@@ -38,37 +38,39 @@ import years from "@/navigation/vertical/years";
 import models from "@/navigation/vertical/models";
 import insurance from "@/navigation/vertical/insurance";
 import common from "@/navigation/vertical/common";
+import marketplace from "@/navigation/vertical/marketplace";
 
-const userData = JSON.parse(localStorage.getItem('userData'))
+const userData = JSON.parse(localStorage.getItem("userData"));
 
-let array = []
+let array = [];
 if (userData.role.id === 2) {
     array = [
         {
-            header: 'Страхование'
+            header: "Страхование",
         },
         {
-            title: 'Осаго',
-            route: 'osago',
-            icon: 'FileIcon'
+            title: "Осаго",
+            route: "osago",
+            icon: "FileIcon",
         },
         {
-            title: 'Путешествие',
-            route: 'travel',
-            icon: 'FileIcon'
+            title: "Путешествие",
+            route: "travel",
+            icon: "FileIcon",
         },
-    ]
+    ];
 } else {
     array = [
         ...insurance,
+        ...marketplace,
         ...common,
         // ...dealers,
-        // ...brands,
-        // ...models,
-        // ...years,
+        ...brands,
+        ...models,
+        ...years,
         ...roles,
         ...users,
-    ]
+    ];
 }
 // Array of sections
-export default array
+export default array;

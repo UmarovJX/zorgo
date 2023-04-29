@@ -34,7 +34,7 @@
           class="btn-success float-right mt-2"
           @click="updateBrand"
       >
-        Создать
+        Сохранить
       </b-button>
     </b-card>
 

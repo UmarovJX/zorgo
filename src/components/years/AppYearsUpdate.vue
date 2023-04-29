@@ -1,64 +1,64 @@
 <template>
-  <div>
+    <div>
+        <b-card>
+            <ValidationObserver ref="validation-observer">
+                <div class="col-12 d-flex flex-wrap p-0">
+                    <!--   USERNAME   -->
+                    <b-col cols="12" class="p-0 px-1">
+                        <ValidationProvider
+                            name="Год"
+                            rules="required"
+                            v-slot="{ errors }"
+                        >
+                            <b-form-group label="Год" label-for="name">
+                                <b-form-input
+                                    type="number"
+                                    v-model="name"
+                                    id="name"
+                                    size="md"
+                                    placeholder="Введите год"
+                                />
+                            </b-form-group>
+                            <p v-if="errors" class="validation__red">
+                                {{ errors[0] }}
+                            </p>
+                        </ValidationProvider>
+                        <ValidationProvider
+                            name="Модель"
+                            rules="required"
+                            v-slot="{ errors }"
+                        >
+                            <b-form-group label="Модель" label-for="">
+                                <b-form-select
+                                    disables="!options.length"
+                                    v-model="model"
+                                    :options="options"
+                                ></b-form-select>
+                            </b-form-group>
 
-    <!--  ROLE NAME  -->
-    <b-card>
-      <ValidationObserver ref="validation-observer">
+                            <p v-if="errors" class="validation__red">
+                                {{ errors[0] }}
+                            </p>
+                        </ValidationProvider>
+                    </b-col>
+                </div>
+            </ValidationObserver>
 
-        <div class="col-12 d-flex flex-wrap p-0">
-
-          <!--   NAME   -->
-          <b-col cols="12" class="p-0 px-1">
-            <ValidationProvider name="Название" rules="required" v-slot="{errors}">
-              <b-form-group
-                  label="Название"
-                  label-for="name"
-
-              >
-                <b-form-input
-                    v-model="name"
-                    id="name"
-                    size="md"
-                    placeholder="Введите"
-                />
-              </b-form-group>
-              <p v-if="errors" class="validation__red">{{ errors[0] }}</p>
-            </ValidationProvider>
-          </b-col>
-
-        </div>
-
-      </ValidationObserver>
-
-      <b-button
-          class="btn-success float-right mt-2"
-          @click="updateBrand"
-      >
-        Создать
-      </b-button>
-    </b-card>
-
-  </div>
+            <b-button
+                class="btn-success float-right mt-2 mr-1"
+                @click="updateYear"
+            >
+                Сохранить
+            </b-button>
+        </b-card>
+    </div>
 </template>
 
 <script>
-import api from '@/services/api'
-import Ripple from 'vue-ripple-directive'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import api from "@/services/api";
+import Ripple from "vue-ripple-directive";
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import {
-  BFormGroup,
-  BFormInput,
-  BButton,
-  BCard,
-  BCol,
-  BTable,
-  BFormCheckbox,
-  BFormCheckboxGroup
-} from 'bootstrap-vue'
-
-export default {
-  name: "AppYearsUpdate",
-  components: {
     BFormGroup,
     BFormInput,
     BButton,
@@ -67,78 +67,119 @@ export default {
     BTable,
     BFormCheckbox,
     BFormCheckboxGroup,
-    ToastificationContent,
-  },
-  directives: {
-    Ripple
-  },
-  data() {
-    return {
-      name: null,
-      isBusy: false,
-      sortBy: '',
-      sortDesc: false,
-      sortDirection: 'asc',
-      filter: null,
-      filterOn: [],
-      selectMode: 'multi',
-      infoModal: {
-        id: 'info-modal',
-        title: '',
-        content: '',
-      },
-    }
-  },
+    BFormSelect,
+} from "bootstrap-vue";
 
-  async mounted() {
-    await this.getOneBrand()
-  },
+export default {
+    name: "AppYearsUpdate",
+    components: {
+        BFormGroup,
+        BFormInput,
+        BButton,
+        BCard,
+        BCol,
+        BTable,
+        BFormCheckbox,
+        BFormCheckboxGroup,
+        BFormSelect,
 
-  methods: {
-
-    async getOneBrand() {
-      const {id} = this.$route.params
-      await api.brands.fetchOneBrand(id)
-          .then(res => {
-            this.name = res.data.name
-          })
-          .catch(error => {
-            console.log(error)
-          })
+        ToastificationContent,
+    },
+    directives: {
+        Ripple,
+    },
+    data() {
+        return {
+            name: null,
+            model: null,
+            options: [],
+            isBusy: false,
+            sortBy: "",
+            sortDesc: false,
+            sortDirection: "asc",
+            filter: null,
+            filterOn: [],
+            selectMode: "multi",
+            infoModal: {
+                id: "info-modal",
+                title: "",
+                content: "",
+            },
+        };
     },
 
-    showToast(variant, text, icon) {
-      this.$toast({
-        component: ToastificationContent,
-        props: {
-          title: text,
-          icon: icon,
-          variant,
+    async mounted() {
+        this.getOneYear();
+        this.getAllModels();
+    },
+
+    methods: {
+        async getOneYear() {
+            const { id } = this.$route.params;
+            await api.years
+                .fetchOneYear(id)
+                .then((res) => {
+                    this.name = res.data.name;
+                    this.model = res.data.model.id;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         },
-      })
-    },
+        async getAllModels() {
+            api.common.getModels().then(({ data }) => {
+                const options = data
+                    .filter((el) => el.active)
+                    .map((el) => ({ value: el.id, text: el.name }));
+                this.options = [
+                    { value: null, text: "Выберите Модель", disabled: true },
+                    ...options,
+                ];
+                this.brand = null;
+            });
+        },
+        showToast(variant, text, icon) {
+            this.$toast({
+                component: ToastificationContent,
+                props: {
+                    title: text,
+                    icon: icon,
+                    variant,
+                },
+            });
+        },
 
-    updateBrand() {
-      const isValid = this.$refs['validation-observer'].validate()
-      if (isValid) {
-        const {id} = this.$route.params
-        const {name} = this
-        const data = {
-          name,
-        }
-        api.brands.updateBrand(id, data)
-            .then(() => {
-              this.$router.push({name: 'brands'})
-              this.showToast('success', 'Успешно изменено!', 'CheckIcon')
-            })
-            .catch((error) => {
-              console.error(error)
-              this.showToast('danger', 'Что-то пошло не так!', 'XIcon')
-            })
-      }
+        updateYear() {
+            const isValid = this.$refs["validation-observer"].validate();
+            if (isValid) {
+                const { id } = this.$route.params;
+                const { name } = this;
+                const data = {
+                    name,
+                    model_id: this.model,
+                };
+                api.years
+                    .updateYear(id, data)
+                    .then(() => {
+                        this.$router.push({ name: "years" });
+                        this.showToast(
+                            "success",
+                            "Успешно изменено!",
+                            "CheckIcon"
+                        );
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        this.showToast(
+                            "danger",
+                            "Что-то пошло не так!",
+                            "XIcon"
+                        );
+                    });
+            }
+        },
     },
-  }
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

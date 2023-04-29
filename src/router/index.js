@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import VueRouter from "vue-router";
 
 import Error404 from "@/views/error/Error404.vue";
 
@@ -20,21 +20,24 @@ import mainPage from "@/router/routes/mainPage";
 import settings from "@/router/routes/settings";
 import description from "@/router/routes/description";
 
-Vue.use(VueRouter)
+//marketplace
+import category from "@/router/routes/marketplace/category";
+
+Vue.use(VueRouter);
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: "history",
     base: process.env.BASE_URL,
     scrollBehavior() {
         return {
             x: 0,
             y: 0,
-        }
+        };
     },
     routes: [
         {
-            path: '/',
-            redirect: {name: 'services'},
+            path: "/",
+            redirect: { name: "services" },
         },
         ...pages,
         ...roles,
@@ -51,36 +54,38 @@ const router = new VueRouter({
         ...mainPage,
         ...description,
         ...settings,
+        //marketplace
+        ...category,
         {
-            path: '/:pathMatch(.*)',
-            component: Error404
+            path: "/:pathMatch(.*)",
+            component: Error404,
         },
     ],
-})
+});
 
 router.beforeEach((to, from, next) => {
-    const AUTH_TOKEN = localStorage.getItem('accessToken')
-    if (to.name === 'auth-login') return next()
+    const AUTH_TOKEN = localStorage.getItem("accessToken");
+    if (to.name === "auth-login") return next();
     if (AUTH_TOKEN) {
-        if (to.path === '/') {
-            return next({name: 'insurance/services'})
+        if (to.path === "/") {
+            return next({ name: "insurance/services" });
         } else {
-            return next()
+            return next();
         }
     } else {
         // return next({ name: "home" })
-        return next({name: 'auth-login'})
+        return next({ name: "auth-login" });
     }
-})
+});
 
 // ? For splash screen
 // Remove afterEach hook if you are not using splash screen
 router.afterEach(() => {
     // Remove initial loading
-    const appLoading = document.getElementById('loading-bg')
+    const appLoading = document.getElementById("loading-bg");
     if (appLoading) {
-        appLoading.style.display = 'none'
+        appLoading.style.display = "none";
     }
-})
+});
 
-export default router
+export default router;

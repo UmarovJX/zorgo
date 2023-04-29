@@ -87,7 +87,7 @@
     <!--  PAGINATION  -->
     <b-col
         cols="12"
-        class="mb-3 d-flex justify-content-between"
+        class="mb-3 d-flex justify-content-between align-items-center"
     >
       <b-form-select
           v-if="showPagination"
@@ -150,7 +150,7 @@ export default {
       pagination: {
         page: 1,
         total: 0,
-        perPage: 20,
+        perPage: 3,
         perPageOptions: [1, 2, 3, 10, 20, 30, 50]
       },
       filter: null,

@@ -1,32 +1,31 @@
-import { axiosInstance } from '@/services/core/base'
-import Core from '@/services/core'
+import { axiosInstance } from "@/services/core/base";
+import Core from "@/services/core";
 
 class Years extends Core {
     constructor(axios = axiosInstance) {
-        super(axios)
+        super(axios);
     }
 
-    fetchYears() {
-        return this.get('cars/year')
+    fetchYears(params = "") {
+        console.log(params);
+        return this.get("cars/year" + (params ? "?" + (params) : ""));
     }
 
     fetchOneYear(id) {
-        return this.get(`cars/year/${id}`)
+        return this.get(`cars/year/${id}`);
     }
 
     updateYear(id, body) {
-        return this.put(`cars/year/${id}`, body)
+        return this.put(`cars/year/${id}`, body);
     }
 
     createYear(body) {
-        return this.post('cars/year', body)
+        return this.post("cars/year", body);
     }
 
     deleteYear(id) {
-        return this.delete(`cars/year/${id}`)
+        return this.delete(`cars/year/${id}`);
     }
-
 }
 
-export default Years
-
+export default Years;
