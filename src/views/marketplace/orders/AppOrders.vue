@@ -1,6 +1,6 @@
 <template>
     <b-row>
-        <h2 class="pl-1">Годы</h2>
+        <h2 class="pl-1">Заказы</h2>
 
         <!--  BEFORE TABLE  -->
         <div class="d-flex justify-content-between col-12">
@@ -21,17 +21,6 @@
                     </b-input-group>
                 </b-form-group>
             </b-col>
-
-            <!--      CREATE     -->
-            <div
-                class="d-flex align-items-center justify-content-center float-right"
-            >
-                <router-link
-                    class="create__btn btn-primary"
-                    :to="{ name: 'year-create' }"
-                    >Создать</router-link
-                >
-            </div>
         </div>
 
         <!--  TABLE  -->
@@ -53,109 +42,59 @@
                     </div>
                 </template>
 
-                <template #cell(active)="data">
-                    <span v-if="data.item.active">Активен</span>
-                    <span v-else>Не активен</span>
-                </template>
-
-                <template #cell(crud_row)="data">
-                    <div class="d-flex float-right">
-                        <!--    EDIT    -->
-                        <router-link
-                            :to="{ path: `year/update/${data.item.id}` }"
-                        >
-                            <b-button
-                                variant="outline-success"
-                                class="update__btn"
-                            >
-                                <feather-icon icon="Edit2Icon" size="18" />
-                            </b-button>
-                        </router-link>
-
-                        <!--  DEACTIVATE  -->
-                        <div class="ml-1" v-if="data.item.active">
-                            <!--  DEACTIVATE  -->
-                            <b-button
+                <template #cell(status)="{ item }">
+                    <b-row>
+                        <b-col cols="6">{{ item.status }}</b-col>
+                        <b-col cols="6"
+                            ><b-button
+                                v-if="item.status !== 'closed'"
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                                v-b-modal="`modal-${data.item.id}`"
-                                variant="outline-danger"
-                                class="delete__btn"
-                            >
-                                <feather-icon icon="Trash2Icon" size="18" />
-                            </b-button>
-                            <!-- DEACTIVATE MODAL -->
-                            <b-modal
-                                :id="`modal-${data.item.id}`"
-                                cancel-title="Отменить"
-                                cancel-variant="danger btn-sm"
-                                body-class="deactivate-btn_modal"
-                                title="Деактивация"
-                                hide-header-close
-                                centered
-                            >
-                                Вы действительно хотите деактивировать этот
-                                бренд?
-
-                                <template #modal-footer>
-                                    <b-button
-                                        variant="danger btn-sm"
-                                        @click="
-                                            $bvModal.hide(
-                                                `modal-${data.item.id}`
-                                            )
-                                        "
-                                    >
-                                        Отменить
-                                    </b-button>
-
-                                    <b-button
-                                        variant="success btn-sm"
-                                        @click="
-                                            deactivateYear(
-                                                data.item.id,
-                                                data.item.active
-                                            )
-                                        "
-                                    >
-                                        Деактивировать
-                                    </b-button>
-                                </template>
-                            </b-modal>
-                        </div>
-
-                        <!--  ACTIVATE  -->
-                        <div class="ml-1" v-else>
-                            <!--  ACTIVATE  -->
-                            <b-button
-                                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                                v-b-modal="`modal-${data.item.id}`"
+                                v-b-modal="`modal-${item.id}`"
                                 variant="outline-info"
                                 class="delete__btn"
                             >
-                                <feather-icon
-                                    icon="CornerUpLeftIcon"
-                                    size="18"
-                                />
+                                <feather-icon icon="Edit2Icon" size="18" />
                             </b-button>
-                            <!-- ACTIVATE MODAL -->
+
                             <b-modal
-                                :id="`modal-${data.item.id}`"
+                                :id="`modal-${item.id}`"
                                 cancel-title="Отменить"
                                 cancel-variant="danger btn-sm"
                                 body-class="deactivate-btn_modal"
-                                title="Активация"
+                                title="Изменить статус"
                                 hide-header-close
                                 centered
                             >
-                                Вы действительно хотите активировать этот бренд?
-
+                                <ValidationObserver ref="validation-observer">
+                                    <ValidationProvider
+                                        name="Статус"
+                                        rules="required"
+                                        v-slot="{ errors }"
+                                    >
+                                        <b-form-group
+                                            label="Статус"
+                                            label-for="status"
+                                        >
+                                            <b-form-select
+                                                :options="statusOptions"
+                                                v-model="status"
+                                            >
+                                            </b-form-select>
+                                        </b-form-group>
+                                        <p
+                                            v-if="errors"
+                                            class="validation__red"
+                                        >
+                                            {{ errors[0] }}
+                                        </p>
+                                    </ValidationProvider>
+                                </ValidationObserver>
                                 <template #modal-footer>
                                     <b-button
                                         variant="danger btn-sm"
                                         @click="
-                                            $bvModal.hide(
-                                                `modal-${data.item.id}`
-                                            )
+                                            $bvModal.hide(`modal-${item.id}`),
+                                                (status = null)
                                         "
                                     >
                                         Отменить
@@ -163,19 +102,33 @@
 
                                     <b-button
                                         variant="success btn-sm"
-                                        @click="
-                                            deactivateYear(
-                                                data.item.id,
-                                                data.item.active
-                                            )
-                                        "
+                                        @click="changeStatus(item.id)"
                                     >
-                                        Активировать
+                                        Сохранить
                                     </b-button>
                                 </template>
-                            </b-modal>
-                        </div>
+                            </b-modal></b-col
+                        >
+                    </b-row>
+                </template>
+                <template #cell(button)="{ item }">
+                    <b-button
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        @click="openDetails(item.id)"
+                        variant="outline-info"
+                        class="delete__btn ml-2"
+                    >
+                        <feather-icon icon="EyeIcon" size="18" />
+                    </b-button>
+                </template>
+
+                <template #cell(client)="{ item }">
+                    <div>
+                        {{
+                            item.client.first_name + " " + item.client.last_name
+                        }}
                     </div>
+                    <div>{{ item.client.phone }}</div>
                 </template>
             </b-table>
         </b-col>
@@ -184,6 +137,7 @@
         <b-col
             cols="12"
             class="mb-3 d-flex justify-content-between align-items-center"
+            v-if="items.length > 0"
         >
             <b-form-select
                 class="float-right col-1"
@@ -227,6 +181,7 @@ import {
     paginationWatchers,
     paramFunctions,
 } from "@/util/pagination-helper";
+import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 export default {
     name: "AppYears",
@@ -244,12 +199,22 @@ export default {
         BFormSelect,
         ModalButton,
         ToastificationContent,
+        ValidationObserver,
+        ValidationProvider,
     },
     directives: {
         Ripple,
     },
     data() {
         return {
+            status: null,
+            statusOptions: [
+                { value: null, text: "Выберите новый статус", disabled: true },
+                { value: "processing", text: "processing" },
+                { value: "delivery", text: "delivery" },
+                { value: "canceled", text: "canceled" },
+                { value: "closed", text: "closed" },
+            ],
             name: null,
             isBusy: false,
             filter: null,
@@ -266,23 +231,33 @@ export default {
                     sortable: true,
                 },
                 {
-                    key: "name",
-                    label: "Год",
+                    key: "status",
+                    label: "Status",
+                },
+                {
+                    key: "price",
+                    label: "Price",
                     sortable: true,
                 },
                 {
-                    key: "active",
-                    label: "Статус",
+                    key: "created_at",
+                    label: "created_at",
                     sortable: true,
+                    formatter: "toLocaleDate",
                 },
                 {
-                    key: "model.name",
-                    label: "Модель",
+                    key: "updated_at",
+                    label: "updated_at",
                     sortable: true,
+                    formatter: "toLocaleDate",
                 },
                 {
-                    key: "crud_row",
-                    label: " ",
+                    key: "client",
+                    label: "Client",
+                },
+                {
+                    key: "button",
+                    label: "",
                 },
             ],
             items: [],
@@ -290,11 +265,12 @@ export default {
             totalRows: 1,
         };
     },
-    watch: paginationWatchers("getYears"),
+    watch: paginationWatchers("getOrders"),
 
-    async mounted() {
+    mounted() {
         this.setParams();
-        await this.getYears();
+        this.getOrders();
+        console.log(this.pagination.page);
     },
 
     computed: {
@@ -311,6 +287,9 @@ export default {
     },
 
     methods: {
+        toLocaleDate(date) {
+            return new Date(date).toLocaleDateString("ru");
+        },
         ///////////
         ...paramFunctions("search[id,name]"),
         showToast(variant, text, icon) {
@@ -324,10 +303,10 @@ export default {
             });
         },
 
-        async getYears() {
+        async getOrders() {
             this.isBusy = true;
-            await api.years
-                .fetchYears(this.getParams())
+            await api.orders
+                .fetchOrders(this.getParams())
                 .then((res) => {
                     this.items = res.data.data;
                     this.pagination.total = res.data.total;
@@ -339,30 +318,37 @@ export default {
                     this.isBusy = false;
                 });
         },
-
-        deactivateYear(id, active) {
-            api.years
-                .deleteYear(id)
-                .then(() => {
-                    this.getYears();
-                    if (active === 1) {
+        async changeStatus(id) {
+            const isValid = await this.$refs["validation-observer"].validate();
+            if (isValid) {
+                api.orders
+                    .changeStatus(id, { status: this.status })
+                    .then(() => {
+                        this.items = [];
+                        this.getOrders();
                         this.showToast(
                             "success",
-                            "Деактивация прошла успешно!",
+                            "Статус изменен успешно!",
                             "CheckIcon"
                         );
-                    } else {
+                    })
+                    .catch((error) => {
+                        console.error(error);
                         this.showToast(
-                            "success",
-                            "Активация прошла успешно!",
-                            "CheckIcon"
+                            "danger",
+                            "Что-то пошло не так!",
+                            "XIcon"
                         );
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                    this.showToast("danger", "Что-то пошло не так!", "XIcon");
-                });
+                    })
+                    .finally(() => {
+                        this.status = null;
+                    });
+            } else {
+                this.showToast("danger", "Необходимо выбрать статус");
+            }
+        },
+        openDetails(id) {
+            this.$router.push({ name: "order-details", params: { id } });
         },
 
         info(item, index, button) {

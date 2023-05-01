@@ -111,7 +111,6 @@ export default {
     },
 
     methods: {
-        
         showToast(variant, text, icon) {
             this.$toast({
                 component: ToastificationContent,
@@ -135,8 +134,8 @@ export default {
             });
         },
 
-        createYear() {
-            const isValid = this.$refs["validation-observer"].validate();
+        async createYear() {
+            const isValid = await this.$refs["validation-observer"].validate();
             if (isValid) {
                 const { name } = this;
                 const data = {

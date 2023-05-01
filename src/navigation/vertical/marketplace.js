@@ -8,6 +8,11 @@ export default [
         route: "categories",
         icon: "GridIcon",
     },
+    {
+        title: "История заказов",
+        route: "orders",
+        icon: "ActivityIcon",
+    },
     // {
     //     title: "Осаго",
     //     route: "osago",

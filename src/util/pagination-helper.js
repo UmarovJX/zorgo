@@ -27,19 +27,17 @@ export function paramFunctions(searchString) {
 
         setParams() {
             const searchParams = new URLSearchParams(window.location.search);
-            if (searchParams.has("page"))
-                this.pagination.page = searchParams.get("page");
-            if (searchParams.has("perPage"))
-                this.pagination.perPage = searchParams.get("perPage");
-            if (searchParams.has(searchString))
-                this.filter = searchParams.get(searchString);
+            ["page", "perPage", searchString].forEach((el) => {
+                if (searchParams.has(el)) {
+                    this.pagination[el] = searchParams.get(el);
+                }
+            });
         },
         getParams() {
             const params = new URLSearchParams();
             if (this.filter) {
                 params.append(searchString, this.filter);
             }
-            console.log(this.pagination.page);
 
             params.append("page", this.pagination.page);
             params.append("perPage", this.pagination.perPage);
@@ -73,14 +71,10 @@ export function paginationWatchers(fName) {
                 const params = new URLSearchParams(window.location.search);
 
                 if (val !== params.get("perPage")) {
-                    if (val > this.pagination.total) {
-                        this.pagination.page = 1;
-                        this.generateParams();
-                        await this[fName]();
-                    } else {
-                        this.generateParams();
-                        await this[fName]();
-                    }
+                    this.pagination.page = 1;
+
+                    this.generateParams();
+                    await this[fName]();
                 }
             },
         },

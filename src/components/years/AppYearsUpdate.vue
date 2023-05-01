@@ -149,8 +149,8 @@ export default {
             });
         },
 
-        updateYear() {
-            const isValid = this.$refs["validation-observer"].validate();
+        async updateYear() {
+            const isValid = await this.$refs["validation-observer"].validate();
             if (isValid) {
                 const { id } = this.$route.params;
                 const { name } = this;

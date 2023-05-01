@@ -112,8 +112,8 @@ export default {
 
     methods: {
         async getAllBrands() {
-            api.brands.fetchBrands().then(({ data }) => {
-                const options = data.data
+            api.common.getBrands().then(({ data }) => {
+                const options = data
                     .filter((el) => el.active)
                     .map((el) => ({ value: el.id, text: el.name }));
                 this.options = [
@@ -134,8 +134,8 @@ export default {
             });
         },
 
-        createModel() {
-            const isValid = this.$refs["validation-observer"].validate();
+        async createModel() {
+            const isValid = await this.$refs["validation-observer"].validate();
             if (isValid) {
                 const data = { name: this.name, brand_id: this.brand };
                 api.models

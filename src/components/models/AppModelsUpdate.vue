@@ -100,7 +100,6 @@ export default {
             },
         };
     },
-    async mounted() {},
     async mounted() {
         this.getOneModel();
         this.getAllBrands();
@@ -120,8 +119,8 @@ export default {
                 });
         },
         async getAllBrands() {
-            api.brands.fetchBrands().then(({ data }) => {
-                const options = data.data
+            api.common.getBrands().then(({ data }) => {
+                const options = data
                     .filter((el) => el.active)
                     .map((el) => ({ value: el.id, text: el.name }));
                 this.options = [
@@ -142,8 +141,8 @@ export default {
             });
         },
 
-        updateModel() {
-            const isValid = this.$refs["validation-observer"].validate();
+        async updateModel() {
+            const isValid = await this.$refs["validation-observer"].validate();
             if (isValid) {
                 const { id } = this.$route.params;
                 const { name, brand } = this;
