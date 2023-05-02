@@ -242,7 +242,7 @@ import ToastificationContent from "@core/components/toastification/Toastificatio
 import {
     paginationData,
     paginationWatchers,
-    paramFunctions,
+    paginationHelperMethods,
 } from "@/util/pagination-helper";
 
 export default {
@@ -359,7 +359,7 @@ export default {
 
     methods: {
         /////////////
-        ...paramFunctions(
+        ...paginationHelperMethods(
             "search[id,name,category_id,category.name,dealer_id,dealer.company]"
         ),
         showToast(variant, text, icon) {

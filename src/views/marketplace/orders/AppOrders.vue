@@ -179,7 +179,7 @@ import ToastificationContent from "@core/components/toastification/Toastificatio
 import {
     paginationData,
     paginationWatchers,
-    paramFunctions,
+    paginationHelperMethods,
 } from "@/util/pagination-helper";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 
@@ -291,7 +291,7 @@ export default {
             return new Date(date).toLocaleDateString("ru");
         },
         ///////////
-        ...paramFunctions("search[id,name]"),
+        ...paginationHelperMethods("search[id,name]"),
         showToast(variant, text, icon) {
             this.$toast({
                 component: ToastificationContent,

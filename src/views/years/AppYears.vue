@@ -44,7 +44,7 @@
                 :busy="isBusy"
                 :items="items"
                 :fields="fields"
-                @filtered="onFiltered"
+                @sort-changed="handleSortChange"
             >
                 <template #table-busy>
                     <div class="text-center text-primary my-2">
@@ -225,7 +225,7 @@ import ToastificationContent from "@core/components/toastification/Toastificatio
 import {
     paginationData,
     paginationWatchers,
-    paramFunctions,
+    paginationHelperMethods,
 } from "@/util/pagination-helper";
 
 export default {
@@ -273,12 +273,10 @@ export default {
                 {
                     key: "active",
                     label: "Статус",
-                    sortable: true,
                 },
                 {
                     key: "model.name",
                     label: "Модель",
-                    sortable: true,
                 },
                 {
                     key: "crud_row",
@@ -312,7 +310,10 @@ export default {
 
     methods: {
         ///////////
-        ...paramFunctions("search[id,name]"),
+        ...paginationHelperMethods("search[id,name]", {
+            id: "id",
+            name: "name",
+        }),
         showToast(variant, text, icon) {
             this.$toast({
                 component: ToastificationContent,
@@ -365,20 +366,11 @@ export default {
                 });
         },
 
-        info(item, index, button) {
-            this.infoModal.title = `Row index: ${index}`;
-            this.infoModal.content = JSON.stringify(item, null, 2);
-            this.$root.$emit("bv::show::modal", this.infoModal.id, button);
-        },
-        resetInfoModal() {
-            this.infoModal.title = "";
-            this.infoModal.content = "";
-        },
-        onFiltered(filteredItems) {
-            // Trigger pagination to update the number of buttons/pages due to filtering
-            this.totalRows = filteredItems.length;
-            this.pagination.current = 1;
-        },
+        // onFiltered(filteredItems) {
+        //     // Trigger pagination to update the number of buttons/pages due to filtering
+        //     this.totalRows = filteredItems.length;
+        //     this.pagination.current = 1;
+        // },
     },
 };
 </script>
