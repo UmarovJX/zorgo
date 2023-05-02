@@ -10,7 +10,7 @@ export default [
         children: [
             {
                 path: 'create',
-                name: 'service-create',
+                name: 'category-create',
                 component: () => import('@/views/services/AppServicesCrud'),
                 meta: {
                     parent: 'services'
@@ -18,7 +18,7 @@ export default [
             },
             {
                 path: 'update/:id',
-                name: 'services-update',
+                name: 'category-update',
                 component: () => import('@/views/services/AppServicesCrud'),
                 meta: {
                     parent: 'services'

@@ -13,6 +13,11 @@ export default [
         route: "orders",
         icon: "ActivityIcon",
     },
+    {
+        title: "Товары",
+        route: "products",
+        icon: "ActivityIcon",
+    },
     // {
     //     title: "Осаго",
     //     route: "osago",

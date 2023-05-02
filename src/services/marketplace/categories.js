@@ -23,7 +23,7 @@ class Categories extends Core {
   }
 
   deleteCategory(id) {
-    return this.delete(`role/${id}`)
+    return this.delete(`marketplace/category/${id}`)
   }
 
 }

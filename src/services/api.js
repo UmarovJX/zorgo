@@ -12,6 +12,7 @@ import Osago from "@/services/osago";
 //Marketplace
 import MarketplaceCategories from "@/services/marketplace/categories";
 import MarketplaceOrders from "@/services/marketplace/orders";
+import MarketplaceProducts from "@/services/marketplace/products";
 
 export default {
     common: new Common(),
@@ -25,6 +26,8 @@ export default {
     years: new Years(),
     models: new Models(),
     osago: new Osago(),
+    //Marketplace
     categories: new MarketplaceCategories(),
     orders: new MarketplaceOrders(),
+    products: new MarketplaceProducts(),
 };

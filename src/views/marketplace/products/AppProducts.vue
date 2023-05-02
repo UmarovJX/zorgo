@@ -1,6 +1,6 @@
 <template>
     <b-row>
-        <h2 class="pl-1">Услуги</h2>
+        <h2 class="pl-1">Модели</h2>
 
         <!--  BEFORE TABLE  -->
         <div class="d-flex justify-content-between col-12">
@@ -23,9 +23,15 @@
             </b-col>
 
             <!--      CREATE     -->
-            <!--      <div class="d-flex align-items-center justify-content-center float-right">-->
-            <!--        <router-link class="create__btn btn-primary" :to="{name:'role-create'}">Создать</router-link>-->
-            <!--      </div>-->
+            <div
+                class="d-flex align-items-center justify-content-center float-right"
+            >
+                <router-link
+                    class="create__btn btn-primary"
+                    :to="{ name: 'model-create' }"
+                    >Создать</router-link
+                >
+            </div>
         </div>
 
         <!--  TABLE  -->
@@ -38,7 +44,7 @@
                 :busy="isBusy"
                 :items="items"
                 :fields="fields"
-                :filter-included-fields="filterOn"
+                @filtered="onFiltered"
             >
                 <template #table-busy>
                     <div class="text-center text-primary my-2">
@@ -51,13 +57,6 @@
                     <span v-if="data.item.active">Активен</span>
                     <span v-else>Не активен</span>
                 </template>
-                <template #cell(category.name.ru)="{ item }">
-                    <span v-if="item.category">{{
-                        item.category.name.ru
-                    }}</span>
-                    <span v-else>Нет категории</span>
-                </template>
-
                 <template #cell(image)="data">
                     <div
                         style="width: 90px; height: 80px"
@@ -78,7 +77,7 @@
                     <div class="d-flex float-right">
                         <!--    EDIT    -->
                         <router-link
-                            :to="{ path: `service/update/${data.item.id}` }"
+                            :to="{ path: `model/update/${data.item.id}` }"
                         >
                             <b-button
                                 variant="outline-success"
@@ -99,7 +98,6 @@
                             >
                                 <feather-icon icon="Trash2Icon" size="18" />
                             </b-button>
-
                             <!-- DEACTIVATE MODAL -->
                             <b-modal
                                 :id="`modal-${data.item.id}`"
@@ -111,7 +109,7 @@
                                 centered
                             >
                                 Вы действительно хотите деактивировать эту
-                                услугу?
+                                модель?
 
                                 <template #modal-footer>
                                     <b-button
@@ -128,7 +126,7 @@
                                     <b-button
                                         variant="success btn-sm"
                                         @click="
-                                            deactivateCategory(
+                                            deactivateModel(
                                                 data.item.id,
                                                 data.item.active
                                             )
@@ -164,7 +162,7 @@
                                 hide-header-close
                                 centered
                             >
-                                Вы действительно хотите активировать эту услугу?
+                                Вы действительно хотите активировать эту модель?
 
                                 <template #modal-footer>
                                     <b-button
@@ -181,7 +179,7 @@
                                     <b-button
                                         variant="success btn-sm"
                                         @click="
-                                            deactivateCategory(
+                                            deactivateModel(
                                                 data.item.id,
                                                 data.item.active
                                             )
@@ -198,12 +196,23 @@
         </b-col>
 
         <!--  PAGINATION  -->
-        <b-col cols="12" class="mb-3">
+        <b-col
+            cols="12"
+            class="mb-3 d-flex justify-content-between align-items-center"
+        >
+            <b-form-select
+                v-if="showPagination"
+                class="float-right col-1"
+                v-model="pagination.perPage"
+                placeholder="Выберите"
+                :options="pagination.perPageOptions"
+            >
+            </b-form-select>
             <b-pagination
                 v-if="showPagination"
-                v-model="pagination.current"
+                v-model="pagination.page"
                 :total-rows="pagination.total"
-                :per-page="pagination.per_page"
+                :per-page="pagination.perPage"
                 align="center"
                 size="sm"
                 class="my-0"
@@ -215,23 +224,16 @@
 <script>
 import {
     BTable,
-    BBadge,
     BRow,
     BCol,
     BFormGroup,
-    BFormSelect,
     BPagination,
     BInputGroup,
     BFormInput,
     BInputGroupAppend,
     BButton,
-    BDropdown,
-    BDropdownItem,
-    BFormCheckbox,
     BSpinner,
-    BCard,
-    BOverlay,
-    BFormTextarea,
+    BFormSelect,
 } from "bootstrap-vue";
 import ModalButton from "@/views/ui/modals/ModalButton";
 import api from "@/services/api";
@@ -244,26 +246,19 @@ import {
 } from "@/util/pagination-helper";
 
 export default {
-    name: "AppCategories",
+    name: "AppModels",
     components: {
         BTable,
-        BBadge,
         BRow,
         BCol,
         BFormGroup,
-        BFormSelect,
         BPagination,
         BInputGroup,
         BFormInput,
         BInputGroupAppend,
         BButton,
-        BDropdown,
-        BDropdownItem,
-        BFormCheckbox,
         BSpinner,
-        BCard,
-        BFormTextarea,
-        BOverlay,
+        BFormSelect,
         ModalButton,
         ToastificationContent,
     },
@@ -272,7 +267,7 @@ export default {
     },
     data() {
         return {
-            name: "",
+            name: null,
             isBusy: false,
             filter: null,
             filterOn: [],
@@ -285,23 +280,48 @@ export default {
                 {
                     key: "id",
                     label: "ID",
+                    sortable: true,
                 },
                 {
                     key: "name.ru",
                     label: "Название",
+                    sortable: true,
                 },
-
                 {
-                    key: "image",
-                    label: "Изображения",
+                    key: "price",
+                    label: "Цена",
+                },
+                {
+                    key: "discount_price",
+                    label: "Цена со скидкой",
+                },
+                {
+                    key: "count",
+                    label: "Количество",
+                },
+                {
+                    key: "unit.name.ru",
+                    label: "Единица измерения",
+                },
+                {
+                    key: "unit.name.ru",
+                    label: "Единица измерения",
                 },
                 {
                     key: "active",
                     label: "Статус",
                 },
                 {
+                    key: "image",
+                    label: "Изображение",
+                },
+                {
                     key: "category.name.ru",
                     label: "Категория",
+                },
+                {
+                    key: "dealer",
+                    label: "Дилер",
                 },
                 {
                     key: "crud_row",
@@ -313,23 +333,20 @@ export default {
             totalRows: 1,
         };
     },
-    watch: paginationWatchers("getCategories"),
+    watch: paginationWatchers("getProducts"),
 
     async mounted() {
-        await this.getCategories();
+        this.setParams();
+        await this.getProducts();
+        // Set the initial number of items
+        this.totalRows = this.items.length;
     },
 
     computed: {
-        rows() {
-            return this.items.length;
-        },
-
-        query() {
-            return Object.assign({}, this.$route.query);
-        },
-
         showPagination() {
-            return this.hasItems && !this.isBusy;
+            return (
+                this.pagination.total > this.pagination.perPage && !this.isBusy
+            );
         },
 
         sortOptions() {
@@ -341,6 +358,10 @@ export default {
     },
 
     methods: {
+        /////////////
+        ...paramFunctions(
+            "search[id,name,category_id,category.name,dealer_id,dealer.company]"
+        ),
         showToast(variant, text, icon) {
             this.$toast({
                 component: ToastificationContent,
@@ -352,17 +373,13 @@ export default {
             });
         },
 
-        replaceRouter(query) {
-            this.$router.replace({ query }).catch(() => {});
-        },
-
-        async getCategories() {
+        async getProducts() {
             this.isBusy = true;
-            await api.categories
-                .fetchCategories()
+            await api.products
+                .fetchProducts(this.getParams())
                 .then((res) => {
                     this.items = res.data.data;
-                    console.log(this.items);
+                    this.pagination.total = res.data.total;
                 })
                 .catch((error) => {
                     console.error(error);
@@ -372,11 +389,11 @@ export default {
                 });
         },
 
-        deactivateCategory(id, active) {
-            api.categories
-                .deleteCategory(id)
+        deactivateModel(id, active) {
+            api.models
+                .deleteModel(id)
                 .then(() => {
-                    this.getCategories();
+                    this.getProducts();
                     if (active === 1) {
                         this.showToast(
                             "success",
@@ -395,6 +412,21 @@ export default {
                     console.error(error);
                     this.showToast("danger", "Что-то пошло не так!", "XIcon");
                 });
+        },
+
+        info(item, index, button) {
+            this.infoModal.title = `Row index: ${index}`;
+            this.infoModal.content = JSON.stringify(item, null, 2);
+            this.$root.$emit("bv::show::modal", this.infoModal.id, button);
+        },
+        resetInfoModal() {
+            this.infoModal.title = "";
+            this.infoModal.content = "";
+        },
+        onFiltered(filteredItems) {
+            // Trigger pagination to update the number of buttons/pages due to filtering
+            this.totalRows = filteredItems.length;
+            this.pagination.current = 1;
         },
     },
 };
