@@ -10,6 +10,7 @@ export function paginationData() {
 export function paginationHelperMethods(searchString, sortingColumnMap) {
     return {
         handleSortChange(ctx) {
+            console.log('sorting');
             if (!ctx.sortBy) return (this.pagination.sorting = "");
 
             const order = ctx.sortDesc ? "desc" : "asc";

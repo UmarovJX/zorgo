@@ -8,19 +8,92 @@
                     <b-input-group size="md">
                         <b-form-input
                             id="filterInput"
-                            v-model="search"
+                            v-model="filter"
                             type="search"
                             placeholder="Искать"
                             @change="getPolicies"
                         />
                         <b-input-group-append>
-                            <b-button :disabled="!search" @click="search = ''">
+                            <b-button :disabled="!filter" @click="filter = ''">
                                 Очистить
                             </b-button>
                         </b-input-group-append>
                     </b-input-group>
                 </b-form-group>
             </b-col>
+            <div
+                class="d-flex align-items-center justify-content-center float-right"
+            >
+                <b-button
+                    :disabled="isExporting"
+                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                    v-b-modal="`modal-export`"
+                    variant="outline-success"
+                    class="delete__btn"
+                >
+                    <feather-icon
+                        icon="DownloadIcon"
+                        size="18"
+                        v-if="!isExporting"
+                    />
+                    <b-spinner v-else small></b-spinner>
+                </b-button>
+                <!-- EXPORT MODAL -->
+                <b-modal
+                    :id="`modal-export`"
+                    cancel-title="Отменить"
+                    cancel-variant="danger btn-sm"
+                    body-class="deactivate-btn_modal"
+                    title="Экспорт полисов"
+                    hide-header-close
+                    centered
+                >
+                    <b-row>
+                        <b-col md="6" class="mb-2"
+                            ><label for="from-datepicker">От:</label>
+                            <b-form-datepicker
+                                hide-header
+                                id="from-datepicker"
+                                v-model="dateFrom"
+                                locale="ru"
+                            ></b-form-datepicker
+                        ></b-col>
+                        <b-col md="6"
+                            ><label for="date-to-datepicker">До:</label>
+                            <b-form-datepicker
+                                :disabled="!dateFrom"
+                                :min="minDate"
+                                hide-header
+                                id="date-to-datepicker"
+                                v-model="dateTo"
+                                locale="ru"
+                            ></b-form-datepicker
+                        ></b-col>
+                    </b-row>
+
+                    <b-row>
+                        <b-col md="6">
+                            <b-form-select
+                                v-model="companyId"
+                                :options="companyOptions"
+                            ></b-form-select>
+                        </b-col>
+                    </b-row>
+
+                    <template #modal-footer>
+                        <b-button
+                            variant="danger btn-sm"
+                            @click="$bvModal.hide(`modal-export`)"
+                        >
+                            Отменить
+                        </b-button>
+
+                        <b-button variant="success btn-sm" @click="exportData">
+                            Экспорт
+                        </b-button>
+                    </template>
+                </b-modal>
+            </div>
         </div>
 
         <!--  TABLE  -->
@@ -33,9 +106,7 @@
                 :busy="loading"
                 :items="policies"
                 :fields="fields"
-                :filter="filter"
-                :filter-included-fields="filterOn"
-                @filtered="onFiltered"
+                @sort-changed="handleSortChange"
             >
                 <template #table-busy>
                     <div class="text-center text-primary my-2">
@@ -87,7 +158,10 @@
         </b-col>
 
         <!--  PAGINATION  -->
-        <b-col cols="12" class="mb-3 d-flex justify-content-between align-items-center">
+        <b-col
+            cols="12"
+            class="mb-3 d-flex justify-content-between align-items-center"
+        >
             <b-form-select
                 v-if="showPagination"
                 class="float-right col-1"
@@ -111,6 +185,15 @@
 
 <script>
 import api from "@/services/api";
+import Ripple from "vue-ripple-directive";
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
+import {
+    paginationData,
+    paginationHelperMethods,
+    paginationWatchers,
+} from "@/util/pagination-helper";
+
+import { exportHelperData, exportHelperFunctions } from "@/util/exportHelper";
 
 import {
     BRow,
@@ -124,6 +207,7 @@ import {
     BPagination,
     BSpinner,
     BFormSelect,
+    BFormDatepicker,
 } from "bootstrap-vue";
 
 export default {
@@ -140,17 +224,22 @@ export default {
         BPagination,
         BSpinner,
         BFormSelect,
+        BFormDatepicker,
+        ToastificationContent,
+    },
+    directives: {
+        Ripple,
     },
     data() {
         return {
+            ...exportHelperData(),
+            dateFrom: "",
+            dateTo: "",
+            companyId: null,
+            companyOptions: [],
+            isExporting: false,
             policies: [],
-            search: "",
-            pagination: {
-                page: 1,
-                total: 0,
-                perPage: 20,
-                perPageOptions: [1, 2, 3, 10, 20, 30, 50],
-            },
+            pagination: paginationData(),
             filter: null,
             filterOn: [],
             loading: false,
@@ -163,6 +252,7 @@ export default {
                 {
                     key: "id",
                     label: "ID",
+                    sortable: true,
                 },
                 {
                     key: "status",
@@ -175,10 +265,17 @@ export default {
                 {
                     key: "price",
                     label: "Стоимость",
+                    sortable: true,
                 },
                 {
                     key: "date_begin",
                     label: "Дата начало",
+                    sortable: true,
+                },
+                {
+                    key: "created_at",
+                    label: "Время создания",
+                    sortable: true,
                 },
                 {
                     key: "policy.anketa_id",
@@ -208,10 +305,7 @@ export default {
                     key: "company.name",
                     label: "Компания",
                 },
-                {
-                    key: "created_at",
-                    label: "Время создания",
-                },
+
                 {
                     key: "crud_row",
                     label: " ",
@@ -220,37 +314,7 @@ export default {
         };
     },
 
-    watch: {
-        "pagination.page": {
-            async handler(val) {
-                const params = new URLSearchParams(window.location.search);
-
-                if (val !== params.get("page")) {
-                    this.generateParams();
-                    await this.getPolicies();
-                }
-            },
-        },
-        search: {
-            async handler() {
-                await this.getPolicies();
-            },
-        },
-        "pagination.perPage": {
-            async handler(val) {
-                const params = new URLSearchParams(window.location.search);
-
-                if (val !== params.get("perPage")) {
-                    if (val > this.pagination.total) {
-                        this.pagination.page = 1;
-                    } else {
-                        this.generateParams();
-                        await this.getPolicies();
-                    }
-                }
-            },
-        },
-    },
+    watch: paginationWatchers("getPolicies"),
 
     computed: {
         showPagination() {
@@ -258,14 +322,58 @@ export default {
                 this.pagination.total > this.pagination.perPage && !this.loading
             );
         },
+
+        minDate() {
+            return new Date(this.dateFrom);
+        },
     },
 
     async mounted() {
         this.setParams();
         await this.getPolicies();
+        this.getCompanies();
     },
 
     methods: {
+        ...exportHelperFunctions(
+            api,
+            "insurance/osago/export",
+            "osago_policies"
+        ),
+        async getCompanies() {
+            api.companies.fetchAll().then(({ data }) => {
+                const options = data
+                    .filter((el) => el.active)
+                    .map((el) => ({ value: el.id, text: el.name }));
+                this.companyOptions = [
+                    { value: null, text: "Выберите компанию", disabled: true },
+                    ...options,
+                ];
+            });
+        },
+
+        showToast(variant, text, icon) {
+            this.$toast({
+                component: ToastificationContent,
+                props: {
+                    title: text,
+                    icon: icon,
+                    variant,
+                },
+            });
+        },
+        ...paginationHelperMethods(
+            "search[id,policy.anketa_id,policy.number," +
+                "applicant.name,applicant.phone," +
+                "owner.name,owner.phone," +
+                "vehicle.number]",
+            {
+                id: "id",
+                price: "price",
+                created_at: "created_at",
+                date_begin: "date_begin",
+            }
+        ),
         async getPolicies() {
             this.loading = true;
             api.osago
@@ -275,50 +383,6 @@ export default {
                     this.pagination.total = res.data.total;
                 })
                 .finally(() => (this.loading = false));
-        },
-
-        generateParams() {
-            const params = new URLSearchParams(window.location.search);
-
-            params.set("page", this.pagination.page);
-            params.set("perPage", this.pagination.perPage);
-
-            let url =
-                window.location.href.replace(window.location.search, "?") +
-                params.toString();
-            window.history.pushState({ path: url }, "", url);
-        },
-
-        setParams() {
-            const searchParams = new URLSearchParams(window.location.search);
-            if (searchParams.has("page"))
-                this.pagination.page = searchParams.get("page");
-            if (searchParams.has("perPage"))
-                this.pagination.perPage = searchParams.get("perPage");
-        },
-
-        getParams() {
-            const params = new URLSearchParams();
-            if (this.search) {
-                params.append(
-                    "search[id,policy.anketa_id,policy.number," +
-                        "applicant.name,applicant.phone," +
-                        "owner.name,owner.phone," +
-                        "vehicle.number]",
-                    this.search
-                );
-            }
-
-            params.append("page", this.pagination.page);
-            params.append("perPage", this.pagination.perPage);
-
-            return params.toString();
-        },
-
-        onFiltered(filteredItems) {
-            // Trigger pagination to update the number of buttons/pages due to filtering
-            this.totalRows = filteredItems.length;
-            this.pagination.current = 1;
         },
     },
 };

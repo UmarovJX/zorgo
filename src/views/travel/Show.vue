@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import Travel from "@/services/travel";
+import Travel from "@/services/travels";
 import {
   BRow, BCol, BCard, BCardTitle, BCardBody, BButton
 } from "bootstrap-vue";

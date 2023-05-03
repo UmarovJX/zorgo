@@ -30,7 +30,7 @@
                         >
                             <b-form-group label="Модель" label-for="">
                                 <b-form-select
-                                    disables="!options.length"
+                                    :disabled="!options.length"
                                     v-model="model"
                                     :options="options"
                                 ></b-form-select>
@@ -130,7 +130,6 @@ export default {
                     { value: null, text: "Выберите Модель", disabled: true },
                     ...options,
                 ];
-                this.brand = null;
             });
         },
 
