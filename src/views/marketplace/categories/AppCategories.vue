@@ -362,7 +362,6 @@ export default {
                 .fetchCategories()
                 .then((res) => {
                     this.items = res.data.data;
-                    console.log(this.items);
                 })
                 .catch((error) => {
                     console.error(error);

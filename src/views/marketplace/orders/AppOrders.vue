@@ -270,7 +270,6 @@ export default {
     mounted() {
         this.setParams();
         this.getOrders();
-        console.log(this.pagination.page);
     },
 
     computed: {

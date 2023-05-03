@@ -418,7 +418,6 @@ export default {
     },
 
     splitString(item) {
-      console.log(item)
       return item.split('T')
     },
 

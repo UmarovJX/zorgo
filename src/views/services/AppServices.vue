@@ -376,7 +376,6 @@ export default {
       await api.services.fetchServices()
           .then(res => {
             this.items = res.data
-            console.log(this.items)
           })
           .catch((error) => {
             console.error(error)

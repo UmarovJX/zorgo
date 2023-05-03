@@ -7,7 +7,6 @@ class Years extends Core {
     }
 
     fetchYears(params = "") {
-        console.log(params);
         return this.get("cars/year" + (params ? "?" + (params) : ""));
     }
 

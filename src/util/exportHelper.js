@@ -44,7 +44,6 @@ export function exportHelperFunctions(api, path, fileName) {
 
             const url =
                 api.getBaseURL() + path + (urlString ? "?" + urlString : "");
-            console.log(url);
             fetch(url, {
                 method: "GET",
                 headers: {

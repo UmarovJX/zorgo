@@ -24,14 +24,7 @@ async function retryApiCall(config) {
     headers['Authorization'] = `${access_token}`
   }
 
-  // config.paramsSerializer = (params) => {
-  //   console.log(params, 'params')
-  //   return qs.stringify(params, {
-  //     encode: false,
-  //     skipNulls: false,
-  //     withCredentials: true,
-  //   })
-  // }
+
 
 
   const _axios = axios.create({
