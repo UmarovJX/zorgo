@@ -1,3 +1,4 @@
+import { debounce } from "@/util/helper";
 export function paginationData() {
     return {
         sorting: "",
@@ -98,11 +99,11 @@ export function paginationWatchers(fName) {
             },
         },
         filter: {
-            async handler() {
+            handler: debounce(async function handler() {
                 this.pagination.page = 1;
                 this.generateParams();
                 await this[fName]();
-            },
+            }, 400),
         },
         "pagination.perPage": {
             async handler(val) {

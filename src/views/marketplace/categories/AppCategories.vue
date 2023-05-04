@@ -1,6 +1,6 @@
 <template>
     <b-row>
-        <h2 class="pl-1">Услуги</h2>
+        <h2 class="pl-1">Категории</h2>
 
         <!--  BEFORE TABLE  -->
         <div class="d-flex justify-content-between col-12">
@@ -21,6 +21,15 @@
                     </b-input-group>
                 </b-form-group>
             </b-col>
+            <div
+                class="d-flex align-items-center justify-content-center float-right"
+            >
+                <router-link
+                    class="create__btn btn-primary"
+                    :to="{ name: 'category-edit' }"
+                    >Создать</router-link
+                >
+            </div>
 
             <!--      CREATE     -->
             <!--      <div class="d-flex align-items-center justify-content-center float-right">-->
@@ -38,7 +47,7 @@
                 :busy="isBusy"
                 :items="items"
                 :fields="fields"
-                :filter-included-fields="filterOn"
+                @sort-changed="handleSortChange"
             >
                 <template #table-busy>
                     <div class="text-center text-primary my-2">
@@ -78,7 +87,10 @@
                     <div class="d-flex float-right">
                         <!--    EDIT    -->
                         <router-link
-                            :to="{ path: `service/update/${data.item.id}` }"
+                            :to="{
+                                name: 'category-edit',
+                                params: { id: data.item.id },
+                            }"
                         >
                             <b-button
                                 variant="outline-success"
@@ -111,7 +123,7 @@
                                 centered
                             >
                                 Вы действительно хотите деактивировать эту
-                                услугу?
+                                категорию?
 
                                 <template #modal-footer>
                                     <b-button
@@ -164,7 +176,7 @@
                                 hide-header-close
                                 centered
                             >
-                                Вы действительно хотите активировать эту услугу?
+                                Вы действительно хотите активировать эту категорию?
 
                                 <template #modal-footer>
                                     <b-button
@@ -198,12 +210,21 @@
         </b-col>
 
         <!--  PAGINATION  -->
-        <b-col cols="12" class="mb-3">
+        <b-col
+            cols="12"
+            class="mb-3 d-flex justify-content-between align-items-center"
+        >
+            <b-form-select
+                class="float-right col-1"
+                v-model="pagination.perPage"
+                placeholder="Выберите"
+                :options="pagination.perPageOptions"
+            >
+            </b-form-select>
             <b-pagination
-                v-if="showPagination"
-                v-model="pagination.current"
+                v-model="pagination.page"
                 :total-rows="pagination.total"
-                :per-page="pagination.per_page"
+                :per-page="pagination.perPage"
                 align="center"
                 size="sm"
                 class="my-0"
@@ -275,7 +296,6 @@ export default {
             name: "",
             isBusy: false,
             filter: null,
-            filterOn: [],
             infoModal: {
                 id: "info-modal",
                 title: "",
@@ -285,10 +305,12 @@ export default {
                 {
                     key: "id",
                     label: "ID",
+                    sortable: true,
                 },
                 {
                     key: "name.ru",
                     label: "Название",
+                    sortable: true,
                 },
 
                 {
@@ -316,6 +338,8 @@ export default {
     watch: paginationWatchers("getCategories"),
 
     async mounted() {
+        this.setParams();
+
         await this.getCategories();
     },
 
@@ -341,6 +365,10 @@ export default {
     },
 
     methods: {
+        ...paginationHelperMethods("search[id,name,category_id]", {
+            id: "id",
+            'name.ru': "name",
+        }),
         showToast(variant, text, icon) {
             this.$toast({
                 component: ToastificationContent,
@@ -359,9 +387,10 @@ export default {
         async getCategories() {
             this.isBusy = true;
             await api.categories
-                .fetchCategories()
+                .fetchCategories(this.getParams())
                 .then((res) => {
                     this.items = res.data.data;
+                    this.pagination.total = res.data.total;
                 })
                 .catch((error) => {
                     console.error(error);

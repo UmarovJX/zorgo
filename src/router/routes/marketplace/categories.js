@@ -1,31 +1,23 @@
 export default [
     {
-        path: '/marketplace/categories',
-        name: 'categories',
-        component: () => import('@/views/marketplace/categories/AppCategories'),
+        path: "/marketplace/categories",
+        name: "categories",
+        component: () => import("@/views/marketplace/categories/AppCategories"),
     },
     {
-        path: '/insurance/service',
-        component: () => import('@/views/services/id'),
+        path: "/marketplace/category",
+        component: () => import("@/views/marketplace/categories/id"),
         children: [
+        
             {
-                path: 'create',
-                name: 'category-create',
-                component: () => import('@/views/services/AppServicesCrud'),
+                path: "edit/:id?",
+                name: "category-edit",
+                component: () =>
+                    import("@/views/marketplace/categories/AppCategoriesCrud"),
                 meta: {
-                    parent: 'services'
-                }
+                    parent: "categories",
+                },
             },
-            {
-                path: 'update/:id',
-                name: 'category-update',
-                component: () => import('@/views/services/AppServicesCrud'),
-                meta: {
-                    parent: 'services'
-                }
-            },
-
-        ]
+        ],
     },
-
-]
+];
