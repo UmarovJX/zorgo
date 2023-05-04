@@ -115,6 +115,13 @@
                     </div>
                 </template>
 
+                <template #cell(platform)="{ item }">
+                    <template v-if="item.platform === 'browser'">Сайт</template>
+                    <template v-if="item.platform === 'mobile'"
+                        >Мобильное приложение</template
+                    >
+                </template>
+
                 <template #cell(status)="data">
                     <p
                         v-if="data.item.status === 3 || data.item.status === 7"
@@ -260,11 +267,7 @@ export default {
                     label: "Дата начало",
                     sortable: true,
                 },
-                {
-                    key: "created_at",
-                    label: "Время создания",
-                    sortable: true,
-                },
+
                 {
                     key: "activity",
                     label: "Цель поездки",
@@ -302,7 +305,11 @@ export default {
                     key: "platform",
                     label: "Платформа",
                 },
-
+                {
+                    key: "created_at",
+                    label: "Время создания",
+                    sortable: true,
+                },
                 {
                     key: "crud_row",
                     label: " ",

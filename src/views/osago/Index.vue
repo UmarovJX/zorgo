@@ -133,6 +133,12 @@
                 <template #cell(price)="data">
                     {{ data.item.price | formatNumber }}
                 </template>
+                <template #cell(platform)="{ item }">
+                    <template v-if="item.platform === 'browser'">Сайт</template>
+                    <template v-if="item.platform === 'mobile'"
+                        >Мобильное приложение</template
+                    >
+                </template>
 
                 <template #cell(crud_row)="data">
                     <div class="d-flex float-right">
@@ -272,11 +278,7 @@ export default {
                     label: "Дата начало",
                     sortable: true,
                 },
-                {
-                    key: "created_at",
-                    label: "Время создания",
-                    sortable: true,
-                },
+
                 {
                     key: "policy.anketa_id",
                     label: "ID анкеты",
@@ -288,10 +290,6 @@ export default {
                 {
                     key: "applicant.name",
                     label: "Имя заявителя",
-                },
-                {
-                    key: "platform",
-                    label: "Платформа",
                 },
 
                 // {
@@ -310,7 +308,15 @@ export default {
                     key: "company.name",
                     label: "Компания",
                 },
-
+                {
+                    key: "platform",
+                    label: "Платформа",
+                },
+                {
+                    key: "created_at",
+                    label: "Время создания",
+                    sortable: true,
+                },
                 {
                     key: "crud_row",
                     label: " ",

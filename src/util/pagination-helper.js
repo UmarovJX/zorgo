@@ -3,8 +3,8 @@ export function paginationData() {
         sorting: "",
         page: 1,
         total: null,
-        perPage: 3,
-        perPageOptions: [1, 2, 3, 10, 20, 30, 50],
+        perPage: 5,
+        perPageOptions: [1, 3, 5, 10, 20, 30, 50],
     };
 }
 export function paginationHelperMethods(searchString, sortingColumnMap) {

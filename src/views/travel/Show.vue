@@ -95,7 +95,7 @@
                                 </tr>
                                 <tr>
                                     <th class="pr-1">Платформа</th>
-                                    <td>{{ policy.platform }}</td>
+                                    <td>{{ platformValue }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -202,6 +202,14 @@ export default {
     },
     async mounted() {
         await this.loadPolicy();
+    },
+    computed: {
+        platformValue() {
+            if (this.policy.platform === "browser") return "Сайт";
+            if (this.policy.platform === "mobile")
+                return "Мобильное приложение";
+            else return "";
+        },
     },
     methods: {
         async loadPolicy() {
