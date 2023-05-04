@@ -289,6 +289,11 @@ export default {
                     key: "applicant.name",
                     label: "Имя заявителя",
                 },
+                {
+                    key: "platform",
+                    label: "Платформа",
+                },
+
                 // {
                 //   key: 'applicant.phone',
                 //   label: 'Номер заявителя',

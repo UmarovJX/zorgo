@@ -298,6 +298,10 @@ export default {
                     key: "company.name",
                     label: "Компания",
                 },
+                {
+                    key: "platform",
+                    label: "Платформа",
+                },
 
                 {
                     key: "crud_row",
