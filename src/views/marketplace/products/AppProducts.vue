@@ -28,7 +28,7 @@
             >
                 <router-link
                     class="create__btn btn-primary"
-                    :to="{ name: 'model-create' }"
+                    :to="{ name: 'product-edit' }"
                     >Создать</router-link
                 >
             </div>
@@ -44,7 +44,7 @@
                 :busy="isBusy"
                 :items="items"
                 :fields="fields"
-                @filtered="onFiltered"
+                @sort-changed="handleSortChange"
             >
                 <template #table-busy>
                     <div class="text-center text-primary my-2">
@@ -77,7 +77,10 @@
                     <div class="d-flex float-right">
                         <!--    EDIT    -->
                         <router-link
-                            :to="{ path: `model/update/${data.item.id}` }"
+                            :to="{
+                                name: 'product-edit',
+                                params: { id: data.item.id },
+                            }"
                         >
                             <b-button
                                 variant="outline-success"
@@ -360,7 +363,11 @@ export default {
     methods: {
         /////////////
         ...paginationHelperMethods(
-            "search[id,name,category_id,category.name,dealer_id,dealer.company]"
+            "search[id,name,category_id,category.name,dealer_id]",
+            {
+                id: "id",
+                "name.ru": "name",
+            }
         ),
         showToast(variant, text, icon) {
             this.$toast({
@@ -390,8 +397,8 @@ export default {
         },
 
         deactivateModel(id, active) {
-            api.models
-                .deleteModel(id)
+            api.products
+                .deleteProduct(id)
                 .then(() => {
                     this.getProducts();
                     if (active === 1) {
@@ -422,11 +429,6 @@ export default {
         resetInfoModal() {
             this.infoModal.title = "";
             this.infoModal.content = "";
-        },
-        onFiltered(filteredItems) {
-            // Trigger pagination to update the number of buttons/pages due to filtering
-            this.totalRows = filteredItems.length;
-            this.pagination.current = 1;
         },
     },
 };

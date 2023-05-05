@@ -15,7 +15,7 @@ export default [
                 component: () =>
                     import("@/views/marketplace/categories/AppCategoriesCrud"),
                 meta: {
-                    parent: "categories",
+                    navActiveLink: "categories",
                 },
             },
         ],

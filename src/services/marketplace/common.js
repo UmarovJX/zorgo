@@ -17,8 +17,19 @@ class Common extends Core {
         return this.get("marketplace/common/category/all");
     }
 
-    fetchAllSpecifications(){
-        return this.get('marketplace/common/specifications')
+    fetchAllSpecifications(id) {
+        return this.get(
+            "marketplace/common/specifications" +
+                (id ? "?filters[categories.id]=" + id : "")
+        );
+    }
+
+    fetchAllUnits() {
+        return this.get("marketplace/common/units");
+    }
+
+    fetchOneCategory(id) {
+        return this.get(`marketplace/common/category/${id}`);
     }
 }
 

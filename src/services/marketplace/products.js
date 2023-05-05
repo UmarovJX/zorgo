@@ -15,7 +15,7 @@ class Products extends Core {
     }
 
     updateProduct(id, body) {
-        return this.put(`marketplace/product/${id}`, body);
+        return this.post(`marketplace/product/${id}?_method=put`, body);
     }
 
     createProduct(body) {
