@@ -18,6 +18,7 @@ import MarketplaceCommon from "@/services/marketplace/common";
 import MarketplaceCategories from "@/services/marketplace/categories";
 import MarketplaceOrders from "@/services/marketplace/orders";
 import MarketplaceProducts from "@/services/marketplace/products";
+import MarketplaceSpecifications from "@/services/marketplace/specifications";
 
 export default {
     getBaseURL() {
@@ -41,4 +42,5 @@ export default {
     categories: new MarketplaceCategories(),
     orders: new MarketplaceOrders(),
     products: new MarketplaceProducts(),
+    specifications: new MarketplaceSpecifications(),
 };

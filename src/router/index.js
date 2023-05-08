@@ -24,6 +24,7 @@ import description from "@/router/routes/description";
 import category from "@/router/routes/marketplace/categories";
 import orders from "@/router/routes/marketplace/orders";
 import products from "@/router/routes/marketplace/products";
+import specifications from "@/router/routes/marketplace/specifications";
 
 Vue.use(VueRouter);
 
@@ -60,6 +61,7 @@ const router = new VueRouter({
         ...category,
         ...orders,
         ...products,
+        ...specifications,
         {
             path: "/:pathMatch(.*)",
             component: Error404,

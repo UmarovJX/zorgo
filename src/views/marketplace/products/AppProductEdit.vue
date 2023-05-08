@@ -248,6 +248,7 @@
                     </b-col>
                 </b-row>
 
+                <!--   Specifications   -->
                 <b-form-group
                     v-if="categorySpecs.length > 0"
                     label="Характеристики"
@@ -323,6 +324,79 @@
                         </b-col>
                     </b-row>
                 </b-form-group>
+
+                <b-form-group
+                    class="my-1"
+                    label="Выбранные авто:"
+                    label-class="font-weigth-bold"
+                >
+                    <b-row class="pl-1">
+                        <b-col>
+                            <template v-if="relations.length === 0">
+                                Ничего не выбрано
+                            </template>
+                            <b-row v-for="bmy in relations" class="px-1 my-1">
+                                <b-col
+                                    cols="12"
+                                    md="6"
+                                    class="d-flex justify-content-between align-items-center"
+                                >
+                                    {{ bmy.text }}
+                                    <b-button
+                                        v-ripple.400="
+                                            'rgba(113, 102, 240, 0.15)'
+                                        "
+                                        variant="outline-danger"
+                                        class="delete__btn"
+                                        size="sm"
+                                        @click="(e) => removeRelation(bmy.text)"
+                                    >
+                                        <feather-icon
+                                            icon="Trash2Icon"
+                                            size="14"
+                                        />
+                                    </b-button>
+                                </b-col>
+                            </b-row>
+                        </b-col>
+                    </b-row>
+                    <b-row class="mt-1">
+                        <b-col cols="12" lg="3">
+                            <b-form-select
+                                class="mb-1"
+                                :options="brandOptions"
+                                v-model="brandId"
+                            ></b-form-select>
+                        </b-col>
+                        <b-col cols="12" lg="3">
+                            <b-form-select
+                                class="mb-1"
+                                :disabled="!brandId"
+                                :options="modelOptions"
+                                v-model="modelId"
+                            ></b-form-select>
+                        </b-col>
+                        <b-col cols="12" lg="3">
+                            <b-form-select
+                                class="mb-1"
+                                :disabled="!modelId"
+                                :options="yearOptions"
+                                v-model="yearId"
+                            ></b-form-select>
+                        </b-col>
+                        <b-col cols="12" lg="3">
+                            <b-button
+                                class="float-right mr-1"
+                                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                                variant="outline-success"
+                                :disabled="!yearId"
+                                @click="addRelation"
+                            >
+                                Добавить
+                            </b-button>
+                        </b-col>
+                    </b-row>
+                </b-form-group>
             </ValidationObserver>
 
             <b-button
@@ -353,7 +427,6 @@ import {
     BFormSelect,
     BFormSelectOption,
 } from "bootstrap-vue";
-import { ExternalLinkIcon } from "vue-feather-icons";
 
 export default {
     name: "AppProductEdit",
@@ -410,6 +483,12 @@ export default {
             categorySpecs: [],
             specValues: {},
 
+            brandId: null,
+            modelId: null,
+            yearId: null,
+            relations: [],
+            relationData: null,
+
             fileRecords: [],
             uploadUrl: "",
             uploadHeaders: { "X-Test-Header": "vue-file-agent" },
@@ -417,6 +496,7 @@ export default {
         };
     },
     async mounted() {
+        this.getBMY();
         this.getUnits();
         if (this.$route.params.id) {
             await this.getProduct(this.$route.params.id);
@@ -424,11 +504,16 @@ export default {
         this.getSubCategories();
     },
     watch: {
-        specValues: {
-            handler(val) {
-                console.log(val);
+        brandId: {
+            handler() {
+                this.modelId = null;
+                this.yearId = null;
             },
-            deep: true,
+        },
+        modelId: {
+            handler() {
+                this.yearId = null;
+            },
         },
         categoryId: {
             async handler(val) {
@@ -443,8 +528,90 @@ export default {
             },
         },
     },
+    computed: {
+        brandOptions() {
+            if (!this.relationData)
+                return [
+                    { value: null, disabled: true, text: "Выберите бренд" },
+                ];
+            else {
+                const opts = this.relationData
+                    .filter((el) => el.active)
+                    .map((el) => ({
+                        value: el.id,
+                        text: el.name,
+                    }));
+
+                return [
+                    { value: null, disabled: true, text: "Выберите бренд" },
+                    ...opts,
+                ];
+            }
+        },
+
+        modelOptions() {
+            if (this.brandId) {
+                const opts = this.relationData
+                    .find((el) => el.id === this.brandId)
+                    .models.filter((el) => el.active)
+                    .map((el) => ({
+                        value: el.id,
+                        text: el.name,
+                    }));
+
+                return [
+                    { value: null, disabled: true, text: "Выберите модель" },
+                    ...opts,
+                ];
+            } else {
+                [{ value: null, disabled: true, text: "Выберите модель" }];
+            }
+        },
+        yearOptions() {
+            if (this.modelId) {
+                const yearIds = this.relations.map((el) => el.y);
+                const opts = this.relationData
+                    .find((el) => el.id === this.brandId)
+                    .models.find((el) => el.id === this.modelId)
+                    .years.filter((el) => el.active && !yearIds.includes(el.id))
+                    .map((el) => ({
+                        value: el.id,
+                        text: el.name,
+                    }));
+
+                return [
+                    { value: null, disabled: true, text: "Выберите год" },
+                    ...opts,
+                ];
+            } else {
+                [{ value: null, disabled: true, text: "Выберите год" }];
+            }
+        },
+    },
 
     methods: {
+        addRelation() {
+            const brand = this.relationData.find(
+                (el) => el.id === this.brandId
+            );
+            const model = brand.models.find((el) => el.id === this.modelId);
+
+            const year = model.years.find((el) => el.id === this.yearId);
+
+            this.relations.push({
+                text: `${brand.name}, ${model.name}, ${year.name}`,
+                b: brand.id,
+                m: model.id,
+                y: year.id,
+            });
+            this.brandId = null;
+            this.modelId = null;
+            this.yearId = null;
+        },
+
+        removeRelation(str) {
+            this.relations = this.relations.filter((el) => el.text !== str);
+        },
         async getProduct(id) {
             const { data } = await api.products.fetchOneProduct(id);
 
@@ -476,6 +643,16 @@ export default {
                 }
             });
             this.specValues = sV;
+
+            data.relations.forEach((el) => {
+                this.relations.push({
+                    id: el.id,
+                    text: `${el.brand.name}, ${el.model.name}, ${el.year.name}`,
+                    b: el.brand.id,
+                    m: el.model.id,
+                    y: el.year.id,
+                });
+            });
         },
         async saveProduct() {
             const isValid = await this.$refs["validation-observer"].validate();
@@ -511,6 +688,15 @@ export default {
                             : this.specValues[el.id];
                     let t = el.type === "select" ? "option_id" : "value";
                     formData.append(`options[${i}][${t}]`, v);
+                });
+
+                this.relations.forEach((el, i) => {
+                    if (el.id) {
+                        formData.append(`relations[${i}][id]`, el.id);
+                    }
+                    formData.append(`relations[${i}][brand_id]`, el.b);
+                    formData.append(`relations[${i}][model_id]`, el.m);
+                    formData.append(`relations[${i}][year_id]`, el.y);
                 });
 
                 let req;
@@ -552,9 +738,6 @@ export default {
                 },
             });
         },
-        async getSpecs() {
-            api.marketplaceCommon;
-        },
         async getSubCategories() {
             api.marketplaceCommon.fetchSubCategories().then(({ data }) => {
                 const options = data
@@ -581,6 +764,9 @@ export default {
                     ...options,
                 ];
             });
+        },
+        async getBMY() {
+            api.common.getBMY().then(({ data }) => (this.relationData = data));
         },
     },
 };

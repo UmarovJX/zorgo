@@ -172,7 +172,7 @@ import {
 } from "bootstrap-vue";
 
 export default {
-    name: "AppYearsCreate",
+    name: "AppCategoryEdit",
     components: {
         BBadge,
         BFormGroup,

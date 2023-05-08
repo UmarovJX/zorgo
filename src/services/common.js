@@ -6,11 +6,15 @@ class Common extends Core {
         super(axios);
     }
 
+    getBMY() {
+        return this.get("common/brands");
+    }
+
     getBrands() {
         return this.get("common/brands-list");
     }
 
-    getModels(){
+    getModels() {
         return this.get("common/models-list");
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <b-row>
-        <h2 class="pl-1">Товары</h2>
+        <h2 class="pl-1">Характеристики</h2>
 
         <!--  BEFORE TABLE  -->
         <div class="d-flex justify-content-between col-12">
@@ -28,7 +28,7 @@
             >
                 <router-link
                     class="create__btn btn-primary"
-                    :to="{ name: 'product-edit' }"
+                    :to="{ name: 'specification-edit' }"
                     >Создать</router-link
                 >
             </div>
@@ -78,7 +78,7 @@
                         <!--    EDIT    -->
                         <router-link
                             :to="{
-                                name: 'product-edit',
+                                name: 'specification-edit',
                                 params: { id: data.item.id },
                             }"
                         >
@@ -111,8 +111,8 @@
                                 hide-header-close
                                 centered
                             >
-                                Вы действительно хотите деактивировать этот
-                                товар?
+                                Вы действительно хотите деактивировать эту
+                                характеристику?
 
                                 <template #modal-footer>
                                     <b-button
@@ -129,7 +129,7 @@
                                     <b-button
                                         variant="success btn-sm"
                                         @click="
-                                            deactivateModel(
+                                            deactivateSpecification(
                                                 data.item.id,
                                                 data.item.active
                                             )
@@ -165,7 +165,8 @@
                                 hide-header-close
                                 centered
                             >
-                                Вы действительно хотите активировать эту товар?
+                                Вы действительно хотите активировать эту
+                                характеристику?
 
                                 <template #modal-footer>
                                     <b-button
@@ -182,7 +183,7 @@
                                     <b-button
                                         variant="success btn-sm"
                                         @click="
-                                            deactivateModel(
+                                            deactivateSpecification(
                                                 data.item.id,
                                                 data.item.active
                                             )
@@ -238,7 +239,6 @@ import {
     BSpinner,
     BFormSelect,
 } from "bootstrap-vue";
-import ModalButton from "@/views/ui/modals/ModalButton";
 import api from "@/services/api";
 import Ripple from "vue-ripple-directive";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
@@ -262,7 +262,6 @@ export default {
         BButton,
         BSpinner,
         BFormSelect,
-        ModalButton,
         ToastificationContent,
     },
     directives: {
@@ -274,11 +273,6 @@ export default {
             isBusy: false,
             filter: null,
             filterOn: [],
-            infoModal: {
-                id: "info-modal",
-                title: "",
-                content: "",
-            },
             fields: [
                 {
                     key: "id",
@@ -291,40 +285,16 @@ export default {
                     sortable: true,
                 },
                 {
-                    key: "price",
-                    label: "Цена",
+                    key: "type",
+                    label: "Тип",
                 },
                 {
-                    key: "discount_price",
-                    label: "Цена со скидкой",
-                },
-                {
-                    key: "count",
-                    label: "Количество",
-                },
-                {
-                    key: "unit.name.ru",
-                    label: "Единица измерения",
-                },
-                {
-                    key: "unit.name.ru",
-                    label: "Единица измерения",
+                    key: "filter",
+                    label: "Фильтр?",
                 },
                 {
                     key: "active",
                     label: "Статус",
-                },
-                {
-                    key: "image",
-                    label: "Изображение",
-                },
-                {
-                    key: "category.name.ru",
-                    label: "Категория",
-                },
-                {
-                    key: "dealer",
-                    label: "Дилер",
                 },
                 {
                     key: "crud_row",
@@ -336,11 +306,11 @@ export default {
             totalRows: 1,
         };
     },
-    watch: paginationWatchers("getProducts"),
+    watch: paginationWatchers("getSpecifications"),
 
     async mounted() {
         this.setParams();
-        await this.getProducts();
+        await this.getSpecifications();
         // Set the initial number of items
         this.totalRows = this.items.length;
     },
@@ -351,24 +321,14 @@ export default {
                 this.pagination.total > this.pagination.perPage && !this.isBusy
             );
         },
-
-        sortOptions() {
-            // Create an options list from our fields
-            return this.fields
-                .filter((f) => f.sortable)
-                .map((f) => ({ text: f.label, value: f.key }));
-        },
     },
 
     methods: {
         /////////////
-        ...paginationHelperMethods(
-            "search[id,name,category_id,category.name,dealer_id,dealer.company]",
-            {
-                id: "id",
-                "name.ru": "name",
-            }
-        ),
+        ...paginationHelperMethods("search[id,name]", {
+            id: "id",
+            "name.ru": "name",
+        }),
         showToast(variant, text, icon) {
             this.$toast({
                 component: ToastificationContent,
@@ -380,10 +340,10 @@ export default {
             });
         },
 
-        async getProducts() {
+        async getSpecifications() {
             this.isBusy = true;
-            await api.products
-                .fetchProducts(this.getParams())
+            await api.specifications
+                .fetchSpecifications(this.getParams())
                 .then((res) => {
                     this.items = res.data.data;
                     this.pagination.total = res.data.total;
@@ -396,11 +356,11 @@ export default {
                 });
         },
 
-        deactivateModel(id, active) {
-            api.products
-                .deleteProduct(id)
+        deactivateSpecification(id, active) {
+            api.specifications
+                .deleteSpecification(id)
                 .then(() => {
-                    this.getProducts();
+                    this.getSpecifications();
                     if (active === 1) {
                         this.showToast(
                             "success",
@@ -419,16 +379,6 @@ export default {
                     console.error(error);
                     this.showToast("danger", "Что-то пошло не так!", "XIcon");
                 });
-        },
-
-        info(item, index, button) {
-            this.infoModal.title = `Row index: ${index}`;
-            this.infoModal.content = JSON.stringify(item, null, 2);
-            this.$root.$emit("bv::show::modal", this.infoModal.id, button);
-        },
-        resetInfoModal() {
-            this.infoModal.title = "";
-            this.infoModal.content = "";
         },
     },
 };
