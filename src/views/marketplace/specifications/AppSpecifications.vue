@@ -249,7 +249,7 @@ import {
 } from "@/util/pagination-helper";
 
 export default {
-    name: "AppModels",
+    name: "AppSpecifications",
     components: {
         BTable,
         BRow,

@@ -8,7 +8,6 @@ import pages from "@/router/routes/pages";
 import roles from "@/router/routes/roles";
 import users from "@/router/routes/users";
 import services from "@/router/routes/services";
-import dealers from "@/router/routes/dealers";
 import brands from "@/router/routes/brands";
 import years from "@/router/routes/years";
 import models from "@/router/routes/models";
@@ -25,6 +24,8 @@ import category from "@/router/routes/marketplace/categories";
 import orders from "@/router/routes/marketplace/orders";
 import products from "@/router/routes/marketplace/products";
 import specifications from "@/router/routes/marketplace/specifications";
+import units from "@/router/routes/marketplace/units";
+import dealers from "@/router/routes/marketplace/dealers";
 
 Vue.use(VueRouter);
 
@@ -46,7 +47,6 @@ const router = new VueRouter({
         ...roles,
         ...users,
         ...services,
-        ...dealers,
         ...brands,
         ...years,
         ...models,
@@ -62,6 +62,8 @@ const router = new VueRouter({
         ...orders,
         ...products,
         ...specifications,
+        ...units,
+        ...dealers,
         {
             path: "/:pathMatch(.*)",
             component: Error404,

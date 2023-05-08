@@ -17,7 +17,7 @@ class Specifications extends Core {
     }
 
     updateSpecification(id, body) {
-        return this.post(`marketplace/specification/${id}?_method=put`, body);
+        return this.put(`marketplace/specification/${id}`, body);
     }
 
     createSpecification(body) {

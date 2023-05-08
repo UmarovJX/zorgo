@@ -4,6 +4,11 @@ export default [
         header: "Маркетплейс", //i18n.t('test')
     },
     {
+        title: "Дилеры",
+        route: "dealers",
+        icon: "GridIcon",
+    },
+    {
         title: "Категория",
         route: "categories",
         icon: "GridIcon",
@@ -21,6 +26,11 @@ export default [
     {
         title: "Характеристики",
         route: "specifications",
+        icon: "ActivityIcon",
+    },
+    {
+        title: "Единицы измерения",
+        route: "units",
         icon: "ActivityIcon",
     },
     // {

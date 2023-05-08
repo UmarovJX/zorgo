@@ -6,7 +6,6 @@ import Roles from "@/services/roles";
 import Permissions from "@/services/permissions";
 import Users from "@/services/users";
 import Services from "@/services/services";
-import Dealers from "@/services/dealers";
 import Brands from "@/services/brands";
 import Years from "@/services/years";
 import Models from "@/services/models";
@@ -19,6 +18,8 @@ import MarketplaceCategories from "@/services/marketplace/categories";
 import MarketplaceOrders from "@/services/marketplace/orders";
 import MarketplaceProducts from "@/services/marketplace/products";
 import MarketplaceSpecifications from "@/services/marketplace/specifications";
+import MarketplaceUnits from "@/services/marketplace/units";
+import MarketplaceDealers from "@/services/marketplace/dealers";
 
 export default {
     getBaseURL() {
@@ -30,7 +31,6 @@ export default {
     permissions: new Permissions(),
     users: new Users(),
     services: new Services(),
-    dealers: new Dealers(),
     brands: new Brands(),
     years: new Years(),
     models: new Models(),
@@ -43,4 +43,6 @@ export default {
     orders: new MarketplaceOrders(),
     products: new MarketplaceProducts(),
     specifications: new MarketplaceSpecifications(),
+    units: new MarketplaceUnits(),
+    dealers: new MarketplaceDealers(),
 };

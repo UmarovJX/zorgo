@@ -28,7 +28,7 @@
             >
                 <router-link
                     class="create__btn btn-primary"
-                    :to="{ name: 'dealer-create' }"
+                    :to="{ name: editPageName }"
                     >Создать</router-link
                 >
             </div>
@@ -44,9 +44,7 @@
                 :busy="isBusy"
                 :items="items"
                 :fields="fields"
-                :filter="filter"
-                :filter-included-fields="filterOn"
-                @filtered="onFiltered"
+                @sort-changed="handleSortChange"
             >
                 <template #table-busy>
                     <div class="text-center text-primary my-2">
@@ -55,20 +53,25 @@
                     </div>
                 </template>
 
-                <template #cell(created_at)="data">
-                    {{ splitString(data.item.created_at)[0] }}
-                </template>
-
                 <template #cell(active)="data">
                     <span v-if="data.item.active">Активен</span>
                     <span v-else>Не активен</span>
+                </template>
+
+                <template #cell(created_at)="data">
+                    <span>{{
+                        new Date(data.item.created_at).toLocaleDateString("ru")
+                    }}</span>
                 </template>
 
                 <template #cell(crud_row)="data">
                     <div class="d-flex float-right">
                         <!--    EDIT    -->
                         <router-link
-                            :to="{ path: `dealer/update/${data.item.id}` }"
+                            :to="{
+                                name: editPageName,
+                                params: { id: data.item.id },
+                            }"
                         >
                             <b-button
                                 variant="outline-success"
@@ -99,8 +102,8 @@
                                 hide-header-close
                                 centered
                             >
-                                Вы действительно хотите деактивировать этот
-                                дилер?
+                                Вы действительно хотите деактивировать эту
+                                позицию?
 
                                 <template #modal-footer>
                                     <b-button
@@ -117,7 +120,7 @@
                                     <b-button
                                         variant="success btn-sm"
                                         @click="
-                                            deactivateDealer(
+                                            deactivateEntry(
                                                 data.item.id,
                                                 data.item.active
                                             )
@@ -153,7 +156,8 @@
                                 hide-header-close
                                 centered
                             >
-                                Вы действительно хотите активировать этот дилер?
+                                Вы действительно хотите активировать эту
+                                позицию?
 
                                 <template #modal-footer>
                                     <b-button
@@ -170,7 +174,7 @@
                                     <b-button
                                         variant="success btn-sm"
                                         @click="
-                                            deactivateDealer(
+                                            deactivateEntry(
                                                 data.item.id,
                                                 data.item.active
                                             )
@@ -187,12 +191,21 @@
         </b-col>
 
         <!--  PAGINATION  -->
-        <b-col cols="12" class="mb-3">
+        <b-col
+            cols="12"
+            class="mb-3 d-flex justify-content-between align-items-center"
+        >
+            <b-form-select
+                class="float-right col-1"
+                v-model="pagination.perPage"
+                placeholder="Выберите"
+                :options="pagination.perPageOptions"
+            >
+            </b-form-select>
             <b-pagination
-                v-if="showPagination"
-                v-model="pagination.current"
+                v-model="pagination.page"
                 :total-rows="pagination.total"
-                :per-page="pagination.per_page"
+                :per-page="pagination.perPage"
                 align="center"
                 size="sm"
                 class="my-0"
@@ -204,51 +217,40 @@
 <script>
 import {
     BTable,
-    BBadge,
     BRow,
     BCol,
     BFormGroup,
-    BFormSelect,
     BPagination,
     BInputGroup,
     BFormInput,
     BInputGroupAppend,
     BButton,
-    BDropdown,
-    BDropdownItem,
-    BFormCheckbox,
     BSpinner,
-    BCard,
-    BOverlay,
-    BFormTextarea,
+    BFormSelect,
 } from "bootstrap-vue";
-import ModalButton from "@/views/ui/modals/ModalButton";
 import api from "@/services/api";
 import Ripple from "vue-ripple-directive";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
+import {
+    paginationData,
+    paginationWatchers,
+    paginationHelperMethods,
+} from "@/util/pagination-helper";
 
 export default {
     name: "AppDealers",
     components: {
         BTable,
-        BBadge,
         BRow,
         BCol,
         BFormGroup,
-        BFormSelect,
         BPagination,
         BInputGroup,
         BFormInput,
         BInputGroupAppend,
         BButton,
-        BDropdown,
-        BDropdownItem,
-        BFormCheckbox,
         BSpinner,
-        BCard,
-        BFormTextarea,
-        BOverlay,
-        ModalButton,
+        BFormSelect,
         ToastificationContent,
     },
     directives: {
@@ -256,18 +258,10 @@ export default {
     },
     data() {
         return {
-            username: null,
-            company: null,
-            phone: null,
-            created_at: null,
+            apiEntry: "dealers",
+            name: null,
             isBusy: false,
             filter: null,
-            filterOn: [],
-            infoModal: {
-                id: "info-modal",
-                title: "",
-                content: "",
-            },
             fields: [
                 {
                     key: "id",
@@ -276,27 +270,24 @@ export default {
                 },
                 {
                     key: "username",
-                    label: "Юзернейм",
-                    sortable: true,
+                    label: "Имя пользователя",
                 },
                 {
                     key: "company",
-                    label: "Компании",
+                    label: "Компания",
                     sortable: true,
                 },
                 {
                     key: "phone",
-                    label: "Номер телефона",
-                    sortable: true,
-                },
-                {
-                    key: "created_at",
-                    label: "Время создании",
-                    sortable: true,
+                    label: "Телефон",
                 },
                 {
                     key: "active",
                     label: "Статус",
+                },
+                {
+                    key: "created_at",
+                    label: "Дата создания",
                     sortable: true,
                 },
                 {
@@ -305,65 +296,37 @@ export default {
                 },
             ],
             items: [],
-            pagination: {
-                current: 1,
-                total: null,
-                per_page: 5,
-            },
-            totalRows: 1,
+            pagination: paginationData(),
         };
     },
-    watch: {
-        "$route.query": {
-            handler(query) {
-                // const routeQueryPage = parseInt(query.page)
-                this.pagination.current = query.page;
-            },
-            deep: true,
-            immediate: true,
-        },
-        "pagination.current": {
-            handler(page) {
-                this.replaceRouter({
-                    ...this.query,
-                    page,
-                });
-            },
-        },
-    },
+    watch: paginationWatchers("getData"),
 
     async mounted() {
-        await this.getDealers();
-        // Set the initial number of items
-        this.totalRows = this.items.length;
+        this.setParams();
+        await this.getData();
     },
 
     computed: {
-        rows() {
-            return this.items.length;
+        editPageName() {
+            return this.apiEntry.slice(0, -1) + "-edit";
         },
-
-        query() {
-            return Object.assign({}, this.$route.query);
-        },
-
-        hasItems() {
-            return this.items.length > this.pagination.per_page;
-        },
-
         showPagination() {
-            return this.hasItems && !this.isBusy;
-        },
-
-        sortOptions() {
-            // Create an options list from our fields
-            return this.fields
-                .filter((f) => f.sortable)
-                .map((f) => ({ text: f.label, value: f.key }));
+            return (
+                this.pagination.total > this.pagination.perPage && !this.isBusy
+            );
         },
     },
 
     methods: {
+        /////////////
+        ...paginationHelperMethods(
+            "search[id,username,full_name,company,phone]",
+            {
+                id: "id",
+                company: "company",
+                created_at: "created_at",
+            }
+        ),
         showToast(variant, text, icon) {
             this.$toast({
                 component: ToastificationContent,
@@ -375,19 +338,13 @@ export default {
             });
         },
 
-        replaceRouter(query) {
-            this.$router.replace({ query }).catch(() => {});
-        },
-
-        async getDealers() {
+        async getData() {
             this.isBusy = true;
-            await api.dealers
-                .fetchAll()
+            await api[this.apiEntry]
+                .fetchAll(this.getParams())
                 .then((res) => {
                     this.items = res.data.data;
-                    this.pagination.per_page = res.data.per_page;
                     this.pagination.total = res.data.total;
-                    this.pagination.current = res.data.current;
                 })
                 .catch((error) => {
                     console.error(error);
@@ -397,11 +354,11 @@ export default {
                 });
         },
 
-        deactivateDealer(id, active) {
-            api.dealers
-                .deleteDealer(id)
+        deactivateEntry(id, active) {
+            api[this.apiEntry]
+                .deactivate(id)
                 .then(() => {
-                    this.getDealers();
+                    this.getData();
                     if (active === 1) {
                         this.showToast(
                             "success",
@@ -420,25 +377,6 @@ export default {
                     console.error(error);
                     this.showToast("danger", "Что-то пошло не так!", "XIcon");
                 });
-        },
-
-        splitString(item) {
-            return item.split("T");
-        },
-
-        info(item, index, button) {
-            this.infoModal.title = `Row index: ${index}`;
-            this.infoModal.content = JSON.stringify(item, null, 2);
-            this.$root.$emit("bv::show::modal", this.infoModal.id, button);
-        },
-        resetInfoModal() {
-            this.infoModal.title = "";
-            this.infoModal.content = "";
-        },
-        onFiltered(filteredItems) {
-            // Trigger pagination to update the number of buttons/pages due to filtering
-            this.totalRows = filteredItems.length;
-            this.pagination.current = 1;
         },
     },
 };

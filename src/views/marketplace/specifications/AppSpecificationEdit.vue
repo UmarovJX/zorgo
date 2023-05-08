@@ -61,7 +61,7 @@
                             v-slot="{ errors }"
                         >
                             <b-form-group
-                                label="Единица измерения"
+                                label="Тип характеристики"
                                 label-for="unit"
                             >
                                 <b-form-select
@@ -107,19 +107,57 @@
                                 variant="outline-danger"
                                 class="delete__btn"
                                 size="sm"
-                                @click="(e) => removeRelation(bmy.text)"
+                                @click="(e) => removeOption(entry)"
                             >
                                 <feather-icon icon="Trash2Icon" size="14" />
+                            </b-button>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col cols="12" md="4">
+                            <b-form-group
+                                label="Название опции[RU]"
+                                label-for="option-name-ru"
+                            >
+                                <b-form-input
+                                    v-model="optionName.ru"
+                                    id="option-name-ru"
+                                    size="md"
+                                    placeholder="Введите"
+                                />
+                            </b-form-group>
+                        </b-col>
+                        <b-col cols="12" md="4">
+                            <b-form-group
+                                label="Название опции[UZ]"
+                                label-for="option-name-uz"
+                            >
+                                <b-form-input
+                                    v-model="optionName.uz"
+                                    id="option-name-uz"
+                                    size="md"
+                                    placeholder="Введите"
+                                />
+                            </b-form-group>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col cols="12" md="8">
+                            <b-button
+                                class="float-right"
+                                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                                variant="outline-success"
+                                :disabled="!optionName.ru && !optionName.uz"
+                                @click="addOption"
+                            >
+                                Добавить
                             </b-button>
                         </b-col>
                     </b-row>
                 </b-form-group>
             </ValidationObserver>
 
-            <b-button
-                class="btn-success float-right mt-2 mr-1"
-                @click="saveProduct"
-            >
+            <b-button class="btn-success float-right mt-2" @click="saveSpecification">
                 Сохранить
             </b-button>
         </b-card>
@@ -180,6 +218,11 @@ export default {
                 { text: "text", value: "text" },
                 { text: "checkbox", value: "checkbox" },
             ],
+
+            optionName: {
+                ru: "",
+                uz: "",
+            },
             options: [],
             isBusy: false,
         };
@@ -206,27 +249,16 @@ export default {
     computed: {},
 
     methods: {
-        addRelation() {
-            const brand = this.relationData.find(
-                (el) => el.id === this.brandId
-            );
-            const model = brand.models.find((el) => el.id === this.modelId);
-
-            const year = model.years.find((el) => el.id === this.yearId);
-
-            this.relations.push({
-                text: `${brand.name}, ${model.name}, ${year.name}`,
-                b: brand.id,
-                m: model.id,
-                y: year.id,
+        addOption() {
+            this.options.push({
+                value: { uz: this.optionName.uz, ru: this.optionName.ru },
             });
-            this.brandId = null;
-            this.modelId = null;
-            this.yearId = null;
+            this.optionName.uz = "";
+            this.optionName.ru = "";
         },
 
-        removeRelation(str) {
-            this.relations = this.relations.filter((el) => el.text !== str);
+        removeOption(e) {
+            this.options = this.options.filter((el) => el !== e);
         },
         async getSpecification(id) {
             const { data } = await api.specifications.fetchOneSpecification(id);
@@ -236,72 +268,31 @@ export default {
             this.filter = !!data.filter;
             this.options = data.options;
         },
-        async saveProduct() {
-            const isValid = await this.$refs["validation-observer"].validate();
-            if (isValid) {
-                const formData = new FormData();
+        async saveSpecification() {
+            const data = {
+                name: this.name,
+                type: this.specType,
+                filter: this.filter,
+                options: this.options,
+            };
 
-                formData.append("name[ru]", this.name.ru);
-                formData.append("name[uz]", this.name.uz);
-                formData.append("body[ru]", this.body.ru);
-                formData.append("body[uz]", this.body.uz);
-                formData.append("price", this.price);
-                if (this.discount_price) {
-                    formData.append("discount_price", this.discount_price);
-                }
-
-                formData.append("count", this.count);
-                formData.append("unit_id", this.unitId);
-                formData.append("category_id", this.categoryId);
-
-                this.fileRecords.forEach((el, i) => {
-                    if (el.id) {
-                        formData.append(`images[${i}][id]`, el.id);
-                    } else {
-                        formData.append(`images[${i}][file]`, el.file);
-                    }
-                });
-
-                this.categorySpecs.forEach((el, i) => {
-                    formData.append(`options[${i}][specification_id]`, el.id);
-                    let v =
-                        el.type === "checkbox"
-                            ? +this.specValues[el.id]
-                            : this.specValues[el.id];
-                    let t = el.type === "select" ? "option_id" : "value";
-                    formData.append(`options[${i}][${t}]`, v);
-                });
-
-                this.relations.forEach((el, i) => {
-                    if (el.id) {
-                        formData.append(`relations[${i}][id]`, el.id);
-                    }
-                    formData.append(`relations[${i}][brand_id]`, el.b);
-                    formData.append(`relations[${i}][model_id]`, el.m);
-                    formData.append(`relations[${i}][year_id]`, el.y);
-                });
-
-                let req;
-                if (this.$route.params.id) {
-                    req = api.products.updateProduct(
-                        this.$route.params.id,
-                        formData
-                    );
-                } else {
-                    req = api.products.createProduct(formData);
-                }
-                req.then(() => {
-                    this.$router.push({ name: "products" });
-                    this.showToast(
-                        "success",
-                        "Успешно cохранено!",
-                        "CheckIcon"
-                    );
-                }).catch((error) => {
-                    console.error(error);
-                    this.showToast("danger", "Что-то пошло не так!", "XIcon");
-                });
+            let req;
+            if (this.$route.params.id) {
+                req = api.specifications.updateSpecification(
+                    this.$route.params.id,
+                    data
+                );
+            } else {
+                req = api.specifications.createSpecification(data);
             }
+
+            req.then(() => {
+                this.$router.push({ name: "specifications" });
+                this.showToast("success", "Успешно cохранено!", "CheckIcon");
+            }).catch((error) => {
+                console.error(error);
+                this.showToast("danger", "Что-то пошло не так!", "XIcon");
+            });
         },
 
         showToast(variant, text, icon) {
