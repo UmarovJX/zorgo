@@ -37,6 +37,24 @@ export default [
         ],
     },
     {
+        title: "Оферта",
+        icon: "MessageCircleIcon",
+        children: [
+            {
+                title: "Публичная оферта",
+                route: {
+                    name: "publicoffer-po",
+                },
+            },
+            {
+                title: "Пользовательское соглашение",
+                route: {
+                    name: "publicoffer-pda",
+                },
+            },
+        ],
+    },
+    {
         title: "Компании",
         route: "company-index",
         icon: "ListIcon",

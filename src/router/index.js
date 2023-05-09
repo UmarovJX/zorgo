@@ -18,6 +18,7 @@ import partners from "@/router/routes/partners";
 import mainPage from "@/router/routes/mainPage";
 import settings from "@/router/routes/settings";
 import description from "@/router/routes/description";
+import publicOffer from "@/router/routes/publicOffer";
 
 //marketplace
 import category from "@/router/routes/marketplace/categories";
@@ -56,6 +57,7 @@ const router = new VueRouter({
         ...partners,
         ...mainPage,
         ...description,
+        ...publicOffer,
         ...settings,
         //marketplace
         ...category,
