@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import quillConfig from "@/util/quillConfig";
 import PublicOffer from "@/services/publicOffer";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import {
@@ -92,11 +93,7 @@ export default {
             type: "osago",
             title: "Осаго",
             errors: [],
-            quillEditorConfig: {
-                modules: {
-                    toolbar: ["bold", "italic", "link"],
-                },
-            },
+            quillEditorConfig: quillConfig,
             item: {
                 body: { ru: "", uz: "" },
                 link: "",
