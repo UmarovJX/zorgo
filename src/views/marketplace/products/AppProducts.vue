@@ -307,10 +307,6 @@ export default {
                     label: "Единица измерения",
                 },
                 {
-                    key: "unit.name.ru",
-                    label: "Единица измерения",
-                },
-                {
                     key: "active",
                     label: "Статус",
                 },
