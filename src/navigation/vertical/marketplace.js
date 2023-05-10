@@ -14,6 +14,11 @@ export default [
         icon: "GridIcon",
     },
     {
+        icon: "GridIcon",
+        title: "Подкатегории",
+        route: { name: "subcategories" },
+    },
+    {
         title: "История заказов",
         route: "orders",
         icon: "ActivityIcon",
@@ -22,6 +27,11 @@ export default [
         title: "Товары",
         route: "products",
         icon: "ActivityIcon",
+    },
+    {
+        title: "Подборки товаров",
+        route: "compilations",
+        icon: "GridIcon",
     },
     {
         title: "Характеристики",

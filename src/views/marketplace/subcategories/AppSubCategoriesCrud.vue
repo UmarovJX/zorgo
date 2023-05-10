@@ -53,10 +53,39 @@
                 </b-row>
 
                 <b-row>
+                    <b-col cols="12"> </b-col>
+                </b-row>
+
+                <b-row>
+                    <b-col cols="12">
+                        <ValidationProvider
+                            name="Категория"
+                            rules="required"
+                            v-slot="{ errors }"
+                        >
+                            <b-form-group
+                                label="Категория"
+                                label-for="category"
+                            >
+                                <b-form-select
+                                    :disabled="subCategories.length > 0"
+                                    id="category"
+                                    v-model="categoryId"
+                                    :options="categoryOptions"
+                                ></b-form-select>
+                            </b-form-group>
+                            <p v-if="errors" class="validation__red">
+                                {{ errors[0] }}
+                            </p>
+                        </ValidationProvider>
+                    </b-col>
+                </b-row>
+
+                <b-row>
                     <!--   FILE INPUT   -->
                     <b-col cols="12" class="px-1">
                         <ValidationProvider
-                            name="Изображение"
+                            name="image"
                             rules="required"
                             v-slot="{ errors }"
                         >
@@ -86,9 +115,64 @@
                     </b-col>
                 </b-row>
                 <!--   SPECIFICATIONS   -->
+
+                <template v-if="categoryId">
+                    <b-row class="mb-1">
+                        <b-col>Спецификации:</b-col>
+                    </b-row>
+                    
+                    <b-row>
+                        <b-col>
+                            <b-row v-for="spec in specList" class="px-1 my-1">
+                                <b-col
+                                    cols="12"
+                                    md="6"
+                                    class="d-flex justify-content-between align-items-center"
+                                >
+                                    {{ spec.name.ru }}
+                                    <b-button
+                                        v-ripple.400="
+                                            'rgba(113, 102, 240, 0.15)'
+                                        "
+                                        variant="outline-danger"
+                                        class="delete__btn"
+                                        size="sm"
+                                        @click="(e) => removeSpec(spec.id)"
+                                    >
+                                        <feather-icon
+                                            icon="Trash2Icon"
+                                            size="14"
+                                        />
+                                    </b-button>
+                                </b-col>
+                            </b-row>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col cols="12" md="6">
+                            <b-form-select
+                                :disabled="subCategories.length > 0"
+                                id="category"
+                                v-model="specificationId"
+                                :options="specOptions"
+                            ></b-form-select
+                        ></b-col>
+                        <b-col cols="12" md="6">
+                            <b-button
+                                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                                variant="outline-success"
+                                :disabled="!specificationId"
+                                @click="addSpec"
+                            >
+                                Добавить
+                            </b-button>
+                        </b-col>
+                    </b-row>
+                </template>
             </ValidationObserver>
 
             <b-button
+                :disabled="isSaving"
                 class="btn-success float-right mt-2 mr-1"
                 @click="saveCategory"
             >
@@ -141,6 +225,15 @@ export default {
                 ru: "",
                 uz: "",
             },
+            categoryId: null,
+            subCategories: [],
+            categoryOptions: [
+                { value: null, text: "Выберите Категорию", disabled: true },
+            ],
+
+            specificationId: null,
+            allSpecs: [],
+            specList: [],
 
             fileRecords: [],
             fileRecordsForUpload: [],
@@ -150,6 +243,7 @@ export default {
             filter: null,
             filterOn: [],
             selectMode: "multi",
+            isSaving: false,
         };
     },
     async mounted() {
@@ -161,13 +255,43 @@ export default {
         });
         this.getCategories();
     },
-    computed: {},
+    computed: {
+        specOptions() {
+            if (this.allSpecs.length === 0)
+                return [{ value: null, text: "Нет доступных спецификаций" }];
+            else {
+                const options = this.allSpecs
+                    .filter(
+                        (el) =>
+                            el.active &&
+                            this.specList.every((e) => e.id !== el.id)
+                    )
+                    .map((el) => ({ value: el.id, text: el.name.ru }));
+                return [
+                    { value: null, text: "Выберите спецификацию" },
+                    ...options,
+                ];
+            }
+        },
+    },
 
     methods: {
+        addSpec() {
+            this.specList.push(
+                this.allSpecs.find((el) => el.id === this.specificationId)
+            );
+            this.specificationId = null;
+        },
+        removeSpec(id) {
+            this.specList = this.specList.filter((el) => el.id !== id);
+        },
         async getCategory(id) {
             const { data } = await api.categories.fetchOneCategory(id);
 
             this.name = data.name;
+            this.categoryId = data.category ? data.category.id : null;
+            this.subCategories = data.categories;
+            this.specList = data.specifications;
             const image = data.image;
 
             this.fileRecords = [
@@ -183,14 +307,21 @@ export default {
         async saveCategory() {
             const isValid = await this.$refs["validation-observer"].validate();
             if (isValid) {
+                this.isSaving = true;
                 const formData = new FormData();
 
                 formData.append("name[ru]", this.name.ru);
                 formData.append("name[uz]", this.name.uz);
-
+                if (this.categoryId) {
+                    formData.append("category_id", this.categoryId);
+                }
                 if (this.fileRecords[0].file) {
                     formData.append("image", this.fileRecords[0].file);
                 }
+
+                this.specList.forEach((el, i) => {
+                    formData.append(`specifications[${i}]`, el.id);
+                });
 
                 let req;
                 if (this.$route.params.id) {
@@ -202,12 +333,20 @@ export default {
                     req = api.categories.createCategory(formData);
                 }
                 req.then(() => {
-                    this.$router.push({ name: "categories" });
+                    this.$router.push({ name: "subcategories" });
                     this.showToast("success", "Успешно изменено!", "CheckIcon");
-                }).catch((error) => {
-                    console.error(error);
-                    this.showToast("danger", "Что-то пошло не так!", "XIcon");
-                });
+                })
+                    .catch((error) => {
+                        console.error(error);
+                        this.showToast(
+                            "danger",
+                            "Что-то пошло не так!",
+                            "XIcon"
+                        );
+                    })
+                    .finally(() => {
+                        this.isSaving = false;
+                    });
             }
         },
         deleteUploadedFile(fileRecord) {
@@ -267,7 +406,7 @@ export default {
                     )
                     .map((el) => ({ value: el.id, text: el.name.ru }));
                 this.categoryOptions = [
-                    { value: null, text: "Выберите Категорию" },
+                    { value: null, text: "Выберите Категорию", disabled: true },
                     ...options,
                 ];
             });

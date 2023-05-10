@@ -7,7 +7,19 @@ class Categories extends Core {
     }
 
     fetchCategories(params = "") {
-        return this.get("marketplace/category" + (params ? "?" + params : ""));
+        return this.get(
+            "marketplace/category" +
+                "?filters[type]=category" +
+                (params ? "&" + params : "")
+        );
+    }
+
+    fetchSubCategories(params = "") {
+        return this.get(
+            "marketplace/category" +
+                "?filters[type]=subcategory" +
+                (params ? "&" + params : "")
+        );
     }
 
     fetchOneCategory(id) {

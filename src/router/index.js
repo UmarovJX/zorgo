@@ -22,11 +22,13 @@ import publicOffer from "@/router/routes/publicOffer";
 
 //marketplace
 import category from "@/router/routes/marketplace/categories";
+import subcategory from "@/router/routes/marketplace/subcategories";
 import orders from "@/router/routes/marketplace/orders";
 import products from "@/router/routes/marketplace/products";
 import specifications from "@/router/routes/marketplace/specifications";
 import units from "@/router/routes/marketplace/units";
 import dealers from "@/router/routes/marketplace/dealers";
+import compilations from "@/router/routes/marketplace/compilations";
 
 Vue.use(VueRouter);
 
@@ -61,11 +63,13 @@ const router = new VueRouter({
         ...settings,
         //marketplace
         ...category,
+        ...subcategory,
         ...orders,
         ...products,
         ...specifications,
         ...units,
         ...dealers,
+        ...compilations,
         {
             path: "/:pathMatch(.*)",
             component: Error404,

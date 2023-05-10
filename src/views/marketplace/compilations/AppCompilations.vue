@@ -1,6 +1,6 @@
 <template>
     <b-row>
-        <h2 class="pl-1">Категории</h2>
+        <h2 class="pl-1">Подборки товаров</h2>
 
         <!--  BEFORE TABLE  -->
         <div class="d-flex justify-content-between col-12">
@@ -21,20 +21,17 @@
                     </b-input-group>
                 </b-form-group>
             </b-col>
+
+            <!--      CREATE     -->
             <div
                 class="d-flex align-items-center justify-content-center float-right"
             >
                 <router-link
                     class="create__btn btn-primary"
-                    :to="{ name: 'category-edit' }"
+                    :to="{ name: editPageName }"
                     >Создать</router-link
                 >
             </div>
-
-            <!--      CREATE     -->
-            <!--      <div class="d-flex align-items-center justify-content-center float-right">-->
-            <!--        <router-link class="create__btn btn-primary" :to="{name:'role-create'}">Создать</router-link>-->
-            <!--      </div>-->
         </div>
 
         <!--  TABLE  -->
@@ -61,20 +58,16 @@
                     <span v-else>Не активен</span>
                 </template>
 
-                <template #cell(image)="data">
+                <template #cell(color)="{ item }">
                     <div
-                        style="width: 90px; height: 80px"
-                        v-if="data.item.image"
-                    >
-                        <img
-                            style="
-                                object-fit: contain;
-                                width: 100%;
-                                height: 100%;
-                            "
-                            :src="data.item.image"
-                        />
-                    </div>
+                        :title="`#${item.color}`"
+                        :style="`width: 30px; height: 30px; background-color: #${item.color}; border-radius: 40%`"
+                    ></div>
+                </template>
+                <template #cell(created_at)="data">
+                    <span>{{
+                        new Date(data.item.created_at).toLocaleDateString("ru")
+                    }}</span>
                 </template>
 
                 <template #cell(crud_row)="data">
@@ -82,7 +75,7 @@
                         <!--    EDIT    -->
                         <router-link
                             :to="{
-                                name: 'category-edit',
+                                name: editPageName,
                                 params: { id: data.item.id },
                             }"
                         >
@@ -105,7 +98,6 @@
                             >
                                 <feather-icon icon="Trash2Icon" size="18" />
                             </b-button>
-
                             <!-- DEACTIVATE MODAL -->
                             <b-modal
                                 :id="`modal-${data.item.id}`"
@@ -117,7 +109,7 @@
                                 centered
                             >
                                 Вы действительно хотите деактивировать эту
-                                категорию?
+                                позицию?
 
                                 <template #modal-footer>
                                     <b-button
@@ -134,7 +126,7 @@
                                     <b-button
                                         variant="success btn-sm"
                                         @click="
-                                            deactivateCategory(
+                                            deactivateEntry(
                                                 data.item.id,
                                                 data.item.active
                                             )
@@ -171,7 +163,7 @@
                                 centered
                             >
                                 Вы действительно хотите активировать эту
-                                категорию?
+                                позицию?
 
                                 <template #modal-footer>
                                     <b-button
@@ -188,7 +180,7 @@
                                     <b-button
                                         variant="success btn-sm"
                                         @click="
-                                            deactivateCategory(
+                                            deactivateEntry(
                                                 data.item.id,
                                                 data.item.active
                                             )
@@ -231,25 +223,17 @@
 <script>
 import {
     BTable,
-    BBadge,
     BRow,
     BCol,
     BFormGroup,
-    BFormSelect,
     BPagination,
     BInputGroup,
     BFormInput,
     BInputGroupAppend,
     BButton,
-    BDropdown,
-    BDropdownItem,
-    BFormCheckbox,
     BSpinner,
-    BCard,
-    BOverlay,
-    BFormTextarea,
+    BFormSelect,
 } from "bootstrap-vue";
-import ModalButton from "@/views/ui/modals/ModalButton";
 import api from "@/services/api";
 import Ripple from "vue-ripple-directive";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
@@ -260,27 +244,19 @@ import {
 } from "@/util/pagination-helper";
 
 export default {
-    name: "AppCategories",
+    name: "AppDealers",
     components: {
         BTable,
-        BBadge,
         BRow,
         BCol,
         BFormGroup,
-        BFormSelect,
         BPagination,
         BInputGroup,
         BFormInput,
         BInputGroupAppend,
         BButton,
-        BDropdown,
-        BDropdownItem,
-        BFormCheckbox,
         BSpinner,
-        BCard,
-        BFormTextarea,
-        BOverlay,
-        ModalButton,
+        BFormSelect,
         ToastificationContent,
     },
     directives: {
@@ -288,14 +264,10 @@ export default {
     },
     data() {
         return {
-            name: "",
+            apiEntry: "compilations",
+            name: null,
             isBusy: false,
             filter: null,
-            infoModal: {
-                id: "info-modal",
-                title: "",
-                content: "",
-            },
             fields: [
                 {
                     key: "id",
@@ -304,13 +276,16 @@ export default {
                 },
                 {
                     key: "name.ru",
-                    label: "Название",
+                    label: "Название [RU]",
                     sortable: true,
                 },
-
                 {
-                    key: "image",
-                    label: "Изображения",
+                    key: "name.uz",
+                    label: "Название [UZ]",
+                },
+                {
+                    key: "color",
+                    label: "Цвет",
                 },
                 {
                     key: "active",
@@ -323,39 +298,28 @@ export default {
             ],
             items: [],
             pagination: paginationData(),
-            totalRows: 1,
         };
     },
-    watch: paginationWatchers("getCategories"),
+    watch: paginationWatchers("getData"),
 
     async mounted() {
         this.setParams();
-
-        await this.getCategories();
+        await this.getData();
     },
 
     computed: {
-        rows() {
-            return this.items.length;
+        editPageName() {
+            return this.apiEntry.slice(0, -1) + "-edit";
         },
-
-        query() {
-            return Object.assign({}, this.$route.query);
-        },
-
         showPagination() {
-            return this.hasItems && !this.isBusy;
-        },
-
-        sortOptions() {
-            // Create an options list from our fields
-            return this.fields
-                .filter((f) => f.sortable)
-                .map((f) => ({ text: f.label, value: f.key }));
+            return (
+                this.pagination.total > this.pagination.perPage && !this.isBusy
+            );
         },
     },
 
     methods: {
+        /////////////
         ...paginationHelperMethods("search[id,name]", {
             id: "id",
             "name.ru": "name",
@@ -371,14 +335,10 @@ export default {
             });
         },
 
-        replaceRouter(query) {
-            this.$router.replace({ query }).catch(() => {});
-        },
-
-        async getCategories() {
+        async getData() {
             this.isBusy = true;
-            await api.categories
-                .fetchCategories(this.getParams())
+            await api[this.apiEntry]
+                .fetchAll(this.getParams())
                 .then((res) => {
                     this.items = res.data.data;
                     this.pagination.total = res.data.total;
@@ -391,11 +351,11 @@ export default {
                 });
         },
 
-        deactivateCategory(id, active) {
-            api.categories
-                .deleteCategory(id)
+        deactivateEntry(id, active) {
+            api[this.apiEntry]
+                .deactivate(id)
                 .then(() => {
-                    this.getCategories();
+                    this.getData();
                     if (active === 1) {
                         this.showToast(
                             "success",

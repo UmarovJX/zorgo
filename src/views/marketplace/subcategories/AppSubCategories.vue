@@ -1,6 +1,6 @@
 <template>
     <b-row>
-        <h2 class="pl-1">Категории</h2>
+        <h2 class="pl-1">Подкатегории</h2>
 
         <!--  BEFORE TABLE  -->
         <div class="d-flex justify-content-between col-12">
@@ -26,7 +26,7 @@
             >
                 <router-link
                     class="create__btn btn-primary"
-                    :to="{ name: 'category-edit' }"
+                    :to="{ name: 'subcategory-edit' }"
                     >Создать</router-link
                 >
             </div>
@@ -60,6 +60,12 @@
                     <span v-if="data.item.active">Активен</span>
                     <span v-else>Не активен</span>
                 </template>
+                <template #cell(category.name.ru)="{ item }">
+                    <span v-if="item.category">{{
+                        item.category.name.ru
+                    }}</span>
+                    <span v-else>Нет категории</span>
+                </template>
 
                 <template #cell(image)="data">
                     <div
@@ -82,7 +88,7 @@
                         <!--    EDIT    -->
                         <router-link
                             :to="{
-                                name: 'category-edit',
+                                name: 'subcategory-edit',
                                 params: { id: data.item.id },
                             }"
                         >
@@ -317,6 +323,10 @@ export default {
                     label: "Статус",
                 },
                 {
+                    key: "category.name.ru",
+                    label: "Категория",
+                },
+                {
                     key: "crud_row",
                     label: " ",
                 },
@@ -356,7 +366,7 @@ export default {
     },
 
     methods: {
-        ...paginationHelperMethods("search[id,name]", {
+        ...paginationHelperMethods("search[id,name,category_id]", {
             id: "id",
             "name.ru": "name",
         }),
@@ -378,7 +388,7 @@ export default {
         async getCategories() {
             this.isBusy = true;
             await api.categories
-                .fetchCategories(this.getParams())
+                .fetchSubCategories(this.getParams())
                 .then((res) => {
                     this.items = res.data.data;
                     this.pagination.total = res.data.total;
