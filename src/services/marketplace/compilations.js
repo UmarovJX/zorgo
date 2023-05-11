@@ -7,7 +7,20 @@ class Compilations extends Core {
     }
 
     fetchAll(params = "") {
-        return this.get("marketplace/compilation" + (params ? "?" + params : ""));
+        return this.get(
+            "marketplace/compilation" + (params ? "?" + params : "")
+        );
+    }
+
+    fetchAllByPosition() {
+        return this.get(
+            "marketplace/compilation" +
+                "?sort[direction]=asc&sort[column]=position&perPage=9999"
+        );
+    }
+
+    updatePosition(data) {
+        return this.put("marketplace/compilation/position", data);
     }
 
     fetchOne(id) {

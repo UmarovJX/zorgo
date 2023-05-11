@@ -7,6 +7,13 @@ export default [
     },
 
     {
+        path: "/marketplace/compilations/positions",
+        name: "compilation-positions",
+        component: () =>
+            import("@/views/marketplace/compilations/AppCompilationPositions"),
+    },
+
+    {
         path: "/marketplace/compilation",
         component: () => import("@/views/marketplace/compilations/id"),
         children: [

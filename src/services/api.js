@@ -21,6 +21,8 @@ import MarketplaceSpecifications from "@/services/marketplace/specifications";
 import MarketplaceUnits from "@/services/marketplace/units";
 import MarketplaceDealers from "@/services/marketplace/dealers";
 import MarketplaceCompilations from "@/services/marketplace/compilations";
+import MarketplaceBanners from "@/services/marketplace/banners";
+import MarketplacePromocodes from "@/services/marketplace/promocodes";
 
 export default {
     getBaseURL() {
@@ -47,4 +49,6 @@ export default {
     units: new MarketplaceUnits(),
     dealers: new MarketplaceDealers(),
     compilations: new MarketplaceCompilations(),
+    banners: new MarketplaceBanners(),
+    promocodes: new MarketplacePromocodes(),
 };

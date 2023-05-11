@@ -9,15 +9,24 @@ export default [
         icon: "GridIcon",
     },
     {
-        title: "Категория",
-        route: "categories",
+        title: "Категории",
         icon: "GridIcon",
+        children: [
+            {
+                title: "Категории",
+                route: "categories",
+            },
+            {
+                title: "Подкатегории",
+                route: "subcategories",
+            },
+            {
+                title: "Позиции",
+                route: "category-positions",
+            },
+        ],
     },
-    {
-        icon: "GridIcon",
-        title: "Подкатегории",
-        route: { name: "subcategories" },
-    },
+
     {
         title: "История заказов",
         route: "orders",
@@ -29,10 +38,40 @@ export default [
         icon: "ActivityIcon",
     },
     {
-        title: "Подборки товаров",
-        route: "compilations",
-        icon: "GridIcon",
+        title: "Промо коды",
+        route: "promocodes",
+        icon: "ActivityIcon",
     },
+
+    {
+        title: "Подборки товаров",
+        icon: "GridIcon",
+        children: [
+            {
+                title: "Подборки товаров",
+                route: "compilations",
+            },
+            {
+                title: "Позиции подборок",
+                route: "compilation-positions",
+            },
+        ],
+    },
+    {
+        title: "Баннеры",
+        icon: "GridIcon",
+        children: [
+            {
+                title: "Баннеры",
+                route: "banners",
+            },
+            {
+                title: "Позиции",
+                route: "banner-positions",
+            },
+        ],
+    },
+
     {
         title: "Характеристики",
         route: "specifications",

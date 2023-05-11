@@ -22,6 +22,17 @@ class Categories extends Core {
         );
     }
 
+    updatePosition(data) {
+        return this.put("marketplace/category/position", data);
+    }
+
+    fetchAllCategories() {
+        return this.get(
+            "marketplace/category/all" +
+                "?sort[direction]=asc&sort[column]=position"
+        );
+    }
+
     fetchOneCategory(id) {
         return this.get(`marketplace/category/${id}`);
     }
