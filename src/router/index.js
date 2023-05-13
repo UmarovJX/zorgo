@@ -30,6 +30,9 @@ import dealers from "@/router/routes/marketplace/dealers";
 import compilations from "@/router/routes/marketplace/compilations";
 import banners from "@/router/routes/marketplace/banners";
 import promocodes from "@/router/routes/marketplace/promocodes";
+import regions from "@/router/routes/marketplace/regions";
+import cities from "@/router/routes/marketplace/cities";
+import feedback from "@/router/routes/marketplace/feedback";
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -71,6 +74,9 @@ const router = new VueRouter({
         ...compilations,
         ...banners,
         ...promocodes,
+        ...regions,
+        ...cities,
+        ...feedback,
         {
             path: "/:pathMatch(.*)",
             component: Error404,

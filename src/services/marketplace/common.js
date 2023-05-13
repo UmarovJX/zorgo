@@ -16,6 +16,9 @@ class Common extends Core {
     fetchAllCategories() {
         return this.get("marketplace/common/category/all");
     }
+    fetchRegions() {
+        return this.get("marketplace/common/regions");
+    }
 
     fetchAllSpecifications(id) {
         return this.get(

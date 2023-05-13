@@ -6,7 +6,7 @@ export default [
     {
         title: "Дилеры",
         route: "dealers",
-        icon: "GridIcon",
+        icon: "UserIcon",
     },
     {
         title: "Категории",
@@ -35,12 +35,12 @@ export default [
     {
         title: "Товары",
         route: "products",
-        icon: "ActivityIcon",
+        icon: "DatabaseIcon",
     },
     {
         title: "Промо коды",
         route: "promocodes",
-        icon: "ActivityIcon",
+        icon: "EditIcon",
     },
 
     {
@@ -59,7 +59,7 @@ export default [
     },
     {
         title: "Баннеры",
-        icon: "GridIcon",
+        icon: "ImageIcon",
         children: [
             {
                 title: "Баннеры",
@@ -75,44 +75,26 @@ export default [
     {
         title: "Характеристики",
         route: "specifications",
-        icon: "ActivityIcon",
+        icon: "ListIcon",
     },
     {
         title: "Единицы измерения",
         route: "units",
-        icon: "ActivityIcon",
+        icon: "PackageIcon",
     },
-    // {
-    //     title: "Осаго",
-    //     route: "osago",
-    //     icon: "FileIcon",
-    // },
-    // {
-    //     title: "Путешествие",
-    //     route: "travel",
-    //     icon: "FileIcon",
-    // },
-    // {
-    //     title: "Краткое описание",
-    //     icon: "MessageCircleIcon",
-    //     children: [
-    //         {
-    //             title: "Осаго",
-    //             route: { name: "description-osago" },
-    //         },
-    //         {
-    //             title: "Каско",
-    //             route: { name: "description-kasko" },
-    //         },
-    //         {
-    //             title: "Путешествие",
-    //             route: { name: "description-travel" },
-    //         },
-    //     ],
-    // },
-    // {
-    //     title: "Компании",
-    //     route: "company-index",
-    //     icon: "ListIcon",
-    // },
+    {
+        title: "Регионы",
+        route: "regions",
+        icon: "TargetIcon",
+    },
+    {
+        title: "Города",
+        route: "cities",
+        icon: "TargetIcon",
+    },
+    {
+        title: "Отзывы",
+        route: "feedback",
+        icon: "MessageCircleIcon",
+    },
 ];

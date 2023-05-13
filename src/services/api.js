@@ -23,6 +23,9 @@ import MarketplaceDealers from "@/services/marketplace/dealers";
 import MarketplaceCompilations from "@/services/marketplace/compilations";
 import MarketplaceBanners from "@/services/marketplace/banners";
 import MarketplacePromocodes from "@/services/marketplace/promocodes";
+import MarketplaceRegions from "@/services/marketplace/regions";
+import MarketplaceCities from "@/services/marketplace/cities";
+import MarketplaceFeedback from "@/services/marketplace/feedback";
 
 export default {
     getBaseURL() {
@@ -51,4 +54,7 @@ export default {
     compilations: new MarketplaceCompilations(),
     banners: new MarketplaceBanners(),
     promocodes: new MarketplacePromocodes(),
+    regions: new MarketplaceRegions(),
+    cities: new MarketplaceCities(),
+    feedback: new MarketplaceFeedback(),
 };
