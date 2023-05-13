@@ -16,75 +16,79 @@
                 @end="drag = false"
                 handle=".handle-category"
             >
-                <b-card
-                    class="mb-1"
-                    body-class="p-1"
-                    v-for="(cat, i) in items"
-                    :key="cat.name.ru + cat.id"
-                    cols="12"
-                >
-                    <b-row>
-                        <b-col cols="12" md="4" sm="6">
-                            <feather-icon
-                                icon="MenuIcon"
-                                size="24"
-                                class="mr-1 cursor-pointer handle-category"
-                            />
-                            {{ i + 1 + ". " + cat.name.ru }}
-                        </b-col>
-                        <b-col v-if="cat.categories.length > 0">
-                            <b-row>
-                                <b-col>
-                                    <b-button
-                                        size="sm"
-                                        v-b-toggle="'collapse' + i"
-                                        variant="primary"
-                                        >Подкатегории
-                                        <feather-icon
-                                            icon="ArrowDownIcon"
-                                            size="14"
-                                        />
-                                    </b-button>
-                                    <b-collapse :id="'collapse' + i">
-                                        <b-card
-                                            class="mb-0"
-                                            body-class="pb-0 pl-1 pt-0"
-                                            ><draggable
-                                                v-model="items[i].categories"
-                                                :group="'sub' + i"
-                                                @start="drag = true"
-                                                @end="drag = false"
-                                                handle=".handle-sub"
-                                            >
-                                                <b-row
-                                                    class=" pr-1 mt-1"
-                                                    v-for="(
-                                                        sub, iSub
-                                                    ) in cat.categories"
-                                                    :key="sub.id"
+                <TransitionGroup name="position">
+                    <b-card
+                        class="mb-1"
+                        body-class="p-1"
+                        v-for="(cat, i) in items"
+                        :key="cat.name.ru + cat.id"
+                        cols="12"
+                    >
+                        <b-row>
+                            <b-col cols="12" md="4" sm="6">
+                                <feather-icon
+                                    icon="MenuIcon"
+                                    size="24"
+                                    class="mr-1 cursor-pointer handle-category"
+                                />
+                                {{ i + 1 + ". " + cat.name.ru }}
+                            </b-col>
+                            <b-col v-if="cat.categories.length > 0">
+                                <b-row>
+                                    <b-col>
+                                        <b-button
+                                            size="sm"
+                                            v-b-toggle="'collapse' + i"
+                                            variant="primary"
+                                            >Подкатегории
+                                            <feather-icon
+                                                icon="ArrowDownIcon"
+                                                size="14"
+                                            />
+                                        </b-button>
+                                        <b-collapse :id="'collapse' + i">
+                                            <b-card
+                                                class="mb-0"
+                                                body-class="pb-0 pl-1 pt-0"
+                                                ><draggable
+                                                    v-model="
+                                                        items[i].categories
+                                                    "
+                                                    :group="'sub' + i"
+                                                    @start="drag = true"
+                                                    @end="drag = false"
+                                                    handle=".handle-sub"
                                                 >
-                                                    <b-col>
-                                                        <feather-icon
-                                                            icon="MenuIcon"
-                                                            size="20"
-                                                            class="mr-1 cursor-pointer handle-sub"
-                                                        />
-                                                        {{
-                                                            iSub +
-                                                            1 +
-                                                            ". " +
-                                                            sub.name.ru
-                                                        }}
-                                                    </b-col>
-                                                </b-row>
-                                            </draggable>
-                                        </b-card>
-                                    </b-collapse>
-                                </b-col>
-                            </b-row>
-                        </b-col>
-                    </b-row>
-                </b-card>
+                                                    <b-row
+                                                        class="pr-1 mt-1"
+                                                        v-for="(
+                                                            sub, iSub
+                                                        ) in cat.categories"
+                                                        :key="sub.id"
+                                                    >
+                                                        <b-col>
+                                                            <feather-icon
+                                                                icon="MenuIcon"
+                                                                size="20"
+                                                                class="mr-1 cursor-pointer handle-sub"
+                                                            />
+                                                            {{
+                                                                iSub +
+                                                                1 +
+                                                                ". " +
+                                                                sub.name.ru
+                                                            }}
+                                                        </b-col>
+                                                    </b-row>
+                                                </draggable>
+                                            </b-card>
+                                        </b-collapse>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                        </b-row>
+                    </b-card>
+                </TransitionGroup>
             </draggable>
         </b-col>
         <b-col cols="12">

@@ -24,7 +24,7 @@
                     cols="12"
                 >
                     <b-row>
-                        <b-col cols="12" md="4" sm="6">
+                        <b-col cols="12">
                             <feather-icon
                                 icon="MenuIcon"
                                 size="24"

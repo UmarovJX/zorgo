@@ -52,7 +52,7 @@
                     <div>
                         {{
                             new Date(data.item.created_at).toLocaleTimeString(
-                                ru
+                                "ru"
                             )
                         }}
                     </div>
