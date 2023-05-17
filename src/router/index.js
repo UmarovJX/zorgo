@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import isRouteAvailable from "@/util/isRouteAvailable";
 
 import Error404 from "@/views/error/Error404.vue";
 
@@ -88,8 +89,8 @@ router.beforeEach((to, from, next) => {
     const AUTH_TOKEN = localStorage.getItem("accessToken");
     if (to.name === "auth-login") return next();
     if (AUTH_TOKEN) {
-        if (to.path === "/") {
-            return next({ name: "insurance/services" });
+        if (to.path === "/" || !isRouteAvailable(to.name, to.params)) {
+            return next({ name: "services" });
         } else {
             return next();
         }

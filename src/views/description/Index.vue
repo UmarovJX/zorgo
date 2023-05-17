@@ -45,7 +45,11 @@
                         </b-col>
                     </b-row>
                 </b-card>
-                <b-button class="btn-success float-right" @click="update()">
+                <b-button
+                    class="btn-success float-right"
+                    @click="update()"
+                    v-if="isUpdateAvailable"
+                >
                     Сохранить
                 </b-button>
             </ValidationObserver>
@@ -76,6 +80,7 @@ import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 import { quillEditor } from "vue-quill-editor";
+import permissionComputeds from "@/util/permissionComputeds";
 
 const api = new Description();
 
@@ -98,6 +103,7 @@ export default {
         ToastificationContent,
         quillEditor,
     },
+    computed: { ...permissionComputeds("description") },
     data() {
         return {
             type: "osago",

@@ -2,7 +2,7 @@ export default {
     modules: {
         toolbar: [
             [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            ["bold", "italic", "underline", "strike"], // toggled buttons
+            ["bold", "italic", "underline", "strike", "link"], // toggled buttons
             [{ color: [] }, { background: [] }], // dropdown with defaults from theme
 
             [
