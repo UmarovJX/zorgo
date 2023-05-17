@@ -18,7 +18,7 @@ export default [
             },
             {
                 path: 'update/:id',
-                name: 'services-update',
+                name: 'service-update',
                 component: () => import('@/views/services/AppServicesCrud'),
                 meta: {
                     parent: 'services'

@@ -47,7 +47,10 @@
                         <b-col cols="6">{{ item.status }}</b-col>
                         <b-col cols="6"
                             ><b-button
-                                v-if="item.status !== 'closed'"
+                                v-if="
+                                    item.status !== 'closed' &&
+                                    isUpdateAvailable
+                                "
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                                 v-b-modal="`modal-${item.id}`"
                                 variant="outline-info"
@@ -182,6 +185,7 @@ import {
     paginationHelperMethods,
 } from "@/util/pagination-helper";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
+import permissionComputeds from "@/util/permissionComputeds";
 
 export default {
     name: "AppYears",
@@ -273,16 +277,7 @@ export default {
     },
 
     computed: {
-        showPagination() {
-            return this.hasItems && !this.isBusy;
-        },
-
-        sortOptions() {
-            // Create an options list from our fields
-            return this.fields
-                .filter((f) => f.sortable)
-                .map((f) => ({ text: f.label, value: f.key }));
-        },
+        ...permissionComputeds("order"),
     },
 
     methods: {
