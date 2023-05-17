@@ -79,7 +79,10 @@
                 <template #cell(crud_row)="data">
                     <div class="d-flex float-right">
                         <!--  DEACTIVATE  -->
-                        <div class="ml-1" v-if="data.item.active">
+                        <div
+                            class="ml-1"
+                            v-if="data.item.active && isDeleteAvailable"
+                        >
                             <!--  DEACTIVATE  -->
                             <b-button
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -130,7 +133,10 @@
                         </div>
 
                         <!--  ACTIVATE  -->
-                        <div class="ml-1" v-else>
+                        <div
+                            class="ml-1"
+                            v-if="!data.item.active && isDeleteAvailable"
+                        >
                             <!--  ACTIVATE  -->
                             <b-button
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -233,6 +239,7 @@ import {
     paginationWatchers,
     paginationHelperMethods,
 } from "@/util/pagination-helper";
+import permissionComputeds from "@/util/permissionComputeds";
 
 export default {
     name: "AppRegions",
@@ -284,10 +291,6 @@ export default {
                     key: "active",
                     label: "Статус",
                 },
-                {
-                    key: "crud_row",
-                    label: " ",
-                },
             ],
             items: [],
             pagination: paginationData(),
@@ -298,12 +301,15 @@ export default {
     async mounted() {
         this.setParams();
         await this.getData();
+        if (this.isDeleteAvailable || this.isUpdateAvailable)
+            this.fields.push({
+                key: "crud_row",
+                label: " ",
+            });
     },
 
     computed: {
-        editPageName() {
-            return "city-edit";
-        },
+        ...permissionComputeds("feedback"),
     },
 
     methods: {

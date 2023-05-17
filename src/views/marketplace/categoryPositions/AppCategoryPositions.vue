@@ -9,19 +9,18 @@
         </b-col>
         <b-col v-else>
             <draggable
-                animation="200"
                 v-model="items"
-                group="category"
                 @start="drag = true"
                 @end="drag = false"
                 handle=".handle-category"
+                v-bind="dragOptions"
             >
-                <TransitionGroup name="position">
+                <TransitionGroup type="transition" name="position">
                     <b-card
                         class="mb-1"
                         body-class="p-1"
                         v-for="(cat, i) in items"
-                        :key="cat.name.ru + cat.id"
+                        :key="cat.id"
                         cols="12"
                     >
                         <b-row>
@@ -177,23 +176,12 @@ export default {
     },
 
     computed: {
-        rows() {
-            return this.items.length;
-        },
-
-        query() {
-            return Object.assign({}, this.$route.query);
-        },
-
-        showPagination() {
-            return this.hasItems && !this.isLoading;
-        },
-
-        sortOptions() {
-            // Create an options list from our fields
-            return this.fields
-                .filter((f) => f.sortable)
-                .map((f) => ({ text: f.label, value: f.key }));
+        dragOptions() {
+            return {
+                animation: 0,
+                group: "category",
+                disabled: false,
+            };
         },
     },
 

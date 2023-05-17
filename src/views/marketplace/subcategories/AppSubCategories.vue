@@ -25,6 +25,7 @@
                 class="d-flex align-items-center justify-content-center float-right"
             >
                 <router-link
+                    v-if="isCreateAvailable"
                     class="create__btn btn-primary"
                     :to="{ name: 'subcategory-edit' }"
                     >Создать</router-link
@@ -87,6 +88,7 @@
                     <div class="d-flex float-right">
                         <!--    EDIT    -->
                         <router-link
+                            v-if="isUpdateAvailable"
                             :to="{
                                 name: 'subcategory-edit',
                                 params: { id: data.item.id },
@@ -101,7 +103,10 @@
                         </router-link>
 
                         <!--  DEACTIVATE  -->
-                        <div class="ml-1" v-if="data.item.active">
+                        <div
+                            class="ml-1"
+                            v-if="data.item.active && isDeleteAvailable"
+                        >
                             <!--  DEACTIVATE  -->
                             <b-button
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -153,7 +158,10 @@
                         </div>
 
                         <!--  ACTIVATE  -->
-                        <div class="ml-1" v-else>
+                        <div
+                            class="ml-1"
+                            v-if="!data.item.active && isDeleteAvailable"
+                        >
                             <!--  ACTIVATE  -->
                             <b-button
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -264,6 +272,7 @@ import {
     paginationWatchers,
     paginationHelperMethods,
 } from "@/util/pagination-helper";
+import permissionComputeds from "@/util/permissionComputeds";
 
 export default {
     name: "AppCategories",
@@ -326,10 +335,6 @@ export default {
                     key: "category.name.ru",
                     label: "Категория",
                 },
-                {
-                    key: "crud_row",
-                    label: " ",
-                },
             ],
             items: [],
             pagination: paginationData(),
@@ -342,27 +347,15 @@ export default {
         this.setParams();
 
         await this.getCategories();
+        if (this.isDeleteAvailable || this.isUpdateAvailable)
+            this.fields.push({
+                key: "crud_row",
+                label: " ",
+            });
     },
 
     computed: {
-        rows() {
-            return this.items.length;
-        },
-
-        query() {
-            return Object.assign({}, this.$route.query);
-        },
-
-        showPagination() {
-            return this.hasItems && !this.isBusy;
-        },
-
-        sortOptions() {
-            // Create an options list from our fields
-            return this.fields
-                .filter((f) => f.sortable)
-                .map((f) => ({ text: f.label, value: f.key }));
-        },
+        ...permissionComputeds("category"),
     },
 
     methods: {
@@ -379,10 +372,6 @@ export default {
                     variant,
                 },
             });
-        },
-
-        replaceRouter(query) {
-            this.$router.replace({ query }).catch(() => {});
         },
 
         async getCategories() {

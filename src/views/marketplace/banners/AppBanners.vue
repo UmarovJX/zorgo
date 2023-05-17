@@ -27,11 +27,13 @@
                 class="d-flex align-items-center justify-content-center float-right"
             >
                 <router-link
+                    v-if="isUpdateAvailable"
                     class="create__btn btn-primary mr-1"
                     :to="{ name: positionPageName }"
                     >Изменить порядок</router-link
                 >
                 <router-link
+                    v-if="isCreateAvailable"
                     class="create__btn btn-primary"
                     :to="{ name: editPageName }"
                     >Создать</router-link
@@ -88,6 +90,7 @@
                     <div class="d-flex float-right">
                         <!--    EDIT    -->
                         <router-link
+                            v-if="isUpdateAvailable"
                             :to="{
                                 name: editPageName,
                                 params: { id: data.item.id },
@@ -102,7 +105,10 @@
                         </router-link>
 
                         <!--  DEACTIVATE  -->
-                        <div class="ml-1" v-if="data.item.active">
+                        <div
+                            class="ml-1"
+                            v-if="data.item.active && isDeleteAvailable"
+                        >
                             <!--  DEACTIVATE  -->
                             <b-button
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -153,7 +159,10 @@
                         </div>
 
                         <!--  ACTIVATE  -->
-                        <div class="ml-1" v-else>
+                        <div
+                            class="ml-1"
+                            v-if="!data.item.active && isDeleteAvailable"
+                        >
                             <!--  ACTIVATE  -->
                             <b-button
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -256,6 +265,7 @@ import {
     paginationWatchers,
     paginationHelperMethods,
 } from "@/util/pagination-helper";
+import permissionComputeds from "@/util/permissionComputeds";
 
 export default {
     name: "AppBanners",
@@ -304,10 +314,6 @@ export default {
                     key: "active",
                     label: "Статус",
                 },
-                {
-                    key: "crud_row",
-                    label: " ",
-                },
             ],
             items: [],
             pagination: paginationData(),
@@ -318,9 +324,15 @@ export default {
     async mounted() {
         this.setParams();
         await this.getData();
+        if (this.isDeleteAvailable || this.isUpdateAvailable)
+            this.fields.push({
+                key: "crud_row",
+                label: " ",
+            });
     },
 
     computed: {
+        ...permissionComputeds("banner"),
         editPageName() {
             return this.apiEntry.slice(0, -1) + "-edit";
         },

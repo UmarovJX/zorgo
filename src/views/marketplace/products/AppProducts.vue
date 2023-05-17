@@ -27,6 +27,7 @@
                 class="d-flex align-items-center justify-content-center float-right"
             >
                 <router-link
+                    v-if="isCreateAvailable"
                     class="create__btn btn-primary"
                     :to="{ name: 'product-edit' }"
                     >Создать</router-link
@@ -77,6 +78,7 @@
                     <div class="d-flex float-right">
                         <!--    EDIT    -->
                         <router-link
+                            v-if="isUpdateAvailable"
                             :to="{
                                 name: 'product-edit',
                                 params: { id: data.item.id },
@@ -91,7 +93,10 @@
                         </router-link>
 
                         <!--  DEACTIVATE  -->
-                        <div class="ml-1" v-if="data.item.active">
+                        <div
+                            class="ml-1"
+                            v-if="data.item.active && isDeleteAvailable"
+                        >
                             <!--  DEACTIVATE  -->
                             <b-button
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -142,7 +147,10 @@
                         </div>
 
                         <!--  ACTIVATE  -->
-                        <div class="ml-1" v-else>
+                        <div
+                            class="ml-1"
+                            v-if="!data.item.active && isDeleteAvailable"
+                        >
                             <!--  ACTIVATE  -->
                             <b-button
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -204,7 +212,6 @@
             class="mb-3 d-flex justify-content-between align-items-center"
         >
             <b-form-select
-                v-if="showPagination"
                 class="float-right col-1"
                 v-model="pagination.perPage"
                 placeholder="Выберите"
@@ -212,7 +219,6 @@
             >
             </b-form-select>
             <b-pagination
-                v-if="showPagination"
                 v-model="pagination.page"
                 :total-rows="pagination.total"
                 :per-page="pagination.perPage"
@@ -247,6 +253,7 @@ import {
     paginationWatchers,
     paginationHelperMethods,
 } from "@/util/pagination-helper";
+import permissionComputeds from "@/util/permissionComputeds";
 
 export default {
     name: "AppModels",
@@ -322,14 +329,9 @@ export default {
                     key: "dealer",
                     label: "Дилер",
                 },
-                {
-                    key: "crud_row",
-                    label: " ",
-                },
             ],
             items: [],
             pagination: paginationData(),
-            totalRows: 1,
         };
     },
     watch: paginationWatchers("getProducts"),
@@ -337,24 +339,14 @@ export default {
     async mounted() {
         this.setParams();
         await this.getProducts();
-        // Set the initial number of items
-        this.totalRows = this.items.length;
+        if (this.isDeleteAvailable || this.isUpdateAvailable)
+            this.fields.push({
+                key: "crud_row",
+                label: " ",
+            });
     },
 
-    computed: {
-        showPagination() {
-            return (
-                this.pagination.total > this.pagination.perPage && !this.isBusy
-            );
-        },
-
-        sortOptions() {
-            // Create an options list from our fields
-            return this.fields
-                .filter((f) => f.sortable)
-                .map((f) => ({ text: f.label, value: f.key }));
-        },
-    },
+    computed: { ...permissionComputeds("product") },
 
     methods: {
         /////////////
