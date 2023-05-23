@@ -95,6 +95,7 @@ router.beforeEach((to, from, next) => {
             return next();
         }
     } else {
+        
         // return next({ name: "home" })
         return next({ name: "auth-login" });
     }
