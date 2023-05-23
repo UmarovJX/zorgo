@@ -89,7 +89,7 @@ export function axiosRequestInterceptResponse(config) {
   const expiredMSeconds = 259200000
   if (config.url !== 'auth/user/login' && module > expiredMSeconds) {
     removeLocalVar('accessToken')
-    window.location.href = '/login'
+    // window.location.href = '/login'
     return
   }
 
