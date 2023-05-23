@@ -28,6 +28,7 @@
             </ValidationObserver>
 
             <b-button
+                :disabled="isSaving"
                 class="btn-success float-right mt-2 mr-1"
                 @click="createBrand"
             >
@@ -83,6 +84,7 @@ export default {
                 title: "",
                 content: "",
             },
+            isSaving: false,
         };
     },
 
@@ -101,6 +103,7 @@ export default {
         async createBrand() {
             const isValid = await this.$refs["validation-observer"].validate();
             if (isValid) {
+                this.isSaving = true;
                 const { name } = this;
                 const data = {
                     name,
@@ -122,6 +125,9 @@ export default {
                             "Что-то пошло не так!",
                             "XIcon"
                         );
+                    })
+                    .finally(() => {
+                        this.isSaving = false;
                     });
             }
         },

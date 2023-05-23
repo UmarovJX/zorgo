@@ -120,7 +120,11 @@
                 </b-row>
             </ValidationObserver>
 
-            <b-button class="btn-success float-right mt-2" @click="save">
+            <b-button
+                class="btn-success float-right mt-2"
+                @click="save"
+                :disabled="isSaving"
+            >
                 Сохранить
             </b-button>
         </b-card>
@@ -175,6 +179,7 @@ export default {
             company: "",
             phone: "",
             address: "",
+            isSaving: false,
         };
     },
     async mounted() {
@@ -198,6 +203,7 @@ export default {
         async save() {
             const isValid = await this.$refs["validation-observer"].validate();
             if (isValid) {
+                this.isSaving = true;
                 const data = {
                     username: this.username,
                     password: this.password,
@@ -224,10 +230,18 @@ export default {
                         "Успешно cохранено!",
                         "CheckIcon"
                     );
-                }).catch((error) => {
-                    console.error(error);
-                    this.showToast("danger", "Что-то пошло не так!", "XIcon");
-                });
+                })
+                    .catch((error) => {
+                        console.error(error);
+                        this.showToast(
+                            "danger",
+                            "Что-то пошло не так!",
+                            "XIcon"
+                        );
+                    })
+                    .finally(() => {
+                        this.isSaving = false;
+                    });
             }
         },
 

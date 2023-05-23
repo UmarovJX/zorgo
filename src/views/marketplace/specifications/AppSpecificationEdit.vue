@@ -109,7 +109,7 @@
                                 size="sm"
                                 @click="(e) => removeOption(entry)"
                             >
-                                <feather-icon icon="Trash2Icon" size="14" />
+                                <feather-icon icon="MinusCircleIcon" size="14" />
                             </b-button>
                         </b-col>
                     </b-row>

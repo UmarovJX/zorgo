@@ -179,10 +179,18 @@ export default {
                         "Успешно cохранено!",
                         "CheckIcon"
                     );
-                }).catch((error) => {
-                    console.error(error);
-                    this.showToast("danger", "Что-то пошло не так!", "XIcon");
-                });
+                })
+                    .catch((error) => {
+                        console.error(error);
+                        this.showToast(
+                            "danger",
+                            "Что-то пошло не так!",
+                            "XIcon"
+                        );
+                    })
+                    .finally(() => {
+                        this.isSaving = false;
+                    });
             } else {
                 this.showToast(
                     "danger",

@@ -149,7 +149,11 @@
                 </div>
             </template>
 
-            <b-button class="btn-success float-right mt-2" @click="createUser">
+            <b-button
+                class="btn-success float-right mt-2"
+                @click="createUser"
+                :disabled="isSaving"
+            >
                 Создать
             </b-button>
         </b-card>
@@ -223,6 +227,7 @@ export default {
             ],
             items: [],
             slugTranslations,
+            isSaving: false,
         };
     },
 
@@ -282,6 +287,7 @@ export default {
         createUser() {
             const isValid = this.$refs["validation-observer"].validate();
             if (isValid) {
+                this.isSaving = true;
                 const { username, password, tableSelected } = this;
                 const data = {
                     username,
@@ -307,7 +313,9 @@ export default {
                             "XIcon"
                         );
                     })
-                    .finally(() => {});
+                    .finally(() => {
+                        this.isSaving = false;
+                    });
             }
         },
 

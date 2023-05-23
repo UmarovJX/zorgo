@@ -140,7 +140,7 @@
                                         @click="(e) => removeSpec(spec.id)"
                                     >
                                         <feather-icon
-                                            icon="Trash2Icon"
+                                            icon="MinusCircleIcon"
                                             size="14"
                                         />
                                     </b-button>

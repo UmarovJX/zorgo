@@ -53,7 +53,11 @@
                 </b-row>
             </ValidationObserver>
 
-            <b-button class="btn-success float-right mt-2" @click="save">
+            <b-button
+                class="btn-success float-right mt-2"
+                @click="save"
+                :disabled="isSaving"
+            >
                 Сохранить
             </b-button>
         </b-card>
@@ -101,6 +105,7 @@ export default {
     },
     data() {
         return {
+            isSaving: false,
             apiEntry: "units",
             name: {
                 ru: "",
@@ -135,24 +140,45 @@ export default {
             this.name = data.name;
         },
         async save() {
-            const data = {
-                name: this.name,
-            };
+            const isValid = await this.$refs["validation-observer"].validate();
+            if (isValid) {
+                this.isSaving = true;
+                const data = {
+                    name: this.name,
+                };
 
-            let req;
-            if (this.$route.params.id) {
-                req = api[this.apiEntry].update(this.$route.params.id, data);
+                let req;
+                if (this.$route.params.id) {
+                    req = api[this.apiEntry].update(
+                        this.$route.params.id,
+                        data
+                    );
+                } else {
+                    req = api[this.apiEntry].create(data);
+                }
+
+                req.then(() => {
+                    this.$router.push({ name: this.apiEntry });
+                    this.showToast(
+                        "success",
+                        "Успешно cохранено!",
+                        "CheckIcon"
+                    );
+                })
+                    .catch((error) => {
+                        console.error(error);
+                        this.showToast(
+                            "danger",
+                            "Что-то пошло не так!",
+                            "XIcon"
+                        );
+                    })
+                    .finally(() => {
+                        this.isSaving = false;
+                    });
             } else {
-                req = api[this.apiEntry].create(data);
+                this.showToast("danger", "Заполните все поля!", "XIcon");
             }
-
-            req.then(() => {
-                this.$router.push({ name: this.apiEntry });
-                this.showToast("success", "Успешно cохранено!", "CheckIcon");
-            }).catch((error) => {
-                console.error(error);
-                this.showToast("danger", "Что-то пошло не так!", "XIcon");
-            });
         },
 
         showToast(variant, text, icon) {

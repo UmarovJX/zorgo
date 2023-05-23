@@ -45,6 +45,7 @@
             </ValidationObserver>
 
             <b-button
+                :disabled="isSaving"
                 class="btn-success float-right mt-2 mr-1"
                 @click="createYear"
             >
@@ -92,7 +93,6 @@ export default {
             name: null,
             options: [],
             model: null,
-            isBusy: false,
             sortBy: "",
             sortDesc: false,
             sortDirection: "asc",
@@ -104,6 +104,7 @@ export default {
                 title: "",
                 content: "",
             },
+            isSaving: false,
         };
     },
     async mounted() {
@@ -136,6 +137,7 @@ export default {
         async createYear() {
             const isValid = await this.$refs["validation-observer"].validate();
             if (isValid) {
+                this.isSaving = true;
                 const { name } = this;
                 const data = {
                     name,
@@ -158,6 +160,9 @@ export default {
                             "Что-то пошло не так!",
                             "XIcon"
                         );
+                    })
+                    .finally(() => {
+                        this.isSaving = false;
                     });
             }
         },

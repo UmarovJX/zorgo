@@ -100,7 +100,11 @@
                 </div>
             </template>
 
-            <b-button class="btn-success float-right mt-2" @click="createRole">
+            <b-button
+                class="btn-success float-right mt-2"
+                @click="createRole"
+                :disabled="isSaving"
+            >
                 Создать
             </b-button>
         </b-card>
@@ -167,6 +171,7 @@ export default {
             items: [],
             selected: [],
             slugTranslations,
+            isSaving: false,
         };
     },
 
@@ -281,6 +286,7 @@ export default {
         createRole() {
             const isValid = this.$refs["validation-observer"].validate();
             if (isValid) {
+                this.isSaving = true;
                 const { name, selected } = this;
                 const data = {
                     name,
@@ -304,7 +310,9 @@ export default {
                             "XIcon"
                         );
                     })
-                    .finally(() => {});
+                    .finally(() => {
+                        this.isSaving = false;
+                    });
             }
         },
     },

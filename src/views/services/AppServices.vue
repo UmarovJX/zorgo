@@ -69,7 +69,7 @@
                                 variant="outline-danger"
                                 class="delete__btn"
                             >
-                                <feather-icon icon="Trash2Icon" size="18" />
+                                <feather-icon icon="MinusCircleIcon" size="18" />
                             </b-button>
 
                             <!-- DEACTIVATE MODAL -->

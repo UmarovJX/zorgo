@@ -352,7 +352,7 @@
                                         @click="(e) => removeRelation(bmy.text)"
                                     >
                                         <feather-icon
-                                            icon="Trash2Icon"
+                                            icon="MinusCircleIcon"
                                             size="14"
                                         />
                                     </b-button>
@@ -400,6 +400,7 @@
             </ValidationObserver>
 
             <b-button
+                :disabled="isSaving"
                 class="btn-success float-right mt-2 mr-1"
                 @click="saveProduct"
             >
@@ -492,7 +493,7 @@ export default {
             fileRecords: [],
             uploadUrl: "",
             uploadHeaders: { "X-Test-Header": "vue-file-agent" },
-            isBusy: false,
+            isSaving: false,
         };
     },
     async mounted() {
@@ -657,6 +658,7 @@ export default {
         async saveProduct() {
             const isValid = await this.$refs["validation-observer"].validate();
             if (isValid) {
+                this.isSaving = true;
                 const formData = new FormData();
 
                 formData.append("name[ru]", this.name.ru);
@@ -715,10 +717,18 @@ export default {
                         "Успешно cохранено!",
                         "CheckIcon"
                     );
-                }).catch((error) => {
-                    console.error(error);
-                    this.showToast("danger", "Что-то пошло не так!", "XIcon");
-                });
+                })
+                    .catch((error) => {
+                        console.error(error);
+                        this.showToast(
+                            "danger",
+                            "Что-то пошло не так!",
+                            "XIcon"
+                        );
+                    })
+                    .finally(() => {
+                        this.isSaving = false;
+                    });
             }
         },
 

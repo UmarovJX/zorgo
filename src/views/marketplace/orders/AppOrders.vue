@@ -235,29 +235,29 @@ export default {
                     sortable: true,
                 },
                 {
-                    key: "status",
-                    label: "Status",
+                    key: "client",
+                    label: "Клиент",
                 },
                 {
                     key: "price",
-                    label: "Price",
+                    label: "Цена",
                     sortable: true,
                 },
                 {
                     key: "created_at",
-                    label: "created_at",
+                    label: "Дата создания",
                     sortable: true,
                     formatter: "toLocaleDate",
                 },
                 {
                     key: "updated_at",
-                    label: "updated_at",
+                    label: "Дата изменения",
                     sortable: true,
                     formatter: "toLocaleDate",
                 },
                 {
-                    key: "client",
-                    label: "Client",
+                    key: "status",
+                    label: "Статус",
                 },
                 {
                     key: "button",

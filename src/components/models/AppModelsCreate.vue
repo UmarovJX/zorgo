@@ -43,6 +43,7 @@
             </ValidationObserver>
 
             <b-button
+                :disabled="isSaving"
                 class="btn-success float-right mt-2 mr-1"
                 @click="createModel"
             >
@@ -92,7 +93,6 @@ export default {
             brand: "",
             options: [],
             name: null,
-            isBusy: false,
             sortBy: "",
             sortDesc: false,
             sortDirection: "asc",
@@ -104,6 +104,7 @@ export default {
                 title: "",
                 content: "",
             },
+            isSaving: false,
         };
     },
     async mounted() {
@@ -137,6 +138,7 @@ export default {
         async createModel() {
             const isValid = await this.$refs["validation-observer"].validate();
             if (isValid) {
+                this.isSaving = true;
                 const data = { name: this.name, brand_id: this.brand };
                 api.models
                     .createModel(data)
@@ -155,6 +157,9 @@ export default {
                             "Что-то пошло не так!",
                             "XIcon"
                         );
+                    })
+                    .finally(() => {
+                        this.isSaving = false;
                     });
             }
         },

@@ -61,9 +61,9 @@ if (userData.role.id === 2) {
     ];
 } else {
     array = [
+        ...common,
         ...insurance,
         ...marketplace,
-        ...common,
         // ...dealers,
         ...brands,
         ...models,

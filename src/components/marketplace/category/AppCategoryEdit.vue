@@ -89,6 +89,7 @@
             </ValidationObserver>
 
             <b-button
+                :disabled="isSaving"
                 class="btn-success float-right mt-2 mr-1"
                 @click="saveCategory"
             >
@@ -115,7 +116,6 @@ import {
     BFormCheckboxGroup,
     BFormSelect,
 } from "bootstrap-vue";
-
 export default {
     name: "AppCategoryEdit",
     components: {
@@ -150,6 +150,7 @@ export default {
             filter: null,
             filterOn: [],
             selectMode: "multi",
+            isSaving: false,
         };
     },
     async mounted() {
@@ -183,6 +184,7 @@ export default {
         async saveCategory() {
             const isValid = await this.$refs["validation-observer"].validate();
             if (isValid) {
+                this.isSaving = true;
                 const formData = new FormData();
 
                 formData.append("name[ru]", this.name.ru);
@@ -204,10 +206,18 @@ export default {
                 req.then(() => {
                     this.$router.push({ name: "categories" });
                     this.showToast("success", "Успешно изменено!", "CheckIcon");
-                }).catch((error) => {
-                    console.error(error);
-                    this.showToast("danger", "Что-то пошло не так!", "XIcon");
-                });
+                })
+                    .catch((error) => {
+                        console.error(error);
+                        this.showToast(
+                            "danger",
+                            "Что-то пошло не так!",
+                            "XIcon"
+                        );
+                    })
+                    .finally(() => {
+                        this.isSaving = false;
+                    });
             }
         },
         deleteUploadedFile(fileRecord) {

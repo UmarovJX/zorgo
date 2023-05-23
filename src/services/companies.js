@@ -18,6 +18,9 @@ class Companies extends Core {
     update(id, body) {
         return this.post(`insurance/company/${id}?_method=put`, body)
     }
+    deactivate(id) {
+        return this.delete(`insurance/company/${id}`);
+    }
 
 }
 
