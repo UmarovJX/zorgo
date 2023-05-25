@@ -9,25 +9,6 @@
                 immediate
                 ref="validation-observer"
             >
-                <b-card v-if="type !== 'travel'">
-                    <b-card-title>Партнеры</b-card-title>
-                    <b-row>
-                        <b-col md="6" v-for="(data, key) in item.partners_text">
-                            <b-form-group
-                                :label="`Текст [${key.toUpperCase()}]`"
-                                :label-for="`partners-text-${key}`"
-                            >
-                                <b-form-textarea
-                                    v-model="item.partners_text[key]"
-                                    :id="`partners-text-${key}`"
-                                    size="md"
-                                    rows="3"
-                                    placeholder="Введите"
-                                />
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-                </b-card>
                 <b-card>
                     <b-card-title>Раздел №1</b-card-title>
                     <b-row>
@@ -189,6 +170,25 @@
                                     :options="quillEditorConfig"
                                 >
                                 </quill-editor>
+                            </b-form-group>
+                        </b-col>
+                    </b-row>
+                </b-card>
+                <b-card v-if="type !== 'travel'">
+                    <b-card-title>Партнеры</b-card-title>
+                    <b-row>
+                        <b-col md="6" v-for="(data, key) in item.partners_text">
+                            <b-form-group
+                                :label="`Текст [${key.toUpperCase()}]`"
+                                :label-for="`partners-text-${key}`"
+                            >
+                                <b-form-textarea
+                                    v-model="item.partners_text[key]"
+                                    :id="`partners-text-${key}`"
+                                    size="md"
+                                    rows="3"
+                                    placeholder="Введите"
+                                />
                             </b-form-group>
                         </b-col>
                     </b-row>

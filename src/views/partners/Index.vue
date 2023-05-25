@@ -61,7 +61,7 @@
                         <!--  DEACTIVATE  -->
                         <b-button
                             v-if="data.item.active && isDeleteAvailable"
-                            v-b-modal="`modal-${data.item.id}`"
+                            v-b-modal="`modal-${data.item.id}-deactivate`"
                             variant="danger"
                             size="small"
                             class="btn-icon"
@@ -72,7 +72,7 @@
                         <!-- DEACTIVATE MODAL -->
                         <b-modal
                             v-if="data.item.active"
-                            :id="`modal-${data.item.id}`"
+                            :id="`modal-${data.item.id}-deactivate`"
                             cancel-title="Отменить"
                             cancel-variant="danger btn-sm"
                             body-class="deactivate-btn_modal"
@@ -80,7 +80,7 @@
                             hide-header-close
                             centered
                         >
-                            Вы действительно хотите деактивировать эту услугу?
+                            Вы действительно хотите деактивировать эту Компанию?
 
                             <template #modal-footer>
                                 <b-button
@@ -110,7 +110,7 @@
                         <b-button
                             v-if="!data.item.active && isDeleteAvailable"
                             v-b-modal="`modal-${data.item.id}`"
-                            variant="success"
+                            variant="outline-info"
                             size="small"
                             class="btn-icon"
                         >
@@ -126,7 +126,7 @@
                             hide-header-close
                             centered
                         >
-                            Вы действительно хотите активировать эту услугу?
+                            Вы действительно хотите активировать эту Компанию?
 
                             <template #modal-footer>
                                 <b-button
