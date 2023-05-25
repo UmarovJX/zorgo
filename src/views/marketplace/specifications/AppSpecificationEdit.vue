@@ -94,14 +94,21 @@
                     label="Опции"
                     label-class="font-weigth-bold"
                 >
-                    <b-row v-for="entry in options" class="m-1">
-                        <b-col cols="12" md="6">
+                    <b-row
+                        v-for="entry in options"
+                        class="m-1 align-items-center"
+                    >
+                        <b-col cols="10">
                             <b-row>
-                                <b-col>RU: {{ entry.value.ru }} </b-col>
-                                <b-col>UZ: {{ entry.value.uz }} </b-col>
+                                <b-col cols="12" md="6">
+                                    <b class="mr-1">RU:</b> {{ entry.value.ru }}
+                                </b-col>
+                                <b-col cols="12" md="6">
+                                    <b class="mr-1">UZ:</b> {{ entry.value.uz }}
+                                </b-col>
                             </b-row>
                         </b-col>
-                        <b-col cols="12" md="6">
+                        <b-col cols="2">
                             <b-button
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                                 variant="outline-danger"
@@ -109,13 +116,17 @@
                                 size="sm"
                                 @click="(e) => removeOption(entry)"
                             >
-                                <feather-icon icon="MinusCircleIcon" size="14" />
+                                <feather-icon
+                                    icon="MinusCircleIcon"
+                                    size="14"
+                                />
                             </b-button>
                         </b-col>
                     </b-row>
-                    <b-row>
-                        <b-col cols="12" md="4">
+                    <b-row class="align-items-end">
+                        <b-col cols="12" md="5">
                             <b-form-group
+                                class="mb-1"
                                 label="Название опции[RU]"
                                 label-for="option-name-ru"
                             >
@@ -127,8 +138,9 @@
                                 />
                             </b-form-group>
                         </b-col>
-                        <b-col cols="12" md="4">
+                        <b-col cols="12" md="5">
                             <b-form-group
+                                class="mb-1"
                                 label="Название опции[UZ]"
                                 label-for="option-name-uz"
                             >
@@ -140,11 +152,9 @@
                                 />
                             </b-form-group>
                         </b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col cols="12" md="8">
+                        <b-col cols="12" md="2">
                             <b-button
-                                class="float-right"
+                                class="mb-1"
                                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                                 variant="outline-success"
                                 :disabled="!optionName.ru && !optionName.uz"
@@ -157,7 +167,10 @@
                 </b-form-group>
             </ValidationObserver>
 
-            <b-button class="btn-success float-right mt-2" @click="saveSpecification">
+            <b-button
+                class="btn-success float-right mt-2"
+                @click="saveSpecification"
+            >
                 Сохранить
             </b-button>
         </b-card>
