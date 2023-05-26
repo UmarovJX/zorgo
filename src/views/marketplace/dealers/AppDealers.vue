@@ -285,6 +285,10 @@ export default {
                     label: "Имя пользователя",
                 },
                 {
+                    key: "full_name",
+                    label: "ФИО",
+                },
+                {
                     key: "company",
                     label: "Компания",
                     sortable: true,
