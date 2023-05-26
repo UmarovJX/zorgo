@@ -284,10 +284,10 @@ export default {
                     key: "username",
                     label: "Имя пользователя",
                 },
-                {
-                    key: "full_name",
-                    label: "ФИО",
-                },
+                // {
+                //     key: "full_name",
+                //     label: "ФИО",
+                // },
                 {
                     key: "company",
                     label: "Компания",
