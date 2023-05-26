@@ -54,7 +54,7 @@
                     <b-col cols="12" md="6" class="px-1">
                         <b-form-group label="Полное имя" label-for="fullname">
                             <b-form-input
-                                v-model="fullname"
+                                v-model="full_name"
                                 id="fullname"
                                 size="md"
                                 placeholder="Введите"
@@ -175,7 +175,7 @@ export default {
             apiEntry: "dealers",
             username: "",
             password: "",
-            fullname: "",
+            full_name: "",
             company: "",
             phone: "",
             address: "",
@@ -195,7 +195,7 @@ export default {
             const { data } = await api[this.apiEntry].fetchOne(id);
             this.username = data.username;
             this.password = data.password;
-            this.fullname = data.full_name;
+            this.full_name = data.full_name;
             this.company = data.company;
             this.phone = data.phone;
             this.address = data.address;
@@ -207,7 +207,7 @@ export default {
                 const data = {
                     username: this.username,
                     password: this.password,
-                    fullname: this.full_name,
+                    full_name: this.full_name,
                     company: this.company,
                     phone: this.phone,
                     address: this.address,
