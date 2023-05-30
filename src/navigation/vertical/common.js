@@ -29,5 +29,11 @@ export default [
         title: 'Контакты и ссылки',
         route: 'settings',
         icon: 'LinkIcon'
-    }
+    },
+    {
+        title: 'Уведомления',
+        route: 'notifications',
+        icon: 'MessageCircleIcon'
+    },
+
 ]

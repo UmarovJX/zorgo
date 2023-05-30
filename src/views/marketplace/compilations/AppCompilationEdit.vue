@@ -64,7 +64,7 @@
             </ValidationObserver>
 
             <b-row>
-                <b-col cols="12" xl="6">
+                <b-col cols="12">
                     <b-row>
                         <b-col cols="12" lg="6">
                             <b-form-group
@@ -185,9 +185,9 @@
                         </b-col>
                     </b-row>
                 </b-col>
-                <b-col cols="12" xl="6"
+                <b-col cols="12"
                     ><b-row class="my-1">
-                        <b-col> Товары в подборке </b-col>
+                        <b-col> <b>Товары в подборке</b> </b-col>
                     </b-row>
                     <b-row
                         class="my-1 ml-2"
@@ -278,7 +278,7 @@ export default {
             categoryOptions: [
                 {
                     value: undefined,
-                    text: "Выберите Категорию",
+                    text: "Все категории",
                 },
             ],
             isSaving: false,
@@ -427,7 +427,7 @@ export default {
                     .filter((el) => el.active)
                     .map((el) => ({ value: el.id, text: el.name.ru }));
                 this.categoryOptions = [
-                    { value: null, text: "Выберите Категорию" },
+                    { value: null, text: "Все категории" },
                     ...options,
                 ];
             });

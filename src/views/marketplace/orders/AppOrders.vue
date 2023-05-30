@@ -68,14 +68,19 @@
                                 hide-header-close
                                 centered
                             >
+                                <b-row>
+                                    <b-col class="mb-1">
+                                        Текущий статус: <b>{{ item.status }}</b>
+                                    </b-col>
+                                </b-row>
                                 <ValidationObserver ref="validation-observer">
                                     <ValidationProvider
-                                        name="Статус"
+                                        name="Новый Статус"
                                         rules="required"
                                         v-slot="{ errors }"
                                     >
                                         <b-form-group
-                                            label="Статус"
+                                            label="Новый статус"
                                             label-for="status"
                                         >
                                             <b-form-select
@@ -132,6 +137,23 @@
                         }}
                     </div>
                     <div>{{ item.client.phone }}</div>
+                </template>
+                <template #cell(created_at)="{ item }">
+                    <div>
+                        {{ new Date(item.created_at).toLocaleDateString("ru") }}
+                    </div>
+                    <div>
+                        {{ new Date(item.created_at).toLocaleTimeString("ru") }}
+                    </div>
+                </template>
+
+                <template #cell(updated_at)="{ item }">
+                    <div>
+                        {{ new Date(item.updated_at).toLocaleDateString("ru") }}
+                    </div>
+                    <div>
+                        {{ new Date(item.updated_at).toLocaleTimeString("ru") }}
+                    </div>
                 </template>
             </b-table>
         </b-col>

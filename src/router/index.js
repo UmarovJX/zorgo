@@ -20,11 +20,12 @@ import mainPage from "@/router/routes/mainPage";
 import settings from "@/router/routes/settings";
 import description from "@/router/routes/description";
 import publicOffer from "@/router/routes/publicOffer";
+import notifications from "@/router/routes/notifications";
 
 //marketplace
 import category from "@/router/routes/marketplace/categories";
 import orders from "@/router/routes/marketplace/orders";
-import products from "@/router/routes/marketplace/products";
+// import products from "@/router/routes/marketplace/products";
 import specifications from "@/router/routes/marketplace/specifications";
 import units from "@/router/routes/marketplace/units";
 import dealers from "@/router/routes/marketplace/dealers";
@@ -65,10 +66,11 @@ const router = new VueRouter({
         ...description,
         ...publicOffer,
         ...settings,
+        ...notifications,
         //marketplace
         ...category,
         ...orders,
-        ...products,
+        // ...products,
         ...specifications,
         ...units,
         ...dealers,
@@ -95,7 +97,6 @@ router.beforeEach((to, from, next) => {
             return next();
         }
     } else {
-        
         // return next({ name: "home" })
         return next({ name: "auth-login" });
     }

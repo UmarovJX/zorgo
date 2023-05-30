@@ -1,6 +1,8 @@
 import { getLocalVar } from "@/util/localstorage-helper";
 
 const routeToPermission = {
+    notifications: ['show-notification', false],
+    'notification-edit': ['create-notification', false],
     roles: ["show-role", false],
     "role-create": ["create-role", false],
     "role-update": ["update-role", false],

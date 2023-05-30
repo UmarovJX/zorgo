@@ -4,7 +4,7 @@ export function paginationData() {
         sorting: "",
         page: 1,
         total: null,
-        perPage: 5,
+        perPage: 10,
         perPageOptions: [1, 3, 5, 10, 20, 30, 50],
     };
 }

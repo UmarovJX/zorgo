@@ -12,6 +12,7 @@ import Models from "@/services/models";
 import Osago from "@/services/osago";
 import Travels from "@/services/travels";
 import Companies from "@/services/companies";
+import Notifications from "@/services/notifications";
 //Marketplace
 import MarketplaceCommon from "@/services/marketplace/common";
 import MarketplaceCategories from "@/services/marketplace/categories";
@@ -43,6 +44,7 @@ export default {
     osago: new Osago(),
     travels: new Travels(),
     companies: new Companies(),
+    notifications: new Notifications(),
     //Marketplace
     marketplaceCommon: new MarketplaceCommon(),
     categories: new MarketplaceCategories(),

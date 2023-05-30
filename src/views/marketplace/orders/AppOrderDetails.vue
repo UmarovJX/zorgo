@@ -11,7 +11,7 @@
                         thead-class="hidden_header"
                     >
                         <template #cell(value)="{ item }">
-                            <template v-if="item.label !== 'Status:'">{{
+                            <template v-if="item.label !== 'Статус:'">{{
                                 item.value
                             }}</template>
                             <template v-else>
@@ -35,6 +35,12 @@
                                     hide-header-close
                                     centered
                                 >
+                                    <b-row>
+                                        <b-col class="mb-1">
+                                            Текущий статус:
+                                            <b>{{ status }}</b>
+                                        </b-col>
+                                    </b-row>
                                     <ValidationObserver
                                         ref="validation-observer"
                                     >
@@ -89,32 +95,32 @@
 
             <b-row>
                 <b-col md="6">
-                    <p>Price: {{ order.price }}</p>
-                    <p>Product Price: {{ order.product_price }}</p>
-                    <p>Delivery Price: {{ order.delivery_price }}</p>
-                    <p>Products Count: {{ order.products_count }}</p>
+                    <p>Стоимость: {{ order.price }}</p>
+                    <p>Стоимость товара: {{ order.product_price }}</p>
+                    <p>Стоимость доставки: {{ order.delivery_price }}</p>
+                    <p>Количество: {{ order.products_count }}</p>
                 </b-col>
                 <b-col md="6" v-if="order.promo_code">
-                    <p>Promo Code: {{ order.promo_code.code }}</p>
-                    <p>Promo Code Discount: {{ order.promo_code.discount }}</p>
+                    <p>Промокод: {{ order.promo_code.code }}</p>
+                    <p>Скидка: {{ order.promo_code.discount }}</p>
                 </b-col>
             </b-row>
             <hr />
             <b-row>
                 <b-col md="6">
-                    <h5>Customer Details</h5>
+                    <h5>Данные покупателя</h5>
                     <p>
-                        Name: {{ order.details.first_name }}
+                        Имя: {{ order.details.first_name }}
                         {{ order.details.last_name }}
                     </p>
-                    <p>Phone: {{ order.details.phone }}</p>
-                    <p>Comment: {{ order.details.comment }}</p>
+                    <p>Тел.: {{ order.details.phone }}</p>
+                    <p>Комментарий: {{ order.details.comment }}</p>
                 </b-col>
                 <b-col md="6">
-                    <h5>Delivery Details</h5>
-                    <p>Address: {{ order.details.address }}</p>
-                    <p>Region: {{ order.details.city.region.name.ru }}</p>
-                    <p>City: {{ order.details.city.name.ru }}</p>
+                    <h5>Данные для доставки</h5>
+                    <p>Адрес: {{ order.details.address }}</p>
+                    <p>Область: {{ order.details.city.region.name.ru }}</p>
+                    <p>Город: {{ order.details.city.name.ru }}</p>
                     <b-link
                         target="_blank"
                         :href="`http://www.google.com/maps/place/${order.details.location.latitude},${order.details.location.longitude}`"
@@ -224,19 +230,19 @@ export default {
                     value: this.order.id,
                 },
                 {
-                    label: "Status:",
+                    label: "Статус:",
                     value: this.order.status,
                 },
                 {
-                    label: "Payment Status:",
+                    label: "Состояние платежа:",
                     value: this.order.payment_status,
                 },
                 {
-                    label: "Created at:",
+                    label: "Создано:",
                     value: this.toLocaleDate(this.order.created_at),
                 },
                 {
-                    label: "Updated at:",
+                    label: "Обновлено:",
                     value: this.toLocaleDate(this.order.updated_at),
                 },
             ];
@@ -265,6 +271,7 @@ export default {
                 .fetchOneOrder(this.$route.params.id)
                 .then((res) => {
                     this.order = res.data;
+                    this.status = res.data.status;
                 })
                 .catch((error) => {
                     console.error(error);
