@@ -139,18 +139,41 @@
                         >Мобильное приложение</template
                     >
                 </template>
-
-                <template #cell(crud_row)="data">
-                    <div class="d-flex float-right">
+                <template #cell(policy)="{ item }">
+                    <div class="d-flex align-items-center justify-content-end">
+                        <div>{{ item.policy.number }}</div>
                         <b-button
-                            v-if="data.item.policy.contract_url"
-                            :href="data.item.policy.contract_url"
+                            v-if="item.policy.contract_url"
+                            :href="item.policy.contract_url"
                             target="_blank"
                             variant="success"
-                            class="btn-sm btn-icon mr-1"
+                            class="btn-sm btn-icon ml-1"
                         >
                             <feather-icon size="18" icon="DownloadCloudIcon" />
                         </b-button>
+                    </div>
+                </template>
+                <template #cell(document)="{ item }">
+                    <div
+                        class="d-flex align-items-center justify-content-end"
+                        v-if="item.with_doc"
+                    >
+                        <div>{{ item.document.policy_number }}</div>
+                        <b-button
+                            v-if="item.document.contract_url"
+                            :href="item.document.contract_url"
+                            target="_blank"
+                            variant="success"
+                            class="btn-sm btn-icon ml-1"
+                        >
+                            <feather-icon size="18" icon="DownloadCloudIcon" />
+                        </b-button>
+                    </div>
+                    <div v-else class="text-center">-</div>
+                </template>
+
+                <template #cell(crud_row)="data">
+                    <div class="d-flex float-right">
                         <router-link
                             :to="{ path: `/insurance/osago/${data.item.id}` }"
                         >
@@ -284,8 +307,12 @@ export default {
                     label: "ID анкеты",
                 },
                 {
-                    key: "policy.number",
+                    key: "policy",
                     label: "Номер полиса",
+                },
+                {
+                    key: "document",
+                    label: "Номер Полиса 2",
                 },
                 {
                     key: "applicant.name",

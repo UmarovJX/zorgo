@@ -64,14 +64,14 @@ const options = [
             icon: "ActivityIcon",
         },
     ],
-    // [
-    //     "show-product",
-    //     {
-    //         title: "Товары",
-    //         route: "products",
-    //         icon: "DatabaseIcon",
-    //     },
-    // ],
+    [
+        "show-product",
+        {
+            title: "Товары",
+            route: "products",
+            icon: "DatabaseIcon",
+        },
+    ],
     [
         "show-promo-code",
         {

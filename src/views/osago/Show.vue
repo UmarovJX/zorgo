@@ -1,26 +1,52 @@
 <template>
     <b-row>
-        <b-col md="12" class="d-flex justify-content-between mb-1">
-            <h2>Осаго #{{ policy.id }}</h2>
-
-            <b-button
-                v-if="policy.policy.contract_url"
-                :href="policy.policy.contract_url"
-                target="_blank"
-                variant="success"
-                class="btn-icon d-flex align-items-center"
-            >
-                <span style="padding-right: 4px">Скачать договор</span>
-                <feather-icon
-                    size="18"
-                    icon="DownloadCloudIcon"
-                    style="padding-left: 4px"
-                />
-            </b-button>
+        <b-col md="12" class="mb-1">
+            <b-row>
+                <b-col md="9" small="12"
+                    ><h2>Осаго #{{ policy.id }}</h2></b-col
+                >
+                <b-col md="3">
+                    <div class="d-flex justify-content-end">
+                        <b-button
+                            v-if="policy.policy"
+                            :href="policy.policy.contract_url"
+                            target="_blank"
+                            variant="success"
+                            class="btn-icon d-flex align-items-center"
+                        >
+                            <span style="padding-right: 4px"
+                                >Скачать Полис</span
+                            >
+                            <feather-icon
+                                size="18"
+                                icon="DownloadCloudIcon"
+                                style="padding-left: 4px"
+                            />
+                        </b-button>
+                        <b-button
+                            v-if="policy.document"
+                            :href="policy.document.contract_url"
+                            target="_blank"
+                            variant="success"
+                            class="btn-icon d-flex align-items-center ml-1"
+                        >
+                            <span style="padding-right: 4px"
+                                >Скачать Документ</span
+                            >
+                            <feather-icon
+                                size="18"
+                                icon="DownloadCloudIcon"
+                                style="padding-left: 4px"
+                            />
+                        </b-button>
+                    </div>
+                </b-col>
+            </b-row>
         </b-col>
+
         <b-col md="9" sm="12">
             <b-card>
-                <div class="row">
+                <div class="row" v-if="policy.policy">
                     <b-col md="9" sm="12">
                         <b-card-title>Полис</b-card-title>
                         <table class="row">
@@ -34,23 +60,86 @@
                                     <td>{{ policy.policy.number }}</td>
                                 </tr>
                                 <tr>
-                                    <th class="pr-1">Кол-во водителей:</th>
-                                    <td>{{ driversCount }}</td>
-                                </tr>
-                                <tr>
                                     <th class="pr-1">Стоимость:</th>
                                     <td>{{ policy.price | formatNumber }}</td>
                                 </tr>
-                                <tr>
-                                    <th class="pr-1">Сумма страхования:</th>
-                                    <td>
-                                        {{
-                                            policy.insurance_sum | formatNumber
-                                        }}
-                                    </td>
-                                </tr>
+                                <template v-if="policy.document">
+                                    <tr>
+                                        <th class="pr-1">Номер документа:</th>
+                                        <td>{{ policy.document.id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="pr-1">Серия:</th>
+                                        <td>
+                                            {{ policy.document.policy_number }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="pr-1">Стоимость:</th>
+                                        <td>
+                                            {{
+                                                policy.document_price
+                                                    | formatNumber
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="pr-1">Общая стоимость:</th>
+                                        <td>
+                                            {{
+                                                policy.total_price
+                                                    | formatNumber
+                                            }}
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template v-else>
+                                    <tr>
+                                        <th class="pr-1">Кол-во водителей:</th>
+                                        <td>
+                                            {{
+                                                this.policy.driver_limit
+                                                    ? "До 5 человек"
+                                                    : "Неограничено"
+                                            }}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="pr-1">Сумма страхования:</th>
+                                        <td>
+                                            {{
+                                                policy.insurance_sum
+                                                    | formatNumber
+                                            }}
+                                        </td>
+                                    </tr>
+                                </template>
                             </tbody>
                             <tbody class="col-sm-12 col-md-7">
+                                <template v-if="policy.document">
+                                    <tr>
+                                        <th class="pr-1">Кол-во водителей:</th>
+                                        <td>
+                                            {{
+                                                this.policy.driver_limit
+                                                    ? "До 5 человек"
+                                                    : "Неограничено"
+                                            }}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="pr-1">Сумма страхования:</th>
+                                        <td>
+                                            {{
+                                                policy.insurance_sum
+                                                    | formatNumber
+                                            }}
+                                        </td>
+                                    </tr>
+                                </template>
+
                                 <tr>
                                     <th class="pr-1">Дата начало:</th>
                                     <td>{{ policy.date_begin }}</td>
@@ -99,7 +188,7 @@
             </b-card>
         </b-col>
         <b-col md="3" sm="12">
-            <b-card>
+            <b-card v-if="policy.vehicle">
                 <b-card-title>Транспортное средство</b-card-title>
                 <table>
                     <tbody>
@@ -166,13 +255,15 @@
             </b-card>
         </b-col>
         <b-col md="3" sm="12">
-            <b-card>
+            <b-card v-if="policy.owner">
                 <b-card-title>Владелец</b-card-title>
                 <table>
                     <tbody>
                         <tr>
                             <th class="pr-1">Тип:</th>
-                            <td>{{ ownerType }}</td>
+                            <td>
+                                {{ policy.owner.type ? "Юр.лицо" : "Физ.лицо" }}
+                            </td>
                         </tr>
                     </tbody>
                     <tbody v-if="policy.owner.type">

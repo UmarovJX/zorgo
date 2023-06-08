@@ -25,7 +25,7 @@ import notifications from "@/router/routes/notifications";
 //marketplace
 import category from "@/router/routes/marketplace/categories";
 import orders from "@/router/routes/marketplace/orders";
-// import products from "@/router/routes/marketplace/products";
+import products from "@/router/routes/marketplace/products";
 import specifications from "@/router/routes/marketplace/specifications";
 import units from "@/router/routes/marketplace/units";
 import dealers from "@/router/routes/marketplace/dealers";
@@ -70,7 +70,7 @@ const router = new VueRouter({
         //marketplace
         ...category,
         ...orders,
-        // ...products,
+        ...products,
         ...specifications,
         ...units,
         ...dealers,

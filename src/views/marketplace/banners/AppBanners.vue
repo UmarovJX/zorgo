@@ -116,7 +116,10 @@
                                 variant="outline-danger"
                                 class="delete__btn"
                             >
-                                <feather-icon icon="MinusCircleIcon" size="18" />
+                                <feather-icon
+                                    icon="MinusCircleIcon"
+                                    size="18"
+                                />
                             </b-button>
                             <!-- DEACTIVATE MODAL -->
                             <b-modal
@@ -309,6 +312,17 @@ export default {
                 {
                     key: "image",
                     label: "Изображение",
+                },
+                {
+                    key: "type",
+                    label: "Тип",
+                    formatter(value, key) {
+                        const d = {
+                            web: "Сайт",
+                            mobile: "Мобильное приложение",
+                        };
+                        return d[value] ? d[value] : value;
+                    },
                 },
                 {
                     key: "active",

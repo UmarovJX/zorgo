@@ -1,8 +1,9 @@
 <template>
     <div>
-        <b-card title="Order Details" v-if="!isBusy && order">
+        <b-card :title="'Заказ ' + order.id" v-if="!isBusy && order">
             <b-row>
-                <b-col>
+                <b-col cols="12" md="6">
+                    <b-card-text>Детали заказа:</b-card-text>
                     <b-table
                         borderless
                         striped
@@ -10,84 +11,17 @@
                         :fields="mainDataFields"
                         thead-class="hidden_header"
                     >
-                        <template #cell(value)="{ item }">
-                            <template v-if="item.label !== 'Статус:'">{{
-                                item.value
-                            }}</template>
-                            <template v-else>
-                                <span>{{ item.value }}</span>
-                                <b-button
-                                    v-if="item.value !== 'closed'"
-                                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                                    v-b-modal="`modal-order`"
-                                    variant="outline-info"
-                                    class="delete__btn ml-2 btn-sm"
-                                >
-                                    <feather-icon icon="Edit2Icon" size="18" />
-                                </b-button>
-
-                                <b-modal
-                                    :id="`modal-order`"
-                                    cancel-title="Отменить"
-                                    cancel-variant="danger btn-sm"
-                                    body-class="deactivate-btn_modal"
-                                    title="Изменить статус"
-                                    hide-header-close
-                                    centered
-                                >
-                                    <b-row>
-                                        <b-col class="mb-1">
-                                            Текущий статус:
-                                            <b>{{ status }}</b>
-                                        </b-col>
-                                    </b-row>
-                                    <ValidationObserver
-                                        ref="validation-observer"
-                                    >
-                                        <ValidationProvider
-                                            name="Статус"
-                                            rules="required"
-                                            v-slot="{ errors }"
-                                        >
-                                            <b-form-group
-                                                label="Статус"
-                                                label-for="status"
-                                            >
-                                                <b-form-select
-                                                    :options="statusOptions"
-                                                    v-model="status"
-                                                >
-                                                </b-form-select>
-                                            </b-form-group>
-                                            <p
-                                                v-if="errors"
-                                                class="validation__red"
-                                            >
-                                                {{ errors[0] }}
-                                            </p>
-                                        </ValidationProvider>
-                                    </ValidationObserver>
-                                    <template #modal-footer>
-                                        <b-button
-                                            variant="danger btn-sm"
-                                            @click="
-                                                $bvModal.hide(`modal-order`),
-                                                    (status = null)
-                                            "
-                                        >
-                                            Отменить
-                                        </b-button>
-
-                                        <b-button
-                                            variant="success btn-sm"
-                                            @click="changeStatus(item.id)"
-                                        >
-                                            Сохранить
-                                        </b-button>
-                                    </template>
-                                </b-modal>
-                            </template>
-                        </template>
+                    </b-table>
+                </b-col>
+                <b-col cols="12" md="6">
+                    <b-card-text>Дилеры:</b-card-text>
+                    <b-table
+                        borderless
+                        striped
+                        :items="dealers"
+                        :fields="dealerFields"
+                        thead-class="hidden_header"
+                    >
                     </b-table>
                 </b-col>
             </b-row>
@@ -147,6 +81,7 @@
 
 <script>
 import {
+    BCardText,
     BFormGroup,
     BFormSelect,
     BCard,
@@ -167,6 +102,7 @@ import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
     name: "AppYears",
     components: {
+        BCardText,
         BFormSelect,
         BFormGroup,
         BCard,
@@ -222,6 +158,21 @@ export default {
                     },
                 },
             ];
+        },
+        dealerFields() {
+            return [
+                {
+                    label: "ID",
+                    key: "id",
+                },
+                {
+                    label: "Название",
+                    key: "company",
+                },
+            ];
+        },
+        dealers() {
+            return this.order.products.map((el) => el.dealer);
         },
         mainData() {
             return [

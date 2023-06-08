@@ -112,7 +112,10 @@
                                 class="delete__btn"
                                 size="sm"
                             >
-                                <feather-icon icon="MinusCircleIcon" size="18" />
+                                <feather-icon
+                                    icon="MinusCircleIcon"
+                                    size="18"
+                                />
                             </b-button>
                             <!-- DEACTIVATE MODAL -->
                             <b-modal
@@ -303,6 +306,33 @@ export default {
                     key: "discount",
                     label: "скидка",
                     sortable: true,
+                },
+                {
+                    key: "min_order_sum",
+                    label: "Минимальная сумма заказа",
+                    formatter(value) {
+                        return value ? value : "Отсутствует";
+                    },
+                },
+                {
+                    key: "used",
+                    label: "Применений",
+                },
+                {
+                    key: "uses",
+                    label: "Лимит применений",
+                    formatter(value) {
+                        return value ? value : "Отсутствует";
+                    },
+                },
+                {
+                    key: "expires_at",
+                    label: "Срок действия",
+                    formatter(value) {
+                        return value
+                            ? new Date(value).toLocaleDateString("ru")
+                            : "Неограничен";
+                    },
                 },
 
                 {

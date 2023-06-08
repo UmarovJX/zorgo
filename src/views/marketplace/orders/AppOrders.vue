@@ -42,7 +42,7 @@
                     </div>
                 </template>
 
-                <template #cell(status)="{ item }">
+                <!-- <template #cell(status)="{ item }">
                     <b-row>
                         <b-col cols="6">{{ item.status }}</b-col>
                         <b-col cols="6"
@@ -118,7 +118,7 @@
                             </b-modal></b-col
                         >
                     </b-row>
-                </template>
+                </template> -->
                 <template #cell(button)="{ item }">
                     <b-button
                         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
