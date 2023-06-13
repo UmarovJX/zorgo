@@ -61,6 +61,17 @@
                         </b-form-group>
                     </b-col>
                 </b-row>
+                <b-row>
+                    <b-col cols="12" md="6">
+                        <b-form-group label="Тип баннера" label-for="type">
+                            <b-form-select
+                                id="type"
+                                v-model="type"
+                                :options="typeOptions"
+                            ></b-form-select>
+                        </b-form-group>
+                    </b-col>
+                </b-row>
 
                 <b-row>
                     <!--   FILE INPUT   -->
@@ -158,6 +169,11 @@ export default {
                 { value: "uz", text: "uz" },
                 { value: "ru", text: "ru" },
             ],
+            type: "web",
+            typeOptions: [
+                { value: "web", text: "Веб-сайт" },
+                { value: "mobile", text: "Мобильное приложение" },
+            ],
             fileRecords: [],
         };
     },
@@ -182,6 +198,7 @@ export default {
             this.subtitle = data.subtitle;
             this.link = data.link;
             this.locale = data.locale;
+            this.type = data.type;
 
             const image = data.image;
             this.fileRecords = [
@@ -207,6 +224,7 @@ export default {
                     formData.append("link", this.link);
                 }
                 formData.append("locale", this.locale);
+                formData.append("type", this.type);
 
                 if (this.fileRecords[0].file) {
                     formData.append("image", this.fileRecords[0].file);
