@@ -129,6 +129,9 @@
                         <feather-icon icon="EyeIcon" size="18" />
                     </b-button>
                 </template>
+                <template #cell(status)="{ item }">
+                    <div>{{ statusTranslate(item.status) }}</div>
+                </template>
 
                 <template #cell(client)="{ item }">
                     <div>
@@ -303,6 +306,18 @@ export default {
     },
 
     methods: {
+        statusTranslate(t) {
+            // New - Yangi
+            // Processing - Jarayonda
+            // Delivery - Yetkazilmoqda
+            // Closed - Yetkazib berildi
+            return {
+                new: "Новый",
+                processing: "В процессе",
+                delivery: "Доставляется",
+                closed: "Доставлен",
+            }[t.toLowerCase()];
+        },
         toLocaleDate(date) {
             return new Date(date).toLocaleDateString("ru");
         },

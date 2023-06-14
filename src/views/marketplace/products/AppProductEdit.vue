@@ -733,7 +733,7 @@ export default {
         },
 
         onBeforeDelete(fileRecord) {
-            if (confirm("Are you sure you want to delete?")) {
+            if (confirm("Вы уверены, что хотите удалить изображение?")) {
                 this.$refs.vueFileAgent.deleteFileRecord(fileRecord);
             }
         },

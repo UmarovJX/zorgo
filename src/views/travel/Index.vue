@@ -115,6 +115,16 @@
                     </div>
                 </template>
 
+                <template #cell(applicant.phone)="{ item }">
+                    <a
+                        class="mono"
+                        :href="
+                            'tel:' + item.applicant.phone.split(' ').join('')
+                        "
+                        >{{ item.applicant.phone.split(" ").join("") }}</a
+                    >
+                </template>
+
                 <template #cell(platform)="{ item }">
                     <template v-if="item.platform === 'browser'">Сайт</template>
                     <template v-if="item.platform === 'mobile'"
@@ -389,4 +399,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.mono {
+    font-family: monospace;
+}
+.mono:hover {
+    border-bottom: 1px solid;
+}
+</style>

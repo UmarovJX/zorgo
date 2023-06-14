@@ -372,7 +372,7 @@ export default {
                 const k = this.fileRecords.indexOf(fileRecord);
                 if (k !== -1) this.fileRecords.splice(k, 1);
             } else {
-                if (confirm("Are you sure you want to delete?")) {
+                if (confirm("Вы уверены, что хотите удалить изображение?")) {
                     this.$refs.vueFileAgent.deleteFileRecord(fileRecord); // will trigger 'delete' event
                 }
             }

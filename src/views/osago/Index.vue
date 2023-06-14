@@ -130,8 +130,8 @@
                     <p v-else class="text-success">Выдан</p>
                 </template>
 
-                <template #cell(price)="data">
-                    {{ data.item.price | formatNumber }}
+                <template #cell(total_price)="data">
+                    {{ data.item.total_price | formatNumber }}
                 </template>
                 <template #cell(platform)="{ item }">
                     <template v-if="item.platform === 'browser'">Сайт</template>
@@ -292,13 +292,13 @@ export default {
                     label: "Кол-во водителей",
                 },
                 {
-                    key: "price",
-                    label: "Стоимость",
+                    key: "total_price",
+                    label: "Общая Стоимость",
                     sortable: true,
                 },
                 {
                     key: "date_begin",
-                    label: "Дата начало",
+                    label: "Дата начала",
                     sortable: true,
                 },
 
@@ -308,11 +308,11 @@ export default {
                 },
                 {
                     key: "policy",
-                    label: "Номер полиса",
+                    label: "Полис ОСАГО",
                 },
                 {
                     key: "document",
-                    label: "Номер Полиса 2",
+                    label: "Полис Тех.Паспорта",
                 },
                 {
                     key: "applicant.name",

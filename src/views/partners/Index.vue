@@ -86,7 +86,9 @@
                                 <b-button
                                     variant="danger btn-sm"
                                     @click="
-                                        $bvModal.hide(`modal-${data.item.id}`)
+                                        $bvModal.hide(
+                                            `modal-${data.item.id}-deactivate`
+                                        )
                                     "
                                 >
                                     Отменить
