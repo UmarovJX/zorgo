@@ -42,35 +42,17 @@ import marketplace from "@/navigation/vertical/marketplace";
 
 const userData = JSON.parse(localStorage.getItem("userData"));
 
-let array = [];
-if (userData.role.id === 2) {
-    array = [
-        {
-            header: "Страхование",
-        },
-        {
-            title: "Осаго",
-            route: "osago",
-            icon: "FileIcon",
-        },
-        {
-            title: "Путешествие",
-            route: "travel",
-            icon: "FileIcon",
-        },
-    ];
-} else {
-    array = [
-        ...common,
-        ...insurance,
-        ...marketplace,
-        // ...dealers,
-        ...brands,
-        ...models,
-        ...years,
-        ...roles,
-        ...users,
-    ];
-}
+let array = [
+    ...common,
+    ...insurance,
+    ...marketplace,
+    // ...dealers,
+    ...brands,
+    ...models,
+    ...years,
+    ...roles,
+    ...users,
+];
+
 // Array of sections
 export default array;
