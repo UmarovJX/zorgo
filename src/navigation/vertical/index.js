@@ -31,28 +31,14 @@ tagVariant
 
 */
 import roles from "@/navigation/vertical/roles";
-import users from "@/navigation/vertical/users";
-import dealers from "@/navigation/vertical/dealers";
-import brands from "@/navigation/vertical/brands";
-import years from "@/navigation/vertical/years";
-import models from "@/navigation/vertical/models";
+import cars from "@/navigation/vertical/cars";
 import insurance from "@/navigation/vertical/insurance";
 import common from "@/navigation/vertical/common";
 import marketplace from "@/navigation/vertical/marketplace";
 
 const userData = JSON.parse(localStorage.getItem("userData"));
 
-let array = [
-    ...common,
-    ...insurance,
-    ...marketplace,
-    // ...dealers,
-    ...brands,
-    ...models,
-    ...years,
-    ...roles,
-    ...users,
-];
+let array = [...common, ...insurance, ...marketplace, ...cars, ...roles];
 
 // Array of sections
 export default array;

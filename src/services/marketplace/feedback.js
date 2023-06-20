@@ -11,7 +11,7 @@ class Feedback extends Core {
     }
 
     deactivate(id) {
-        return this.patch(`marketplace/feedback/${id}`);
+        return this.delete(`marketplace/feedback/${id}`);
     }
 }
 

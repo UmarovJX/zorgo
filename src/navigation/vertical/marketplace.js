@@ -4,11 +4,7 @@ const perms = {};
 JSON.parse(getLocalVar("userData")).permissions.forEach((el) => {
     perms[el.slug] = true;
 });
-const config = [
-    {
-        header: "Маркетплейс", //i18n.t('test')
-    },
-];
+const config = [];
 
 const categories = {
     title: "Категории",
@@ -146,4 +142,9 @@ if (perms["update-banner"])
         route: "banner-positions",
     });
 
+if (config.length > 0) {
+    config.unshift({
+        header: "Маркетплейс", //i18n.t('test')
+    });
+}
 export default config;

@@ -326,7 +326,7 @@ export default {
                     label: "Категория",
                 },
                 {
-                    key: "dealer",
+                    key: "dealer.company",
                     label: "Дилер",
                 },
             ],

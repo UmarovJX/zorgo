@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import isRouteAvailable from "@/util/isRouteAvailable";
 
 import Error404 from "@/views/error/Error404.vue";
+import { getLocalVar } from "@/util/localstorage-helper";
 
 // Routes
 import pages from "@/router/routes/pages";
@@ -86,13 +87,58 @@ const router = new VueRouter({
         },
     ],
 });
+function getAvailableRoute() {
+    const perm = JSON.parse(getLocalVar("userData")).permissions.find((el) => {
+        return el.slug.startsWith("show");
+    });
+    console.log(perm);
 
+    switch (perm.slug) {
+        case "show-category":
+            return { name: "categories" };
+            break;
+        case "show-city":
+            return { name: "cities" };
+            break;
+        case "show-company":
+            return { name: "company-index" };
+            break;
+        case "show-feedback":
+            return { name: "feedback" };
+            break;
+        case "show-osago":
+            return { name: "osago" };
+            break;
+        case "show-public-offer":
+            return { name: "publicoffer-po" };
+            break;
+        case "show-travel":
+            return { name: "travel" };
+            break;
+        case "show-description":
+            return { name: "description-osago" };
+            break;
+        case "show-partner":
+            return { name: "partner-index" };
+            break;
+        case "show-promo-code":
+            return { name: "promocodes" };
+            break;
+        case "show-section":
+            return { name: "main-page-osago" };
+            break;
+        default:
+            return { name: perm.slug.slice(5) + "s" };
+    }
+}
 router.beforeEach((to, from, next) => {
     const AUTH_TOKEN = localStorage.getItem("accessToken");
     if (to.name === "auth-login") return next();
     if (AUTH_TOKEN) {
         if (to.path === "/" || !isRouteAvailable(to.name, to.params)) {
-            return next({ name: "services" });
+            const r = getAvailableRoute();
+            console.log(r);
+            return next(r);
         } else {
             return next();
         }
