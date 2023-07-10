@@ -41,7 +41,7 @@
                         sort-icon-left
                         thead-class="hidden_header"
                         :busy="isBusy"
-                        :items="items"
+                        :items="sortedItems"
                         :fields="fields"
                         :sort-by.sync="sortBy"
                         :sort-desc.sync="sortDesc"
@@ -64,6 +64,9 @@
 
                         <template #cell(all)="data">
                             <div class="pm-row-all">
+                                <template v-if="data.item.header">
+                                    <b>{{ data.item.header }}</b>
+                                </template>
                                 <template v-for="item in data.item.permissions">
                                     <div class="pm-row-one">
                                         <b-form-checkbox
@@ -109,6 +112,8 @@
 
 <script>
 import slugTranslations from "@/util/slugTranslations";
+import sortPermissionsComputed from "@/util/sortPermissions";
+
 import api from "@/services/api";
 import Ripple from "vue-ripple-directive";
 import { VueGoodTable } from "vue-good-table";
@@ -184,6 +189,9 @@ export default {
             selected: [],
             slugTranslations,
         };
+    },
+    computed: {
+        ...sortPermissionsComputed,
     },
 
     async mounted() {
@@ -297,9 +305,7 @@ export default {
 
         translatePermissions(item) {
             const val = this.slugTranslations[item];
-            if (!val) {
-                return "No Translation";
-            }
+
             return val;
         },
 
