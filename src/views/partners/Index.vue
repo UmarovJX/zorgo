@@ -12,7 +12,9 @@
                     variant="success"
                     class="btn-icon d-flex align-items-center"
                 >
-                    <span style="padding-right: 4px">Добавить</span>
+                    <span style="padding-right: 4px">{{
+                        $t('commons.add')
+                    }}</span>
                     <feather-icon
                         size="18"
                         icon="PlusCircleIcon"
@@ -161,6 +163,7 @@
 </template>
 
 <script>
+import i18n from "@/libs/i18n";
 import Partners from "@/services/partners";
 import permissionComputeds from "@/util/permissionComputeds";
 import {
@@ -219,6 +222,9 @@ export default {
         ...permissionComputeds("partner"),
     },
     methods: {
+        getLabel(s) {
+            return i18n.t(s);
+        },
         async loadItems() {
             this.loading = true;
             await api
