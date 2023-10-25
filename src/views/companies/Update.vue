@@ -279,6 +279,7 @@ export default {
         const formData = new FormData();
 
         formData.append("name", this.company.name);
+        formData.append("order", this.company.order);
         formData.append("driver_limit", +this.company.driver_limit);
         if (this.fileRecords[0].file)
           formData.append("image", this.fileRecords[0].file);
