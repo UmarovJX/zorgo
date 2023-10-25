@@ -26,48 +26,6 @@
               </p>
             </ValidationProvider>
             <ValidationProvider
-              name="image"
-              rules="required"
-              v-slot="{ errors }"
-            >
-              <b-form-group label="Изображение">
-                <VueFileAgent
-                  ref="vueFileAgent"
-                  v-model="fileRecords"
-                  :deletable="true"
-                  :meta="true"
-                  :accept="'image/*,.zip'"
-                  :maxSize="'5MB'"
-                  :maxFiles="1"
-                  :helpText="'Выберите изображение'"
-                  :errorText="{
-                    type: 'Неверный тип файла. Разрешены только изображения или zip',
-                    size: 'Размер файла не должен превышать 10 МБ.',
-                  }"
-                  @select="filesSelected($event)"
-                  @beforedelete="onBeforeDelete($event)"
-                  @delete="fileDeleted($event)"
-                />
-              </b-form-group>
-              <p v-if="errors" class="validation__red">
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <div>
-              <b-card-text class="mb-0"
-                >До 5 человек для города Ташкент и Ташкентской
-                области</b-card-text
-              >
-              <b-form-checkbox
-                v-model="company.driver_limit"
-                class="custom-control-primary"
-                name="check-button"
-                switch
-              />
-            </div>
-          </b-col>
-          <b-col cols="12" class="px-1">
-            <ValidationProvider
               name="Порядок"
               rules="required"
               v-slot="{ errors }"
@@ -125,6 +83,7 @@
               />
             </div>
           </b-col>
+          <b-col cols="12" class="px-1"> </b-col>
 
           <b-col cols="12" class="px-1 mt-1">
             <b-form-group label="Услуги">
