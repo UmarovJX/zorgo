@@ -14,6 +14,7 @@ import brands from '@/router/routes/brands';
 import years from '@/router/routes/years';
 import models from '@/router/routes/models';
 import osago from '@/router/routes/osago';
+import kasko from '@/router/routes/kasko';
 import companies from '@/router/routes/companies';
 import travel from '@/router/routes/travel';
 import partners from '@/router/routes/partners';
@@ -61,6 +62,7 @@ const router = new VueRouter({
     ...years,
     ...models,
     ...osago,
+    ...kasko,
     ...travel,
     ...companies,
     ...partners,

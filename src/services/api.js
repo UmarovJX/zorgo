@@ -10,6 +10,7 @@ import Brands from "@/services/brands";
 import Years from "@/services/years";
 import Models from "@/services/models";
 import Osago from "@/services/osago";
+import Kasko from "@/services/kasko";
 import Travels from "@/services/travels";
 import Companies from "@/services/companies";
 import Notifications from "@/services/notifications";
@@ -42,6 +43,7 @@ export default {
     years: new Years(),
     models: new Models(),
     osago: new Osago(),
+    kasko: new Kasko(),
     travels: new Travels(),
     companies: new Companies(),
     notifications: new Notifications(),

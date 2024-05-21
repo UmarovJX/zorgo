@@ -25,10 +25,13 @@ export default {
         const res = [];
         res.push(this.items.find((el) => el.type === "service"));
         res.push(this.items.find((el) => el.type === "osago"));
+        res.push(this.items.find((el) => el.type === "kasko"));
         res.push(this.items.find((el) => el.type === "travel"));
         res.push(this.items.find((el) => el.type === "description"));
         res.push(this.items.find((el) => el.type === "public-offer"));
         res.push(this.items.find((el) => el.type === "company"));
+        res.push(this.items.find((el) => el.type === "wallet-transaction"));
+        res.push(this.items.find((el) => el.type === "client"));
         return res;
     },
     marketplaceItems() {

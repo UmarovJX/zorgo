@@ -124,7 +124,7 @@ export default {
                 },
                 {
                     key: "wallet.owner",
-                    label: "Статус",
+                    label: "Владелец",
                     formatter: v => v.first_name + ' ' + v.last_name
                 },
                 {

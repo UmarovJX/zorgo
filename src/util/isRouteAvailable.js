@@ -68,15 +68,17 @@ const routeToPermission = {
   cities: ['show-city', false],
   'city-edit': ['city', true],
   feedback: ['show-feedback', false],
+
+  transactions: ['show-wallet-transaction', false],
+  clients: ['show-client', false],
+  'client-view': ['show-client', false],
+  kasko: ['show-kasko', false],
+  'kasko-show': ['show-kasko', false],
 };
 
 export default function isRouteAvailable(name, params) {
   if (name === 'auth-login') return true;
-  if (name === 'transactions') return true;
-  if (name === 'clients') return true;
-  if (name === 'client-view') return true;
-  const userData = getLocalVar('userData');
-  const perms = JSON.parse(getLocalVar('userData'))?.permissions;
+  const perms = JSON.parse(getLocalVar('userData'))?.permissions || [];
   const [tag, needParams] = routeToPermission[name];
   if (!needParams) {
     return perms.some((el) => el.slug === tag);

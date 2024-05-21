@@ -24,6 +24,14 @@ const options = [
     },
   ],
   [
+    'show-kasko',
+    {
+      title: 'Каско',
+      route: 'kasko',
+      icon: 'FileIcon',
+    },
+  ],
+  [
     'show-travel',
     {
       title: 'Путешествие',
@@ -81,6 +89,22 @@ const options = [
       icon: 'ListIcon',
     },
   ],
+  [
+    'show-wallet-transaction',
+    {
+      title: 'Транзакции',
+      route: 'transactions',
+      icon: 'ListIcon',
+    },
+  ],
+  [
+    'show-client',
+    {
+      title: 'Клиенты',
+      route: 'clients',
+      icon: 'UsersIcon',
+    },
+  ],
 ];
 
 options.forEach(([key, option]) => {
@@ -91,14 +115,5 @@ if (config.length > 0) {
     header: 'Страхование', //i18n.t('test')
   });
 }
-config.push({
-  title: 'Transactions',
-  route: 'transactions',
-  icon: 'ListIcon',
-});
-config.push({
-  title: 'Clients',
-  route: 'clients',
-  icon: 'UsersIcon',
-});
+
 export default config;
