@@ -5,21 +5,9 @@
                 <b-row>
                     <!--   NAME [RU]   -->
                     <b-col cols="12" md="6" class="px-1">
-                        <ValidationProvider
-                            name="Название [RU]"
-                            rules="required"
-                            v-slot="{ errors }"
-                        >
-                            <b-form-group
-                                label="Название [RU]"
-                                label-for="name-ru"
-                            >
-                                <b-form-input
-                                    v-model="name.ru"
-                                    id="name-ru"
-                                    size="md"
-                                    placeholder="Введите"
-                                />
+                        <ValidationProvider name="Название [RU]" rules="required" v-slot="{ errors }">
+                            <b-form-group label="Название [RU]" label-for="name-ru">
+                                <b-form-input v-model="name.ru" id="name-ru" size="md" placeholder="Введите" />
                             </b-form-group>
                             <p v-if="errors" class="validation__red">
                                 {{ errors[0] }}
@@ -29,21 +17,9 @@
 
                     <!--   NAME [UZ]   -->
                     <b-col cols="12" md="6" class="px-1">
-                        <ValidationProvider
-                            name="Название [UZ]"
-                            rules="required"
-                            v-slot="{ errors }"
-                        >
-                            <b-form-group
-                                label="Название [UZ]"
-                                label-for="name-uz"
-                            >
-                                <b-form-input
-                                    v-model="name.uz"
-                                    id="name-uz"
-                                    size="md"
-                                    placeholder="Введите"
-                                />
+                        <ValidationProvider name="Название [UZ]" rules="required" v-slot="{ errors }">
+                            <b-form-group label="Название [UZ]" label-for="name-uz">
+                                <b-form-input v-model="name.uz" id="name-uz" size="md" placeholder="Введите" />
                             </b-form-group>
                             <p v-if="errors" class="validation__red">
                                 {{ errors[0] }}
@@ -55,21 +31,9 @@
                 <b-row>
                     <!--   BODY [RU]   -->
                     <b-col cols="12" md="6" class="px-1">
-                        <ValidationProvider
-                            name="Описание [RU]"
-                            rules="required"
-                            v-slot="{ errors }"
-                        >
-                            <b-form-group
-                                label="Описание [RU]"
-                                label-for="body-ru"
-                            >
-                                <b-form-input
-                                    v-model="body.ru"
-                                    id="body-ru"
-                                    size="md"
-                                    placeholder="Введите"
-                                />
+                        <ValidationProvider name="Описание [RU]" rules="required" v-slot="{ errors }">
+                            <b-form-group label="Описание [RU]" label-for="body-ru">
+                                <b-form-input v-model="body.ru" id="body-ru" size="md" placeholder="Введите" />
                             </b-form-group>
                             <p v-if="errors" class="validation__red">
                                 {{ errors[0] }}
@@ -79,21 +43,9 @@
 
                     <!--   BODY [UZ]   -->
                     <b-col cols="12" md="6" class="px-1">
-                        <ValidationProvider
-                            name="Описание [UZ]"
-                            rules="required"
-                            v-slot="{ errors }"
-                        >
-                            <b-form-group
-                                label="Описание [UZ]"
-                                label-for="body-uz"
-                            >
-                                <b-form-input
-                                    v-model="body.uz"
-                                    id="body-uz"
-                                    size="md"
-                                    placeholder="Введите"
-                                />
+                        <ValidationProvider name="Описание [UZ]" rules="required" v-slot="{ errors }">
+                            <b-form-group label="Описание [UZ]" label-for="body-uz">
+                                <b-form-input v-model="body.uz" id="body-uz" size="md" placeholder="Введите" />
                             </b-form-group>
                             <p v-if="errors" class="validation__red">
                                 {{ errors[0] }}
@@ -105,19 +57,10 @@
                 <b-row>
                     <!--   PRICE   -->
                     <b-col cols="12" md="6" class="px-1">
-                        <ValidationProvider
-                            name="Цена"
-                            rules="required"
-                            v-slot="{ errors }"
-                        >
+                        <ValidationProvider name="Цена" rules="required" v-slot="{ errors }">
                             <b-form-group label="Цена" label-for="price">
-                                <b-form-input
-                                    type="number"
-                                    v-model="price"
-                                    id="price"
-                                    size="md"
-                                    placeholder="Введите"
-                                />
+                                <b-form-input type="number" v-model="price" id="price" size="md"
+                                    placeholder="Введите" />
                             </b-form-group>
                             <p v-if="errors" class="validation__red">
                                 {{ errors[0] }}
@@ -127,17 +70,9 @@
 
                     <!--   Discounted PRICE   -->
                     <b-col cols="12" md="6" class="px-1">
-                        <b-form-group
-                            label="Цена со скидкой"
-                            label-for="discount_price"
-                        >
-                            <b-form-input
-                                type="number"
-                                v-model="discount_price"
-                                id="discount_price"
-                                size="md"
-                                placeholder="Введите"
-                            />
+                        <b-form-group label="Цена со скидкой" label-for="discount_price">
+                            <b-form-input type="number" v-model="discount_price" id="discount_price" size="md"
+                                placeholder="Введите" />
                         </b-form-group>
                     </b-col>
                 </b-row>
@@ -145,19 +80,10 @@
                 <b-row>
                     <!--   COUNT   -->
                     <b-col cols="12" md="6" class="px-1">
-                        <ValidationProvider
-                            name="Количество"
-                            rules="required"
-                            v-slot="{ errors }"
-                        >
+                        <ValidationProvider name="Количество" rules="required" v-slot="{ errors }">
                             <b-form-group label="Количество" label-for="count">
-                                <b-form-input
-                                    type="number"
-                                    v-model="count"
-                                    id="count"
-                                    size="md"
-                                    placeholder="Введите"
-                                />
+                                <b-form-input type="number" v-model="count" id="count" size="md"
+                                    placeholder="Введите" />
                             </b-form-group>
                             <p v-if="errors" class="validation__red">
                                 {{ errors[0] }}
@@ -169,20 +95,9 @@
                 <b-row>
                     <!--   UNIT   -->
                     <b-col cols="12" md="6">
-                        <ValidationProvider
-                            name="Единица измерения"
-                            rules="required"
-                            v-slot="{ errors }"
-                        >
-                            <b-form-group
-                                label="Единица измерения"
-                                label-for="unit"
-                            >
-                                <b-form-select
-                                    id="unit"
-                                    v-model="unitId"
-                                    :options="unitOptions"
-                                ></b-form-select>
+                        <ValidationProvider name="Единица измерения" rules="required" v-slot="{ errors }">
+                            <b-form-group label="Единица измерения" label-for="unit">
+                                <b-form-select id="unit" v-model="unitId" :options="unitOptions"></b-form-select>
                             </b-form-group>
                             <p v-if="errors" class="validation__red">
                                 {{ errors[0] }}
@@ -194,27 +109,33 @@
                 <b-row>
                     <!--   FILE INPUT   -->
                     <b-col cols="12" class="px-1">
-                        <ValidationProvider
-                            name="image"
-                            rules="required"
-                            v-slot="{ errors }"
-                        >
+                        <ValidationProvider name="image" rules="required" v-slot="{ errors }">
                             <b-form-group label="Изображение">
-                                <VueFileAgent
-                                    ref="vueFileAgent"
-                                    v-model="fileRecords"
-                                    :deletable="true"
-                                    :meta="true"
-                                    :accept="'image/*,.zip'"
-                                    :maxSize="'5MB'"
-                                    :maxFiles="5"
-                                    :helpText="'Выберите изображение'"
-                                    :errorText="{
+                                <VueFileAgent ref="vueFileAgent" v-model="fileRecords" :deletable="true" :meta="true"
+                                    :accept="'image/*,.zip'" :maxSize="'5MB'" :maxFiles="5"
+                                    :helpText="'Выберите изображение'" :errorText="{
                                         type: 'Неверный тип файла. Разрешены только изображения или zip',
                                         size: 'Размер файла не должен превышать 5 МБ.',
-                                    }"
-                                    @beforedelete="onBeforeDelete($event)"
-                                />
+                                    }" @beforedelete="onBeforeDelete($event)" />
+                            </b-form-group>
+                            <p v-if="errors" class="validation__red">
+                                {{ errors[0] }}
+                            </p>
+                        </ValidationProvider>
+                    </b-col>
+                </b-row>
+
+                <b-row>
+                    <!--   Video INPUT   -->
+                    <b-col cols="12" class="px-1">
+                        <ValidationProvider name="video" rules="required" v-slot="{ errors }">
+                            <b-form-group label="Видео">
+                                <VueFileAgent ref="vueVideoAgent" v-model="videosRecords" :deletable="true" :meta="true"
+                                    :accept="'video/*'" :maxSize="'5MB'" :maxFiles="5" :helpText="'Выберите Видео'"
+                                    :errorText="{
+                                        type: 'Неверный тип файла. Разрешены только Видео',
+                                        size: 'Размер файла не должен превышать 5 МБ.',
+                                    }" @beforedelete="onBeforeDelete($event)" />
                             </b-form-group>
                             <p v-if="errors" class="validation__red">
                                 {{ errors[0] }}
@@ -226,20 +147,10 @@
                 <b-row>
                     <!--   CATEGORY   -->
                     <b-col cols="12" md="6">
-                        <ValidationProvider
-                            name="Категория"
-                            rules="required"
-                            v-slot="{ errors }"
-                        >
-                            <b-form-group
-                                label="Категория"
-                                label-for="category"
-                            >
-                                <b-form-select
-                                    id="category"
-                                    v-model="categoryId"
-                                    :options="categoryOptions"
-                                ></b-form-select>
+                        <ValidationProvider name="Категория" rules="required" v-slot="{ errors }">
+                            <b-form-group label="Категория" label-for="category">
+                                <b-form-select id="category" v-model="categoryId"
+                                    :options="categoryOptions"></b-form-select>
                             </b-form-group>
                             <p v-if="errors" class="validation__red">
                                 {{ errors[0] }}
@@ -249,29 +160,15 @@
                 </b-row>
 
                 <!--   Specifications   -->
-                <b-form-group
-                    v-if="categorySpecs.length > 0"
-                    label="Характеристики"
-                    label-class="font-weigth-bold"
-                >
+                <b-form-group v-if="categorySpecs.length > 0" label="Характеристики" label-class="font-weigth-bold">
                     <b-row v-for="spec in categorySpecs" class="">
                         <b-col cols="12" md="6" class="px-1">
                             <!--   TEXT SPEC   -->
                             <template v-if="spec.type === 'text'">
-                                <ValidationProvider
-                                    :name="spec.name.ru"
-                                    rules="required"
-                                    v-slot="{ errors }"
-                                >
-                                    <b-form-group
-                                        :label="spec.name.ru"
-                                        :label-for="`specification-${spec.id}`"
-                                    >
-                                        <b-form-input
-                                            v-model="specValues[spec.id]"
-                                            :id="`specification-${spec.id}`"
-                                            placeholder="Введите"
-                                        />
+                                <ValidationProvider :name="spec.name.ru" rules="required" v-slot="{ errors }">
+                                    <b-form-group :label="spec.name.ru" :label-for="`specification-${spec.id}`">
+                                        <b-form-input v-model="specValues[spec.id]" :id="`specification-${spec.id}`"
+                                            placeholder="Введите" />
                                     </b-form-group>
                                     <p v-if="errors" class="validation__red">
                                         {{ errors[0] }}
@@ -280,38 +177,18 @@
                             </template>
                             <!--   CHECKBOX SPEC   -->
                             <template v-if="spec.type === 'checkbox'">
-                                <b-form-checkbox
-                                    v-model="specValues[spec.id]"
-                                    :id="`specification-${spec.id}`"
-                                >
-                                    {{ spec.name.ru }}</b-form-checkbox
-                                >
+                                <b-form-checkbox v-model="specValues[spec.id]" :id="`specification-${spec.id}`">
+                                    {{ spec.name.ru }}</b-form-checkbox>
                             </template>
                             <!--   SELECT SPEC   -->
                             <template v-if="spec.type === 'select'">
-                                <ValidationProvider
-                                    :name="spec.name.ru"
-                                    rules="required"
-                                    v-slot="{ errors }"
-                                >
-                                    <b-form-group
-                                        :label="spec.name.ru"
-                                        :label-for="`specification-${spec.id}`"
-                                    >
-                                        <b-form-select
-                                            :id="`specification-${spec.id}`"
-                                            v-model="specValues[spec.id]"
-                                        >
-                                            <b-form-select-option
-                                                disabled
-                                                :value="undefined"
-                                                >Выберите характеристику
+                                <ValidationProvider :name="spec.name.ru" rules="required" v-slot="{ errors }">
+                                    <b-form-group :label="spec.name.ru" :label-for="`specification-${spec.id}`">
+                                        <b-form-select :id="`specification-${spec.id}`" v-model="specValues[spec.id]">
+                                            <b-form-select-option disabled :value="undefined">Выберите характеристику
                                             </b-form-select-option>
 
-                                            <b-form-select-option
-                                                v-for="opt in spec.options"
-                                                :value="+opt.id"
-                                            >
+                                            <b-form-select-option v-for="opt in spec.options" :value="+opt.id">
                                                 {{ opt.value.ru }}
                                             </b-form-select-option>
                                         </b-form-select>
@@ -325,36 +202,19 @@
                     </b-row>
                 </b-form-group>
 
-                <b-form-group
-                    class="my-1"
-                    label="Выбранные авто:"
-                    label-class="font-weigth-bold"
-                >
+                <b-form-group class="my-1" label="Выбранные авто:" label-class="font-weigth-bold">
                     <b-row class="pl-1">
                         <b-col>
                             <template v-if="relations.length === 0">
                                 Ничего не выбрано
                             </template>
                             <b-row v-for="bmy in relations" class="px-1 my-1">
-                                <b-col
-                                    cols="12"
-                                    md="6"
-                                    class="d-flex justify-content-between align-items-center"
-                                >
+                                <b-col cols="12" md="6" class="d-flex justify-content-between align-items-center">
                                     {{ bmy.text }}
-                                    <b-button
-                                        v-ripple.400="
-                                            'rgba(113, 102, 240, 0.15)'
-                                        "
-                                        variant="outline-danger"
-                                        class="delete__btn"
-                                        size="sm"
-                                        @click="(e) => removeRelation(bmy.text)"
-                                    >
-                                        <feather-icon
-                                            icon="MinusCircleIcon"
-                                            size="14"
-                                        />
+                                    <b-button v-ripple.400="'rgba(113, 102, 240, 0.15)'
+                                        " variant="outline-danger" class="delete__btn" size="sm"
+                                        @click="(e) => removeRelation(bmy.text)">
+                                        <feather-icon icon="MinusCircleIcon" size="14" />
                                     </b-button>
                                 </b-col>
                             </b-row>
@@ -362,36 +222,19 @@
                     </b-row>
                     <b-row class="mt-1">
                         <b-col cols="12" lg="3">
-                            <b-form-select
-                                class="mb-1"
-                                :options="brandOptions"
-                                v-model="brandId"
-                            ></b-form-select>
+                            <b-form-select class="mb-1" :options="brandOptions" v-model="brandId"></b-form-select>
                         </b-col>
                         <b-col cols="12" lg="3">
-                            <b-form-select
-                                class="mb-1"
-                                :disabled="!brandId"
-                                :options="modelOptions"
-                                v-model="modelId"
-                            ></b-form-select>
+                            <b-form-select class="mb-1" :disabled="!brandId" :options="modelOptions"
+                                v-model="modelId"></b-form-select>
                         </b-col>
                         <b-col cols="12" lg="3">
-                            <b-form-select
-                                class="mb-1"
-                                :disabled="!modelId"
-                                :options="yearOptions"
-                                v-model="yearId"
-                            ></b-form-select>
+                            <b-form-select class="mb-1" :disabled="!modelId" :options="yearOptions"
+                                v-model="yearId"></b-form-select>
                         </b-col>
                         <b-col cols="12" lg="3">
-                            <b-button
-                                class="float-right mr-1"
-                                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                                variant="outline-success"
-                                :disabled="!yearId"
-                                @click="addRelation"
-                            >
+                            <b-button class="float-right mr-1" v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                                variant="outline-success" :disabled="!yearId" @click="addRelation">
                                 Добавить
                             </b-button>
                         </b-col>
@@ -399,11 +242,7 @@
                 </b-form-group>
             </ValidationObserver>
 
-            <b-button
-                :disabled="isSaving"
-                class="btn-success float-right mt-2 mr-1"
-                @click="saveProduct"
-            >
+            <b-button :disabled="isSaving" class="btn-success float-right mt-2 mr-1" @click="saveProduct">
                 Сохранить
             </b-button>
         </b-card>
@@ -491,6 +330,7 @@ export default {
             relationData: null,
 
             fileRecords: [],
+            videosRecords: [],
             uploadUrl: "",
             uploadHeaders: { "X-Test-Header": "vue-file-agent" },
             isSaving: false,
@@ -632,6 +472,14 @@ export default {
                 url: el.url,
                 src: el.url,
             }));
+            this.videosRecords = data.videos.map((el) => ({
+                name: "video.mp4",
+                id: el.id,
+                size: 0,
+                type: "video/mp4",
+                url: el.url,
+                src: el.url,
+            }));
 
             const sV = {};
             data.options.forEach((el) => {
@@ -679,6 +527,13 @@ export default {
                         formData.append(`images[${i}][id]`, el.id);
                     } else {
                         formData.append(`images[${i}][file]`, el.file);
+                    }
+                });
+                this.videosRecords.forEach((el, i) => {
+                    if (el.id) {
+                        formData.append(`videos[${i}][id]`, el.id);
+                    } else {
+                        formData.append(`videos[${i}][file]`, el.file);
                     }
                 });
 
@@ -735,6 +590,11 @@ export default {
         onBeforeDelete(fileRecord) {
             if (confirm("Вы уверены, что хотите удалить изображение?")) {
                 this.$refs.vueFileAgent.deleteFileRecord(fileRecord);
+            }
+        },
+        onBeforeVideoDelete(fileRecord) {
+            if (confirm("Вы уверены, что хотите удалить изображение?")) {
+                this.$refs.vueVideoAgent.deleteFileRecord(fileRecord);
             }
         },
 
