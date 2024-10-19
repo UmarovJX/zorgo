@@ -128,19 +128,19 @@
                 <b-row>
                     <!--   Video INPUT   -->
                     <b-col cols="12" class="px-1">
-                        <ValidationProvider name="video" rules="required" v-slot="{ errors }">
-                            <b-form-group label="Видео">
-                                <VueFileAgent ref="vueVideoAgent" v-model="videosRecords" :deletable="true" :meta="true"
-                                    :accept="'video/*'" :maxSize="'5MB'" :maxFiles="5" :helpText="'Выберите Видео'"
-                                    :errorText="{
-                                        type: 'Неверный тип файла. Разрешены только Видео',
-                                        size: 'Размер файла не должен превышать 5 МБ.',
-                                    }" @beforedelete="onBeforeVideoDelete($event)" />
-                            </b-form-group>
-                            <p v-if="errors" class="validation__red">
+                        <!-- <ValidationProvider name="video" rules="required" v-slot="{ errors }"> -->
+                        <b-form-group label="Видео">
+                            <VueFileAgent ref="vueVideoAgent" v-model="videosRecords" :deletable="true" :meta="true"
+                                :accept="'video/*'" :maxSize="'5MB'" :maxFiles="5" :helpText="'Выберите Видео'"
+                                :errorText="{
+                                    type: 'Неверный тип файла. Разрешены только Видео',
+                                    size: 'Размер файла не должен превышать 5 МБ.',
+                                }" @beforedelete="onBeforeVideoDelete($event)" />
+                        </b-form-group>
+                        <!-- <p v-if="errors" class="validation__red">
                                 {{ errors[0] }}
                             </p>
-                        </ValidationProvider>
+                        </ValidationProvider> -->
                     </b-col>
                 </b-row>
 
