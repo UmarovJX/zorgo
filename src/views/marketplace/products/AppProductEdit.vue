@@ -135,7 +135,7 @@
                                     :errorText="{
                                         type: 'Неверный тип файла. Разрешены только Видео',
                                         size: 'Размер файла не должен превышать 5 МБ.',
-                                    }" @beforedelete="onBeforeDelete($event)" />
+                                    }" @beforedelete="onBeforeVideoDelete($event)" />
                             </b-form-group>
                             <p v-if="errors" class="validation__red">
                                 {{ errors[0] }}
@@ -472,7 +472,7 @@ export default {
                 url: el.url,
                 src: el.url,
             }));
-            this.videosRecords = data.videos.map((el) => ({
+            this.videosRecords = (data.videos || []).map((el) => ({
                 name: "video.mp4",
                 id: el.id,
                 size: 0,
